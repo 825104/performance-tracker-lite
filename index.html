@@ -1548,14 +1548,40 @@ fileInput.addEventListener("change", (e) => {
   if (e.target.files.length > 0) handleFile(e.target.files[0]);
 });
 
-// ========== EXCEL PARSER (V4.6 - Full 34 agents support) ==========
+// ========== EXCEL PARSER (V4.7 - FIXED: skip title rows in Roster/IMPORT) ==========
 async function handleFile(file) {
   showStatus("loading", `Leyendo ${file.name}...`);
   try {
     const buffer = await file.arrayBuffer();
     const wb = XLSX.read(buffer, { type: "array" });
+    console.log("[Parser] Hojas encontradas:", wb.SheetNames);
 
-    // STEP 1: Read ⚙️ Config for current month
+    // ========== HELPER: find header row and parse table ==========
+    // Finds the row where first cell === "Advocate Name" and returns objects
+    // keyed by that row's values.
+    function parseTableWithHeaderSearch(sheet) {
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null });
+      let headerIdx = -1;
+      for (let i = 0; i < rows.length; i++) {
+        const first = String((rows[i] && rows[i][0]) || "").trim();
+        if (first === "Advocate Name") { headerIdx = i; break; }
+      }
+      if (headerIdx === -1) return { headerIdx: -1, rows: [], headers: [] };
+      const headers = rows[headerIdx].map(h => h ? String(h).trim() : "");
+      const dataRows = [];
+      for (let r = headerIdx + 1; r < rows.length; r++) {
+        const row = rows[r];
+        if (!row || !row[0]) continue;
+        const nameCell = String(row[0]).trim();
+        if (/team average|🏆|🌟|SME —|SME—/i.test(nameCell)) continue;
+        const obj = {};
+        headers.forEach((h, idx) => { if (h) obj[h] = row[idx]; });
+        dataRows.push(obj);
+      }
+      return { headerIdx, rows: dataRows, headers };
+    }
+
+    // ========== STEP 1: Read Config for current month ==========
     let currentMonth = "Junio 2026";
     const configSheetName = wb.SheetNames.find(n => /config/i.test(n));
     if (configSheetName) {
@@ -1574,23 +1600,24 @@ async function handleFile(file) {
     }
     console.log("[Parser] Mes actual:", currentMonth);
 
-    // STEP 2: Read 👥 Roster into map by AssociateID
+    // ========== STEP 2: Read Roster into map by AssociateID ==========
     const rosterMap = {};
     const rosterSheetName = wb.SheetNames.find(n => /roster/i.test(n));
     if (rosterSheetName) {
-      const rosterRows = XLSX.utils.sheet_to_json(wb.Sheets[rosterSheetName], { defval: null });
+      const { rows: rosterRows } = parseTableWithHeaderSearch(wb.Sheets[rosterSheetName]);
       rosterRows.forEach(row => {
         const id = String(row["Associate ID"] || row["AssociateID"] || "").trim();
         if (!id) return;
-        const status = String(row["Status"] || "Active").trim();
-        if (status && status.toLowerCase() !== "active") return;
+        // Status: accept if empty or contains "active" (case-insensitive)
+        const statusRaw = String(row["Status"] || "").trim().toLowerCase();
+        if (statusRaw && !statusRaw.includes("active")) return;
         rosterMap[id] = {
           name: row["Advocate Name"] || "",
           associateId: id,
           team: row["TL/Team"] || row["Team"] || "",
           lob: row["LOB"] || "",
           category: row["Category"] || "Tenured",
-          status: status,
+          status: statusRaw || "active",
           isNewHire: (row["NH"] === "Yes" || row["NH"] === true),
           tenureDate: row["Tenure Date"] || ""
         };
@@ -1598,25 +1625,26 @@ async function handleFile(file) {
     }
     console.log("[Parser] Roster cargado:", Object.keys(rosterMap).length, "agentes");
 
-    // STEP 3: Find IMPORT sheets
+    // ========== STEP 3: Find IMPORT sheets ==========
     const importSheets = wb.SheetNames.filter(n =>
       /IMPORT.*(ACPNY|SHARY|GEO|Ange|Medicare)/i.test(n)
     );
     if (importSheets.length === 0) {
-      showStatus("error", "No encontré hojas 📤 IMPORT. Revisá que se llamen IMPORT ACPNY/SHARY/GEO.");
+      showStatus("error", "No encontre hojas IMPORT. Revisa que se llamen IMPORT ACPNY/SHARY/GEO.");
       return;
     }
+    console.log("[Parser] IMPORT sheets:", importSheets);
 
-    // STEP 4: Parse IMPORT sheets
+    // ========== STEP 4: Parse IMPORT sheets ==========
     const parsedAgents = {};
     importSheets.forEach(sheetName => {
-      const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { defval: null });
+      const { rows } = parseTableWithHeaderSearch(wb.Sheets[sheetName]);
       rows.forEach(row => {
         const importStatus = String(row["ImportStatus"] || "READY").trim();
         if (/excluded/i.test(importStatus)) return;
         const id = String(row["AssociateID"] || row["Associate ID"] || "").trim();
         if (!id) {
-          console.warn("[Parser] Fila sin AssociateID:", row["Advocate Name"]);
+          console.warn("[Parser] Fila sin AssociateID en", sheetName, ":", row["Advocate Name"]);
           return;
         }
         const name = row["Advocate Name"] || row["Name"] || "";
@@ -1655,7 +1683,7 @@ async function handleFile(file) {
     });
     console.log("[Parser] Agentes parseados desde IMPORT:", Object.keys(parsedAgents).length);
 
-    // STEP 5: Parse SC sheets (multi-section) for tier/score
+    // ========== STEP 5: Parse SC sheets (multi-section) for tier/score ==========
     const scSheets = wb.SheetNames.filter(n =>
       /^(📊 )?SC\s*(ACPNY|EH|Medicare|Shary|Geo|Ange)/i.test(n)
     );
@@ -1716,7 +1744,7 @@ async function handleFile(file) {
     });
     console.log("[Parser] SC sheets procesadas");
 
-    // STEP 6: Enrich with Roster metadata
+    // ========== STEP 6: Enrich with Roster metadata ==========
     Object.values(parsedAgents).forEach(a => {
       const rosterEntry = rosterMap[a.associateId];
       if (rosterEntry) {
@@ -1743,7 +1771,7 @@ async function handleFile(file) {
       }
     });
 
-    // STEP 7: Save & replace AGENTS
+    // ========== STEP 7: Save & replace AGENTS ==========
     localStorage.setItem("ptl_uploadedData", JSON.stringify(parsedAgents));
     Object.keys(AGENTS).forEach(k => delete AGENTS[k]);
     Object.assign(AGENTS, parsedAgents);
@@ -1758,7 +1786,7 @@ async function handleFile(file) {
       footerPeriod.textContent = "Período: " + parsedAgents[firstKey].month;
     }
     document.getElementById("demoBanner").classList.add("hidden");
-    showStatus("success", `¡Listo! Cargué ${Object.keys(parsedAgents).length} agentes de ${currentMonth}. Cerrando...`);
+    showStatus("success", `Listo! Cargue ${Object.keys(parsedAgents).length} agentes de ${currentMonth}. Cerrando...`);
     setTimeout(closeUploadModal, 1500);
   } catch (err) {
     console.error(err);
@@ -1785,7 +1813,7 @@ function computeBonus(a) {
   const qualifies = a.qualifiesForBonus === true;
   a.fixedBonus = { eligible: true, amount: 12, reason: "Todos reciben +$12 de eficiencia siempre." };
   a.performanceBonus = qualifies
-    ? { eligible: true, amount: baseAmount, reason: `Tier ${tier} — Performance Bonus de $${baseAmount}.` }
+    ? { eligible: true, amount: baseAmount, reason: `Tier ${tier} - Performance Bonus de $${baseAmount}.` }
     : { eligible: false, amount: 0, baseAmount: baseAmount, reason: a.bonusReason || "Descalificado" };
   a.totalUSD = (qualifies ? baseAmount : 0) + 12;
   a.totalCRC = a.totalUSD * 497;
