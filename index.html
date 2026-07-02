@@ -4,96 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0f172a">
-<title>Performance Tracker Lite v4.5 | Cognizant CR</title>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
-// ========== V4.5 - TL MODE ==========
-const TL_PASSWORD = "EHCC2026";
-
-function openTLPasswordModal() {
-  document.getElementById("tlPasswordModal").classList.add("visible");
-  const input = document.getElementById("tlPasswordInput");
-  input.value = "";
-  setTimeout(() => input.focus(), 100);
-  const status = document.getElementById("tlPasswordStatus");
-  status.className = "modal-status";
-  status.innerHTML = "";
-}
-
-function closeTLPasswordModal() {
-  document.getElementById("tlPasswordModal").classList.remove("visible");
-}
-
-function checkTLPassword() {
-  const input = document.getElementById("tlPasswordInput").value;
-  const status = document.getElementById("tlPasswordStatus");
-
-  if (input === TL_PASSWORD) {
-    localStorage.setItem("ptl_tlMode", "true");
-    status.className = "modal-status visible success";
-    status.innerHTML = "✅ <span>Acceso concedido. Activando Modo TL...</span>";
-    setTimeout(() => {
-      closeTLPasswordModal();
-      updateTLModeUI();
-      // Re-render current view
-      const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0];
-      renderAgent(savedAgent);
-    }, 800);
-  } else {
-    status.className = "modal-status visible error";
-    status.innerHTML = "❌ <span>Código incorrecto. Volvé a intentarlo.</span>";
-    document.getElementById("tlPasswordInput").value = "";
-  }
-}
-
-function toggleTLMode() {
-  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
-  if (isTLMode) {
-    exitTLMode();
-  } else {
-    openTLPasswordModal();
-  }
-}
-
-function exitTLMode() {
-  if (!confirm("¿Salir del Modo TL? Vas a volver a la vista pública sin montos.")) return;
-  localStorage.removeItem("ptl_tlMode");
-  updateTLModeUI();
-  const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0];
-  renderAgent(savedAgent);
-}
-
-function updateTLModeUI() {
-  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
-  const btn = document.getElementById("tlModeBtn");
-  const banner = document.getElementById("tlModeBanner");
-
-  if (isTLMode) {
-    if (btn) {
-      btn.classList.add("active");
-      btn.innerHTML = "Modo TL";
-      btn.title = "Salir del Modo TL";
-    }
-    if (banner) banner.classList.add("visible");
-  } else {
-    if (btn) {
-      btn.classList.remove("active");
-      btn.innerHTML = "🔒 Modo TL";
-      btn.title = "Activar Modo Team Lead";
-    }
-    if (banner) banner.classList.remove("visible");
-  }
-}
-
-// Close TL modal on outside click or Esc
-document.getElementById("tlPasswordModal").addEventListener("click", (e) => {
-  if (e.target.id === "tlPasswordModal") closeTLPasswordModal();
-});
-
-// Init on load
-updateTLModeUI();
-
-
-</script>
+<title>Performance Tracker Lite v4.6 | Cognizant CR</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
@@ -150,11 +62,9 @@ updateTLModeUI();
     --chart-grid: #334155;
     --chart-meta: #64748b;
   }
-
   .container { max-width: 480px; margin: 0 auto; padding: 12px; }
   @media (min-width: 768px) { .container { max-width: 720px; padding: 20px; } }
   @media (min-width: 1024px) { .container { max-width: 960px; padding: 24px; } }
-
   .app-header {
     background: var(--card-bg); border-radius: 16px; padding: 16px;
     margin-bottom: 16px; box-shadow: var(--shadow);
@@ -183,7 +93,6 @@ updateTLModeUI();
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
   }
-
   .card {
     background: var(--card-bg); border-radius: 16px; padding: 20px;
     margin-bottom: 16px; box-shadow: var(--shadow);
@@ -198,7 +107,6 @@ updateTLModeUI();
     color: var(--text-muted); font-weight: 600; margin-bottom: 4px;
   }
   .card-subtitle { font-size: 12px; color: var(--text-soft); margin-bottom: 14px; }
-
   .hero-info h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
   .hero-meta { font-size: 13px; color: var(--text-soft); margin-bottom: 12px; }
   .hero-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
@@ -211,7 +119,6 @@ updateTLModeUI();
   .badge-danger { background: var(--danger-bg); color: var(--danger); }
   .badge-info { background: var(--info-bg); color: var(--info); }
   .badge-purple { background: var(--purple-bg); color: var(--purple); }
-
   .hero-score-wrapper {
     display: flex; align-items: center; justify-content: space-around;
     gap: 20px; padding: 20px 10px; background: var(--card-bg-soft);
@@ -234,7 +141,6 @@ updateTLModeUI();
   .star-empty { color: var(--donut-bg); }
   .tier-label { font-size: 13px; font-weight: 600; color: var(--text); }
   .tier-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
   .bonus-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
   @media (min-width: 500px) { .bonus-grid { grid-template-columns: 1fr 1fr; } }
   .bonus-item { padding: 14px; border-radius: 12px; background: var(--card-bg-soft); border: 1px solid var(--border-soft); }
@@ -242,8 +148,6 @@ updateTLModeUI();
   .bonus-item-title { font-size: 13px; font-weight: 600; color: var(--text); }
   .bonus-item-amount { font-size: 20px; font-weight: 700; color: var(--success); margin: 6px 0; }
   .bonus-item-reason { font-size: 12px; color: var(--text-soft); line-height: 1.4; }
-
-  /* ========== NEW: EVOLUTION CARD ========== */
   .evo-insights {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -274,7 +178,6 @@ updateTLModeUI();
   .evo-insight-value.success { color: var(--success); }
   .evo-insight-value.warning { color: var(--warning); }
   .evo-insight-value.danger { color: var(--danger); }
-
   .evo-metric-toggle {
     display: flex;
     flex-wrap: wrap;
@@ -301,7 +204,6 @@ updateTLModeUI();
     color: white;
     border-color: var(--info);
   }
-
   .evo-chart-wrapper {
     background: var(--card-bg-soft);
     border-radius: 12px;
@@ -340,7 +242,6 @@ updateTLModeUI();
     border: 4px solid transparent;
     border-top-color: var(--text);
   }
-
   .evo-insight-card {
     padding: 12px 14px;
     background: var(--card-bg-soft);
@@ -356,8 +257,6 @@ updateTLModeUI();
   .evo-insight-card-content { flex: 1; }
   .evo-insight-card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
   .evo-insight-card-text { font-size: 12px; color: var(--text-soft); line-height: 1.4; }
-
-  /* Chart data points */
   .evo-point {
     fill: var(--success);
     stroke: var(--card-bg);
@@ -388,8 +287,6 @@ updateTLModeUI();
     font-family: 'Inter', sans-serif;
     font-weight: 500;
   }
-
-  /* ========== METRICS GRID (unchanged from v1) ========== */
   .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (min-width: 500px) { .metrics-grid { grid-template-columns: repeat(3, 1fr); } }
   @media (min-width: 768px) { .metrics-grid { grid-template-columns: repeat(4, 1fr); } }
@@ -407,17 +304,14 @@ updateTLModeUI();
     padding: 2px 6px; border-radius: 4px; margin-top: 6px;
     text-transform: uppercase; letter-spacing: 0.3px;
   }
-
   .tips-list { display: flex; flex-direction: column; gap: 10px; }
   .tip-item { display: flex; gap: 10px; padding: 12px; background: var(--card-bg-soft); border-radius: 10px; border-left: 3px solid var(--info); }
   .tip-icon { font-size: 18px; flex-shrink: 0; }
   .tip-content { flex: 1; }
   .tip-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
   .tip-text { font-size: 12px; color: var(--text-soft); line-height: 1.4; }
-
   .footer { text-align: center; padding: 20px 12px; font-size: 11px; color: var(--text-muted); line-height: 1.6; }
   .footer strong { color: var(--text-soft); }
-
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -428,13 +322,10 @@ updateTLModeUI();
   .card:nth-child(3) { animation-delay: 0.15s; }
   .card:nth-child(4) { animation-delay: 0.2s; }
   .card:nth-child(5) { animation-delay: 0.25s; }
-
   @keyframes drawLine {
     from { stroke-dashoffset: 1000; }
     to { stroke-dashoffset: 0; }
   }
-
-  /* ========== DEMO BANNER ========== */
   .demo-banner {
     background: linear-gradient(90deg, rgba(239,68,68,0.08), rgba(249,115,22,0.08), rgba(234,179,8,0.08), rgba(34,197,94,0.08), rgba(59,130,246,0.08), rgba(139,92,246,0.08), rgba(236,72,153,0.08));
     border: 1px solid var(--border);
@@ -484,8 +375,6 @@ updateTLModeUI();
     padding: 0 4px;
     line-height: 1;
   }
-
-  /* ========== UPLOAD MODAL ========== */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -501,7 +390,6 @@ updateTLModeUI();
   }
   .modal-overlay.visible { display: flex; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
   .modal-card {
     background: var(--card-bg);
     border-radius: 18px;
@@ -564,7 +452,6 @@ updateTLModeUI();
     font-weight: 700;
     flex-shrink: 0;
   }
-
   .dropzone {
     border: 2px dashed var(--border);
     border-radius: 12px;
@@ -588,7 +475,6 @@ updateTLModeUI();
   }
   .dropzone-hint { font-size: 11px; color: var(--text-muted); }
   .dropzone input { display: none; }
-
   .modal-status {
     padding: 10px 12px;
     border-radius: 8px;
@@ -611,7 +497,6 @@ updateTLModeUI();
     animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-
   .modal-actions {
     display: flex;
     gap: 8px;
@@ -636,8 +521,6 @@ updateTLModeUI();
   .modal-btn:hover { transform: translateY(-1px); }
   .modal-btn.primary { background: var(--info); color: white; border-color: var(--info); }
   .modal-btn.danger { background: transparent; color: var(--danger); border-color: var(--danger); font-size: 11px; }
-
-  /* ========== IMPROVED BONUS CARD ========== */
   .bonus-total {
     margin-top: 14px;
     padding: 14px;
@@ -681,9 +564,6 @@ updateTLModeUI();
     font-style: italic;
     text-align: right;
   }
-
-
-  /* V4.5 - TL Mode + Public View */
   .tl-mode-btn {
     background: var(--card-bg-soft); border: 1px solid var(--border);
     border-radius: 10px; padding: 6px 12px;
@@ -718,8 +598,6 @@ updateTLModeUI();
     cursor: pointer; font-family: inherit;
   }
   .tl-mode-banner-exit:hover { background: var(--purple); color: white; }
-
-  /* Status Card (replaces bonus in public mode) */
   .status-card-content {
     display: flex; flex-direction: column; gap: 12px;
     padding: 4px;
@@ -745,7 +623,6 @@ updateTLModeUI();
     font-size: 20px; font-weight: 700; color: var(--text);
   }
   .status-tier-icon { font-size: 32px; }
-
   .status-tip {
     padding: 12px 14px;
     background: var(--card-bg-soft);
@@ -757,14 +634,11 @@ updateTLModeUI();
   .status-tip-content { flex: 1; }
   .status-tip-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
   .status-tip-text { font-size: 12px; color: var(--text-soft); line-height: 1.4; }
-
   .status-note {
     font-size: 11px; color: var(--text-muted);
     text-align: center; padding: 8px;
     font-style: italic;
   }
-
-  /* Tier Distribution */
   .tier-dist-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -792,18 +666,15 @@ updateTLModeUI();
     text-transform: uppercase; letter-spacing: 0.5px;
     margin-top: 4px; font-weight: 600;
   }
-
 </style>
 </head>
-<body>
-
+  <body>
 <div class="container">
-
   <!-- DEMO BANNER -->
   <div class="demo-banner" id="demoBanner">
     <div class="demo-banner-icon">ℹ️</div>
     <div class="demo-banner-text">
-      <strong>Data demo · Junio 2026</strong> — Cargá tu Excel del Master Scorecard para ver a tu equipo real.
+      <strong>Data demo · Solo 4 agentes</strong> — Cargá el Excel Master para ver los 34 agentes reales con data del mes.
     </div>
     <div class="demo-banner-actions">
       <button class="demo-banner-btn" onclick="openUploadModal()">📤 Cargar Excel</button>
@@ -824,7 +695,7 @@ updateTLModeUI();
     <div class="header-top">
       <div class="logo">
         📊 Performance Tracker
-        <span class="logo-badge">LITE v4.5</span>
+        <span class="logo-badge">LITE v4.6</span>
       </div>
       <div class="header-actions">
         <button class="tl-mode-btn" id="tlModeBtn" onclick="toggleTLMode()" title="Modo Team Lead">🔒 Modo TL</button>
@@ -842,20 +713,15 @@ updateTLModeUI();
     <div class="bonus-grid" id="bonusGrid"></div>
   </div>
 
-  <!-- NEW: EVOLUTION CARD -->
   <div class="card card-rainbow">
     <div class="card-title">📈 Mi Evolución</div>
     <div class="card-subtitle">Últimos 6 meses de performance</div>
-
     <div class="evo-insights" id="evoInsights"></div>
-
     <div class="evo-metric-toggle" id="evoToggle"></div>
-
     <div class="evo-chart-wrapper">
       <svg class="evo-chart-svg" id="evoChart" viewBox="0 0 400 200" preserveAspectRatio="none"></svg>
       <div class="evo-tooltip" id="evoTooltip"></div>
     </div>
-
     <div class="evo-insight-card" id="evoInsightCard"></div>
   </div>
 
@@ -870,28 +736,23 @@ updateTLModeUI();
   </div>
 
   <footer class="footer">
-    <strong>Performance Tracker Lite</strong> v4.5<br>
+    <strong>Performance Tracker Lite</strong> v4.6<br>
     Powered by Cognizant CR · EmblemHealth Contact Center<br>
-    Período: Junio 2026 · <em>+ Vista Pública + Modo TL con password</em>
+    <em>Período: Junio 2026</em> · Vista Pública + Modo TL con password
   </footer>
-
 </div>
-
 
 <!-- TL PASSWORD MODAL -->
 <div class="modal-overlay" id="tlPasswordModal">
   <div class="modal-card">
     <div class="modal-title">🔐 Modo Team Lead</div>
     <div class="modal-subtitle">Solo TLs y Supervisors. Ingresá el código para ver montos de bonos y detalles completos.</div>
-
     <div style="margin-bottom: 14px;">
-      <input type="password" id="tlPasswordInput" placeholder="Código de acceso" 
+      <input type="password" id="tlPasswordInput" placeholder="Código de acceso"
         style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--card-bg-soft); color: var(--text); font-size: 14px; font-family: inherit;"
         onkeydown="if(event.key==='Enter') checkTLPassword()">
     </div>
-
     <div class="modal-status" id="tlPasswordStatus"></div>
-
     <div class="modal-actions">
       <div></div>
       <div style="display:flex; gap:8px;">
@@ -907,11 +768,10 @@ updateTLModeUI();
   <div class="modal-card">
     <div class="modal-title">📤 Cargar Master Scorecard</div>
     <div class="modal-subtitle">Subí tu Excel para ver a tu equipo real con data en vivo.</div>
-
     <div class="modal-steps">
       <div class="modal-step">
         <div class="modal-step-num">1</div>
-        <div>Abrí tu file <strong>Scorecard_Master_2026_MR-COMM-ACPNY.xlsx</strong></div>
+        <div>Abrí tu file <strong>Scorecard_Master_2026_MR-COMM-ACPNY.xlsm</strong></div>
       </div>
       <div class="modal-step">
         <div class="modal-step-num">2</div>
@@ -919,19 +779,16 @@ updateTLModeUI();
       </div>
       <div class="modal-step">
         <div class="modal-step-num">3</div>
-        <div>Subí el archivo completo (.xlsx) acá abajo 👇</div>
+        <div>Subí el archivo completo (.xlsx o .xlsm) acá abajo 👇</div>
       </div>
     </div>
-
     <label class="dropzone" id="dropzone">
       <div class="dropzone-icon">📁</div>
       <div class="dropzone-text">Click acá o arrastrá tu archivo</div>
-      <div class="dropzone-hint">Formatos: .xlsx, .csv · Max 10MB</div>
-      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+      <div class="dropzone-hint">Formatos: .xlsx, .xlsm, .csv · Max 10MB</div>
+      <input type="file" id="fileInput" accept=".xlsx,.xlsm,.xls,.csv">
     </label>
-
     <div class="modal-status" id="modalStatus"></div>
-
     <div class="modal-actions">
       <button class="modal-btn danger" onclick="clearData()">🗑️ Limpiar datos</button>
       <div style="display:flex; gap:8px;">
@@ -942,9 +799,8 @@ updateTLModeUI();
 </div>
 
 <script>
-// ========== DATA ==========
+// ========== DATA DEMO (fallback cuando no hay Excel cargado) ==========
 const MONTHS_ORDER = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
-
 const AGENTS = {
   ingrid: {
     name: "Arguedas Nuñez, Ingrid",
@@ -955,7 +811,7 @@ const AGENTS = {
     qualifiesForBonus: true, bonusReason: "Bono aprobado: Tier Golden",
     behaviorActive: false, amonestacionType: "None",
     category: "Agent",
-    tier: "Golden", tierIcon: "🥇",
+    tierIcon: "🥇",
     fixedBonus: { eligible: true, amount: 12, reason: "Todos los agentes reciben +$12 de eficiencia siempre." },
     performanceBonus: { eligible: true, amount: 85, reason: "Tier Golden — Performance Bonus de $85." },
     totalUSD: 97, totalCRC: 48209,
@@ -989,7 +845,7 @@ const AGENTS = {
     bonusReason: "Sin bono: QA < 95% (Performance gate)",
     behaviorActive: true, amonestacionType: "Behavior (Tardía)",
     category: "Agent NH",
-    tier: "Golden", tierIcon: "🥇",
+    tierIcon: "🥇",
     fixedBonus: { eligible: true, amount: 12, reason: "Recibís $12 de eficiencia aún estando descalificada." },
     performanceBonus: { eligible: false, amount: 0, baseAmount: 85, reason: "Descalificada: QA 91.67% < 95% + Amonestación Behavior (Tardía)." },
     totalUSD: 12, totalCRC: 5964,
@@ -1022,7 +878,7 @@ const AGENTS = {
     qualifiesForBonus: true, bonusReason: "Bono aprobado: Tier Platinum",
     behaviorActive: false, amonestacionType: "None",
     category: "Agent",
-    tier: "Platinum", tierIcon: "🏆",
+    tierIcon: "🏆",
     fixedBonus: { eligible: true, amount: 12, reason: "Todos los agentes reciben +$12 de eficiencia siempre." },
     performanceBonus: { eligible: true, amount: 100, reason: "¡Excepcional! Tier Platinum — Performance Bonus máximo de $100." },
     totalUSD: 112, totalCRC: 55664,
@@ -1055,7 +911,7 @@ const AGENTS = {
     qualifiesForBonus: true, bonusReason: "Bono aprobado: Tier Platinum",
     behaviorActive: false, amonestacionType: "None",
     category: "Agent",
-    tier: "Platinum", tierIcon: "🏆",
+    tierIcon: "🏆",
     fixedBonus: { eligible: true, amount: 12, reason: "Todos los agentes reciben +$12 de eficiencia siempre." },
     performanceBonus: { eligible: true, amount: 100, reason: "¡Desempeño excepcional! Score perfecto — Performance Bonus máximo de $100." },
     totalUSD: 112, totalCRC: 55664,
@@ -1097,20 +953,20 @@ function getMetricStatus(metric) {
   if (goalOp === ">=") passes = value >= goal;
   else if (goalOp === "<=") passes = value <= goal;
   else passes = value === goal;
-
   let close;
   if (goalOp === ">=") close = value >= goal * 0.95 && value < goal;
   else if (goalOp === "<=") close = value <= goal * 1.05 && value > goal;
-
   if (passes) return { class: "success", label: "En meta", color: "var(--success)" };
   if (close) return { class: "warning", label: "Cerca", color: "var(--warning)" };
   return { class: "danger", label: "Fuera", color: "var(--danger)" };
 }
+
 function getMetricProgress(metric) {
   const { value, goal, goalOp } = metric;
   if (goalOp === ">=") return Math.min(100, (value / goal) * 100);
   return Math.min(100, (goal / Math.max(value, 1)) * 100);
 }
+
 function formatMetricValue(metric) {
   if (metric.format === "pct") return metric.value.toFixed(metric.value % 1 === 0 ? 0 : 2) + "%";
   return metric.value + metric.unit;
@@ -1121,7 +977,6 @@ function generateTips(agent) {
   const tips = [];
   const failing = agent.metrics.filter(m => getMetricStatus(m).class === "danger");
   const close = agent.metrics.filter(m => getMetricStatus(m).class === "warning");
-
   if (failing.length === 0 && close.length === 0) {
     tips.push({ icon: "🌟", title: "¡Sigue así!", text: "Todas tus métricas están en meta. Mantén el ritmo y comparte tus buenas prácticas con el equipo." });
     tips.push({ icon: "🎯", title: "Zona de crecimiento", text: "Considera pedirle a tu TL retos adicionales o proyectos especiales para seguir creciendo." });
@@ -1134,6 +989,7 @@ function generateTips(agent) {
   }
   return tips.slice(0, 3);
 }
+
 function getTipForMetric(metric) {
   const map = {
     "QA": { icon: "🎯", title: "Mejora tu QA", text: `Tu QA está en ${metric.value.toFixed(2)}% (meta ${metric.goal}%). Revisá con tu TL las últimas evals y pedí calls de calibración.` },
@@ -1160,7 +1016,6 @@ function getValidHistory(agent, metricKey) {
 function calculateInsights(agent, metricKey) {
   const data = getValidHistory(agent, metricKey);
   if (data.length === 0) return null;
-
   const values = data.map(d => d.value);
   const best = data.reduce((a, b) => {
     if (metricKey === "AHT") return a.value < b.value ? a : b;
@@ -1170,10 +1025,8 @@ function calculateInsights(agent, metricKey) {
   const first = values[0];
   const last = values[values.length - 1];
   const delta = last - first;
-
   let trend;
   if (metricKey === "AHT") {
-    // AHT: lower is better
     if (delta < -20) trend = { label: "Mejorando", icon: "↓", class: "success" };
     else if (delta > 20) trend = { label: "Subiendo", icon: "↑", class: "danger" };
     else trend = { label: "Estable", icon: "→", class: "info" };
@@ -1182,7 +1035,6 @@ function calculateInsights(agent, metricKey) {
     else if (delta < -1.5) trend = { label: "Bajando", icon: "↓", class: "danger" };
     else trend = { label: "Estable", icon: "→", class: "info" };
   }
-
   return { best, avg, first, last, delta, trend, monthsCount: data.length };
 }
 
@@ -1196,7 +1048,6 @@ function renderEvoInsights(agent, metricKey) {
   const ins = calculateInsights(agent, metricKey);
   const container = document.getElementById("evoInsights");
   if (!ins) { container.innerHTML = "<div style='grid-column:1/-1;text-align:center;font-size:12px;color:var(--text-muted);padding:20px;'>Sin datos históricos disponibles</div>"; return; }
-
   container.innerHTML = `
     <div class="evo-insight">
       <div class="evo-insight-icon">🏆</div>
@@ -1236,16 +1087,12 @@ function renderEvoChart(agent, metricKey) {
   const svg = document.getElementById("evoChart");
   const tooltip = document.getElementById("evoTooltip");
   const data = agent.history[metricKey] || [];
-
   const W = 400, H = 200;
   const padL = 35, padR = 15, padT = 15, padB = 30;
   const chartW = W - padL - padR;
   const chartH = H - padT - padB;
-
-  // Compute Y range
   const validValues = data.filter(v => v !== null && v !== undefined);
   if (validValues.length === 0) { svg.innerHTML = ""; return; }
-
   let minY, maxY;
   if (metricKey === "AHT") {
     minY = Math.max(0, Math.min(...validValues) - 100);
@@ -1255,25 +1102,16 @@ function renderEvoChart(agent, metricKey) {
     maxY = Math.min(100, Math.max(...validValues) + 2);
     if (maxY - minY < 5) maxY = minY + 5;
   }
-
   const xStep = chartW / (MONTHS_ORDER.length - 1);
   const yScale = v => padT + chartH - ((v - minY) / (maxY - minY)) * chartH;
-
   const goal = METRIC_GOALS[metricKey];
-  const goalY = (goal.goal >= minY && goal.goal <= maxY) ? yScale(goal.goal) : null;
-
-  // Build path
+  const goalY = (goal && goal.goal >= minY && goal.goal <= maxY) ? yScale(goal.goal) : null;
   const points = data.map((v, i) => v === null ? null : { x: padL + i * xStep, y: yScale(v), value: v, month: MONTHS_ORDER[i], idx: i }).filter(p => p !== null);
-
   const linePath = points.map((p, i) => (i === 0 ? "M" : "L") + p.x + " " + p.y).join(" ");
   const areaPath = linePath + ` L ${points[points.length-1].x} ${padT + chartH} L ${points[0].x} ${padT + chartH} Z`;
-
-  // Determine color based on last value status
-  const lastMetric = { value: points[points.length-1].value, goal: goal.goal, goalOp: goal.goalOp };
+  const lastMetric = { value: points[points.length-1].value, goal: goal ? goal.goal : 0, goalOp: goal ? goal.goalOp : ">=" };
   const lastStatus = getMetricStatus(lastMetric);
   const lineColor = lastStatus.color;
-
-  // Y-axis labels (3 ticks)
   const yTicks = [minY, (minY + maxY) / 2, maxY];
   const yLabelsHTML = yTicks.map(v => {
     const y = yScale(v);
@@ -1283,20 +1121,14 @@ function renderEvoChart(agent, metricKey) {
       <text class="evo-axis-label" x="${padL - 6}" y="${y + 3}" text-anchor="end">${label}</text>
     `;
   }).join("");
-
-  // Month labels
   const monthLabelsHTML = MONTHS_ORDER.map((m, i) => {
     const x = padL + i * xStep;
     return `<text class="evo-month-label" x="${x}" y="${H - 10}" text-anchor="middle">${m}</text>`;
   }).join("");
-
-  // Meta line
-  const metaLineHTML = goalY !== null ? `
+  const metaLineHTML = (goalY !== null && goal) ? `
     <line class="evo-meta-line" x1="${padL}" y1="${goalY}" x2="${W - padR}" y2="${goalY}"></line>
     <text class="evo-axis-label" x="${W - padR - 2}" y="${goalY - 4}" text-anchor="end" style="fill: var(--chart-meta);">Meta ${metricKey === "AHT" ? goal.goal + "s" : goal.goal + "%"}</text>
   ` : "";
-
-  // Points
   const pointsHTML = points.map((p, i) => {
     const isLast = i === points.length - 1;
     return `<circle class="evo-point ${isLast ? 'current' : ''}"
@@ -1304,9 +1136,7 @@ function renderEvoChart(agent, metricKey) {
               style="fill: ${lineColor};"
               data-month="${p.month}" data-value="${p.value}" data-idx="${p.idx}"></circle>`;
   }).join("");
-
   const gradientId = `evoGrad-${metricKey}`;
-
   svg.innerHTML = `
     <defs>
       <linearGradient id="${gradientId}" x1="0" y1="0" x2="0" y2="1">
@@ -1321,18 +1151,13 @@ function renderEvoChart(agent, metricKey) {
     ${pointsHTML}
     ${monthLabelsHTML}
   `;
-
-  // Tooltip logic
   const chartWrapper = svg.parentElement;
-  const rect = svg.getBoundingClientRect();
-
   svg.querySelectorAll(".evo-point").forEach(circle => {
-    const show = (e) => {
+    const show = () => {
       const month = circle.dataset.month;
       const value = parseFloat(circle.dataset.value);
       const cx = parseFloat(circle.getAttribute("cx"));
       const cy = parseFloat(circle.getAttribute("cy"));
-      // Convert SVG coords to wrapper coords
       const svgRect = svg.getBoundingClientRect();
       const wrapperRect = chartWrapper.getBoundingClientRect();
       const xPct = cx / W;
@@ -1356,10 +1181,8 @@ function renderEvoInsightCard(agent, metricKey) {
   const ins = calculateInsights(agent, metricKey);
   const container = document.getElementById("evoInsightCard");
   if (!ins) { container.innerHTML = ""; return; }
-
   let icon, title, text, cls = "";
   const deltaAbs = Math.abs(ins.delta).toFixed(1);
-
   if (ins.trend.label === "Mejorando") {
     icon = "🎉";
     title = "¡Vas subiendo!";
@@ -1378,7 +1201,6 @@ function renderEvoInsightCard(agent, metricKey) {
       : `Tu ${metricKey} bajó ${deltaAbs} puntos. Es buen momento de un 1:1 con tu TL para revisar el plan.`;
     cls = ins.trend.label === "Bajando" ? "danger" : "warning";
   }
-
   container.className = `evo-insight-card ${cls}`;
   container.innerHTML = `
     <div class="evo-insight-card-icon">${icon}</div>
@@ -1388,26 +1210,50 @@ function renderEvoInsightCard(agent, metricKey) {
     </div>
   `;
 }
-
 // ========== RENDER FUNCTIONS ==========
 function renderAgentSelector() {
   const sel = document.getElementById("agentSelector");
   sel.innerHTML = "";
+
+  // Group agents by team
+  const groups = { Ange: [], Shary: [], Geo: [], Other: [] };
   Object.entries(AGENTS).forEach(([key, agent]) => {
-    const opt = document.createElement("option");
-    opt.value = key;
-    opt.textContent = `👤 ${agent.name} · ${agent.lob}`;
-    sel.appendChild(opt);
+    const team = String(agent.team || "").replace(/^Team\s+/i, "").trim();
+    if (team === "Ange") groups.Ange.push([key, agent]);
+    else if (team === "Shary") groups.Shary.push([key, agent]);
+    else if (team === "Geo") groups.Geo.push([key, agent]);
+    else groups.Other.push([key, agent]);
   });
-  sel.addEventListener("change", (e) => renderAgent(e.target.value));
+
+  const groupLabels = {
+    Ange: "🟣 Team Ange (ACPNY)",
+    Shary: "🟢 Team Shary (EH Comm)",
+    Geo: "🟠 Team Geo (Medicare + EH Comm)",
+    Other: "👤 Otros"
+  };
+
+  Object.entries(groups).forEach(([teamKey, agents]) => {
+    if (agents.length === 0) return;
+    agents.sort((a, b) => (a[1].name || "").localeCompare(b[1].name || ""));
+    const optgroup = document.createElement("optgroup");
+    optgroup.label = groupLabels[teamKey] + ` (${agents.length})`;
+    agents.forEach(([key, agent]) => {
+      const opt = document.createElement("option");
+      opt.value = key;
+      opt.textContent = `${agent.name} · ${agent.category || "Agent"}`;
+      optgroup.appendChild(opt);
+    });
+    sel.appendChild(optgroup);
+  });
+
+  sel.onchange = (e) => renderAgent(e.target.value);
 }
 
 function renderHero(agent) {
   const badgeClass = agent.qualifiesForBonus ? "badge-success" : "badge-danger";
   const badgeIcon = agent.qualifiesForBonus ? "✅" : "❌";
   const badgeText = agent.qualifiesForBonus ? "Bono Elegible" : "Sin Bono";
-
-  const badgesHTML = agent.badges.map(b => {
+  const badgesHTML = (agent.badges || []).map(b => {
     let cls = "badge-info";
     if (b.includes("Top") || b.includes("Platinum") || b.includes("Perfecto")) cls = "badge-purple";
     else if (b.includes("Streak")) cls = "badge-warning";
@@ -1415,18 +1261,16 @@ function renderHero(agent) {
     else if (b.includes("desarrollo")) cls = "badge-warning";
     return `<span class="badge ${cls}">${b}</span>`;
   }).join("");
-
   const starsHTML = Array.from({length: 5}, (_, i) =>
-    i < agent.stars ? `<span class="star-filled">★</span>` : `<span class="star-empty">★</span>`
+    i < (agent.stars || 0) ? `<span class="star-filled">★</span>` : `<span class="star-empty">★</span>`
   ).join("");
-
   const circumference = 2 * Math.PI * 50;
-  const offset = circumference - (agent.finalScore / 100) * circumference;
-
+  const scoreVal = agent.finalScore || 0;
+  const offset = circumference - (scoreVal / 100) * circumference;
   document.getElementById("heroCard").innerHTML = `
     <div class="hero-info">
-      <h1>👋 Hola, ${agent.firstName}</h1>
-      <div class="hero-meta">${agent.name} · ${agent.category || "Agent"} · ${agent.lob} · ${agent.team} · ${agent.month}</div>
+      <h1>👋 Hola, ${agent.firstName || agent.name}</h1>
+      <div class="hero-meta">${agent.name} · ${agent.category || "Agent"} · ${agent.lob || ""} · ${agent.team || ""} · ${agent.month || ""}</div>
       <div class="hero-badges">
         <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
         ${badgesHTML}
@@ -1448,29 +1292,26 @@ function renderHero(agent) {
           </defs>
         </svg>
         <div class="donut-text">
-          <div class="donut-value">${agent.finalScore.toFixed(1)}%</div>
+          <div class="donut-value">${scoreVal.toFixed(1)}%</div>
           <div class="donut-label">Score Final</div>
         </div>
       </div>
       <div class="stars-container">
         <div class="stars">${starsHTML}</div>
-        <div class="tier-label">🏅 ${agent.tier}</div>
-        <div class="tier-sub">${agent.stars}/5 · ${agent.tenure}</div>
+        <div class="tier-label">🏅 ${agent.tier || "Unsatisfactory"}</div>
+        <div class="tier-sub">${agent.stars || 0}/5 · ${agent.tenure || ""}</div>
       </div>
     </div>
   `;
 }
 
 function renderStatusCard(agent) {
-  // Public mode: show tier + status + short tip (no amounts)
   const tier = agent.tier || "Golden";
   const tierClass = tier.toLowerCase();
   const tierIcon = tier === "Platinum" ? "🏆" : tier === "Golden" ? "🥇" : tier === "Bronze" ? "🥉" : "⚠️";
   const qualif = agent.qualifiesForBonus;
   const statusLabel = qualif ? "En Meta ✅" : "Requiere Atención ⚠️";
-  const statusReason = agent.performanceBonus?.reason || agent.bonusReason || "";
-
-  // Motivational tip per tier
+  const statusReason = (agent.performanceBonus && agent.performanceBonus.reason) || agent.bonusReason || "";
   let tipIcon, tipTitle, tipText;
   if (tier === "Platinum") {
     tipIcon = "🌟"; tipTitle = "¡Excepcional!";
@@ -1485,8 +1326,6 @@ function renderStatusCard(agent) {
     tipIcon = "🚨"; tipTitle = "Requiere plan de acción";
     tipText = "Es momento clave para un 1:1 con tu TL y definir un plan concreto de mejora.";
   }
-
-  const bonusCard = document.getElementById("bonusGrid").parentElement;
   document.getElementById("bonusGrid").innerHTML = `
     <div class="status-card-content" style="grid-column: 1 / -1;">
       <div class="status-tier-row ${tierClass}">
@@ -1496,16 +1335,13 @@ function renderStatusCard(agent) {
         </div>
         <div class="status-tier-icon">${qualif ? "✅" : "⚠️"}</div>
       </div>
-
       <div class="status-tier-row ${qualif ? '' : 'unsat'}">
         <div class="status-tier-info">
           <div class="status-tier-label">Estado</div>
           <div class="status-tier-value" style="font-size: 16px;">${statusLabel}</div>
         </div>
       </div>
-
       ${statusReason && !qualif ? `<div class="status-note" style="color: var(--danger); text-align: left; padding: 8px 14px; background: var(--danger-bg); border-radius: 8px;">📌 ${statusReason}</div>` : ""}
-
       <div class="status-tip">
         <div class="status-tip-icon">${tipIcon}</div>
         <div class="status-tip-content">
@@ -1513,49 +1349,37 @@ function renderStatusCard(agent) {
           <div class="status-tip-text">${tipText}</div>
         </div>
       </div>
-
       <div class="status-note">💡 Para ver detalles de bono y montos, contactá a tu TL.</div>
     </div>
   `;
-
-  // Remove bonusTotal if exists (from previous TL mode render)
   const existingTotal = document.getElementById("bonusTotal");
   if (existingTotal) existingTotal.remove();
 }
 
 function renderBonus(agent) {
-  // Check if TL mode is active
   const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
+  const cardTitle = document.querySelector("#bonusGrid").parentElement.querySelector(".card-title");
   if (!isTLMode) {
-    // Public mode: show status card instead
     renderStatusCard(agent);
-    // Update card title
-    const cardTitle = document.querySelector("#bonusGrid").parentElement.querySelector(".card-title");
     if (cardTitle) cardTitle.innerHTML = "🎯 Estado del Mes";
     return;
   }
-
-  // TL mode: original bonus logic
-  const cardTitle = document.querySelector("#bonusGrid").parentElement.querySelector(".card-title");
   if (cardTitle) cardTitle.innerHTML = "💰 Resumen de Bonos";
-
   return _originalRenderBonus(agent);
 }
 
 function _originalRenderBonus(agent) {
-  const fixed = agent.fixedBonus;
-  const perf = agent.performanceBonus;
+  const fixed = agent.fixedBonus || { amount: 12, reason: "$12 de eficiencia base." };
+  const perf = agent.performanceBonus || { eligible: false, amount: 0, reason: "" };
   const FX_RATE = 497;
   const baseUSD = perf.eligible ? perf.amount : 0;
   const effUSD = fixed.amount;
   const totalUSD = baseUSD + effUSD;
   const totalCRC = totalUSD * FX_RATE;
   const potentialBase = perf.baseAmount || perf.amount || 0;
-
   const strikeBase = (!perf.eligible && potentialBase > 0)
     ? `<div class="bonus-total-row strike"><span>Bono Base potencial:</span><span>$${potentialBase}</span></div>`
     : "";
-
   document.getElementById("bonusGrid").innerHTML = `
     <div class="bonus-item">
       <div class="bonus-item-header">
@@ -1574,8 +1398,6 @@ function _originalRenderBonus(agent) {
       <div class="bonus-item-reason">${perf.reason}</div>
     </div>
   `;
-
-  // Add Total Estimado section
   const bonusCard = document.getElementById("bonusGrid").parentElement;
   let totalDiv = document.getElementById("bonusTotal");
   if (!totalDiv) {
@@ -1597,7 +1419,12 @@ function _originalRenderBonus(agent) {
 
 function renderMetrics(agent) {
   const grid = document.getElementById("metricsGrid");
-  grid.innerHTML = agent.metrics.map(m => {
+  const metrics = agent.metrics || [];
+  if (metrics.length === 0) {
+    grid.innerHTML = "<div style='grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted);font-size:12px;'>Sin métricas disponibles para este agente</div>";
+    return;
+  }
+  grid.innerHTML = metrics.map(m => {
     const status = getMetricStatus(m);
     const progress = getMetricProgress(m);
     const valDisplay = formatMetricValue(m);
@@ -1632,10 +1459,7 @@ function renderTips(agent) {
 function renderAgent(key) {
   const agent = AGENTS[key];
   if (!agent) return;
-
-  // Reset metric if not available for this agent
-  if (!agent.availableMetrics.includes(currentEvoMetric)) currentEvoMetric = "Score";
-
+  if (!agent.availableMetrics || !agent.availableMetrics.includes(currentEvoMetric)) currentEvoMetric = "Score";
   renderHero(agent);
   renderBonus(agent);
   renderEvoToggle(agent);
@@ -1645,7 +1469,6 @@ function renderAgent(key) {
   renderMetrics(agent);
   renderTips(agent);
   localStorage.setItem("ptl_selectedAgent", key);
-
   setTimeout(() => {
     const donut = document.querySelector(".donut-progress");
     if (donut) {
@@ -1668,11 +1491,9 @@ document.getElementById("themeToggle").addEventListener("click", () => {
   document.documentElement.setAttribute("data-theme", next);
   document.getElementById("themeToggle").textContent = next === "dark" ? "☀️" : "🌙";
   localStorage.setItem("ptl_theme", next);
-  // Re-render chart to pick up new theme colors
   const agentKey = document.getElementById("agentSelector").value;
-  renderEvoChart(AGENTS[agentKey], currentEvoMetric);
+  if (AGENTS[agentKey]) renderEvoChart(AGENTS[agentKey], currentEvoMetric);
 });
-
 
 // ========== DEMO BANNER ==========
 function checkBanner() {
@@ -1702,16 +1523,15 @@ function showStatus(type, message) {
   el.className = "modal-status visible " + type;
   el.innerHTML = `${icon} <span>${message}</span>`;
 }
-
-// Close on Esc or click outside
 document.getElementById("uploadModal").addEventListener("click", (e) => {
   if (e.target.id === "uploadModal") closeUploadModal();
 });
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeUploadModal();
+  if (e.key === "Escape") {
+    closeUploadModal();
+    closeTLPasswordModal();
+  }
 });
-
-// Dropzone
 const dropzone = document.getElementById("dropzone");
 const fileInput = document.getElementById("fileInput");
 ["dragover", "dragenter"].forEach(evt =>
@@ -1728,111 +1548,188 @@ fileInput.addEventListener("change", (e) => {
   if (e.target.files.length > 0) handleFile(e.target.files[0]);
 });
 
-// ========== EXCEL PARSER ==========
+// ========== EXCEL PARSER (V4.6 - Full 34 agents support) ==========
 async function handleFile(file) {
   showStatus("loading", `Leyendo ${file.name}...`);
   try {
     const buffer = await file.arrayBuffer();
     const wb = XLSX.read(buffer, { type: "array" });
 
-    // Find IMPORT sheets by partial name
-    const importSheets = wb.SheetNames.filter(n =>
-      /IMPORT.*(ACPNY|SHARY|GEO|Ange|Shary|Medicare)/i.test(n)
-    );
+    // STEP 1: Read ⚙️ Config for current month
+    let currentMonth = "Junio 2026";
+    const configSheetName = wb.SheetNames.find(n => /config/i.test(n));
+    if (configSheetName) {
+      const configRows = XLSX.utils.sheet_to_json(wb.Sheets[configSheetName], { header: 1, defval: null });
+      for (const row of configRows) {
+        if (!row || row.length < 2) continue;
+        const label = String(row[0] || "").toLowerCase();
+        if (label.includes("mes") || label.includes("período") || label.includes("periodo")) {
+          const val = row[1];
+          if (val && typeof val === "string" && val.trim()) {
+            currentMonth = val.trim();
+            break;
+          }
+        }
+      }
+    }
+    console.log("[Parser] Mes actual:", currentMonth);
 
+    // STEP 2: Read 👥 Roster into map by AssociateID
+    const rosterMap = {};
+    const rosterSheetName = wb.SheetNames.find(n => /roster/i.test(n));
+    if (rosterSheetName) {
+      const rosterRows = XLSX.utils.sheet_to_json(wb.Sheets[rosterSheetName], { defval: null });
+      rosterRows.forEach(row => {
+        const id = String(row["Associate ID"] || row["AssociateID"] || "").trim();
+        if (!id) return;
+        const status = String(row["Status"] || "Active").trim();
+        if (status && status.toLowerCase() !== "active") return;
+        rosterMap[id] = {
+          name: row["Advocate Name"] || "",
+          associateId: id,
+          team: row["TL/Team"] || row["Team"] || "",
+          lob: row["LOB"] || "",
+          category: row["Category"] || "Tenured",
+          status: status,
+          isNewHire: (row["NH"] === "Yes" || row["NH"] === true),
+          tenureDate: row["Tenure Date"] || ""
+        };
+      });
+    }
+    console.log("[Parser] Roster cargado:", Object.keys(rosterMap).length, "agentes");
+
+    // STEP 3: Find IMPORT sheets
+    const importSheets = wb.SheetNames.filter(n =>
+      /IMPORT.*(ACPNY|SHARY|GEO|Ange|Medicare)/i.test(n)
+    );
     if (importSheets.length === 0) {
-      showStatus("error", "No encontré hojas 📤 IMPORT en el archivo. Revisá que las hojas se llamen IMPORT ACPNY/SHARY/GEO.");
+      showStatus("error", "No encontré hojas 📤 IMPORT. Revisá que se llamen IMPORT ACPNY/SHARY/GEO.");
       return;
     }
 
-    // Also find SC sheets for tier/score data
-    const scSheets = wb.SheetNames.filter(n =>
-      /^(📊 )?SC\s*(ACPNY|EH|Medicare|Shary|Geo|Ange)/i.test(n)
-    );
-
+    // STEP 4: Parse IMPORT sheets
     const parsedAgents = {};
-
-    // Parse IMPORT sheets
     importSheets.forEach(sheetName => {
-      const sheet = wb.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json(sheet, { defval: null });
-
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { defval: null });
       rows.forEach(row => {
-        const name = row["Advocate Name"] || row["Name"];
-        if (!name || typeof name !== "string") return;
-
-        const key = name.toLowerCase().replace(/[^a-z]/g, "").slice(0, 20);
-        parsedAgents[key] = parsedAgents[key] || {
+        const importStatus = String(row["ImportStatus"] || "READY").trim();
+        if (/excluded/i.test(importStatus)) return;
+        const id = String(row["AssociateID"] || row["Associate ID"] || "").trim();
+        if (!id) {
+          console.warn("[Parser] Fila sin AssociateID:", row["Advocate Name"]);
+          return;
+        }
+        const name = row["Advocate Name"] || row["Name"] || "";
+        const lob = row["LOB"] || "";
+        const isACPNY = /ACPNY/i.test(lob);
+        const isMedicare = /Medicare/i.test(lob);
+        parsedAgents[id] = parsedAgents[id] || {
+          associateId: id,
           name: name,
           firstName: name.split(",")[1]?.trim().split(" ")[0] || name.split(" ")[0],
           team: row["Team"] || "N/A",
-          lob: row["LOB"] || "N/A",
+          lob: lob,
           category: row["Category"] || "Agent",
-          tenure: row["IsNewHire"] === "Yes" || row["IsNewHire"] === true ? "New Hire" : "Tenure",
-          month: "Junio 2026",
+          tenure: (row["IsNewHire"] === "Yes" || row["IsNewHire"] === true) ? "New Hire" : "Tenure",
+          month: currentMonth,
           badges: [],
           metrics: [],
-          history: {},
+          history: { Score: [] },
           availableMetrics: ["Score"]
         };
-
-        const a = parsedAgents[key];
-        // Build metrics based on LOB
-        const isACPNY = /ACPNY|Ange/i.test(a.lob);
-        const isMedicare = /Medicare/i.test(a.lob);
-
+        const a = parsedAgents[id];
         const metrics = [];
-        if (row["ACSS_CSAT"] && row["ACSS_CSAT"] !== 0) {
+        if (row["ACSS_CSAT"] && row["ACSS_CSAT"] !== 0 && !isACPNY) {
           metrics.push({ name: "CSAT", value: pct(row["ACSS_CSAT"]), unit: "%", goal: isMedicare ? 95 : 94.3, goalOp: ">=", format: "pct" });
         }
         if (row["Adherence"]) metrics.push({ name: "ADH", value: pct(row["Adherence"]), unit: "%", goal: isACPNY ? 96 : 95.5, goalOp: ">=", format: "pct" });
         if (row["AHT"]) metrics.push({ name: "AHT", value: Math.round(row["AHT"]), unit: "s", goal: isACPNY ? 400 : 690, goalOp: "<=", format: "num" });
         if (row["Attendance"]) metrics.push({ name: "ATT", value: pct(row["Attendance"]), unit: "%", goal: isACPNY ? 95 : 98, goalOp: ">=", format: "pct" });
         if (row["Opened_Within_Month"] && !isACPNY) metrics.push({ name: "Opened", value: pct(row["Opened_Within_Month"]), unit: "%", goal: 95, goalOp: ">=", format: "pct" });
-        if (row["SC_NR"] !== undefined) metrics.push({ name: "SC+NR", value: pct(row["SC_NR"]), unit: "%", goal: isACPNY ? 1 : 3, goalOp: "<=", format: "pct" });
+        if (row["SC_NR"] !== undefined && row["SC_NR"] !== null) metrics.push({ name: "SC+NR", value: pct(row["SC_NR"]), unit: "%", goal: isACPNY ? 1 : (isMedicare ? 2 : 3), goalOp: "<=", format: "pct" });
         if (row["QA"]) metrics.push({ name: "QA", value: pct(row["QA"]), unit: "%", goal: isACPNY ? 93 : 95.5, goalOp: ">=", format: "pct", cap: isACPNY ? 91.5 : 95 });
         if (row["CE"] && isACPNY) metrics.push({ name: "CE", value: pct(row["CE"]), unit: "%", goal: 75, goalOp: ">=", format: "pct" });
         if (row["PKT"]) metrics.push({ name: "PKT", value: pct(row["PKT"]), unit: "%", goal: 90, goalOp: ">=", format: "pct" });
-
         a.metrics = metrics;
       });
     });
+    console.log("[Parser] Agentes parseados desde IMPORT:", Object.keys(parsedAgents).length);
 
-    // Parse SC sheets to get tier and final score
+    // STEP 5: Parse SC sheets (multi-section) for tier/score
+    const scSheets = wb.SheetNames.filter(n =>
+      /^(📊 )?SC\s*(ACPNY|EH|Medicare|Shary|Geo|Ange)/i.test(n)
+    );
     scSheets.forEach(sheetName => {
       const sheet = wb.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json(sheet, { defval: null });
-      rows.forEach(row => {
-        const name = row["Advocate Name"] || row["Advocate"] || row["Name"];
-        if (!name || typeof name !== "string") return;
-        const key = name.toLowerCase().replace(/[^a-z]/g, "").slice(0, 20);
-        if (!parsedAgents[key]) return;
-
-        const a = parsedAgents[key];
-        const finalPct = row["Final %"] || row["Score"] || row["Final Score"];
-        const scoreNum = row["Score"] || row["Rating"];
-        const tier = row["Tier"];
-        const qualifies = row["QualifiesForBonus"] || row["Qualifies For Bonus"];
-        const bonusReason = row["BonusReason"] || row["Bono Status"];
-        const behavior = row["BehaviorActive"];
-
-        if (finalPct) a.finalScore = pct(finalPct);
-        if (scoreNum && scoreNum <= 5) a.stars = Math.round(scoreNum);
-        if (tier) {
-          a.tier = String(tier).replace(/[^A-Za-z]/g, "").trim() || "Golden";
-          a.tierIcon = tier.includes("Platinum") ? "🏆" : tier.includes("Golden") ? "🥇" : tier.includes("Bronze") ? "🥉" : "⚠️";
+      const rawRows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null });
+      const sectionStarts = [];
+      rawRows.forEach((row, idx) => {
+        if (row && String(row[0] || "").trim() === "Advocate Name") {
+          sectionStarts.push(idx);
         }
-        a.qualifiesForBonus = String(qualifies).toLowerCase() === "yes" || qualifies === true;
-        a.behaviorActive = behavior === true || behavior === 1 || String(behavior) === "1";
-        a.bonusReason = bonusReason || "";
-
-        // Calculate bonus
-        computeBonus(a);
+      });
+      sectionStarts.forEach((startIdx, sectionIdx) => {
+        const headerRow = rawRows[startIdx];
+        const endIdx = sectionStarts[sectionIdx + 1] || rawRows.length;
+        const colMap = {};
+        headerRow.forEach((cell, i) => {
+          if (cell) colMap[String(cell).trim()] = i;
+        });
+        for (let r = startIdx + 1; r < endIdx; r++) {
+          const row = rawRows[r];
+          if (!row || !row[0]) continue;
+          const nameCell = String(row[0]).trim();
+          if (/team average|🏆|🌟|SME —|SME—/i.test(nameCell)) continue;
+          const rosterEntry = Object.values(rosterMap).find(re => re.name === nameCell);
+          if (!rosterEntry) continue;
+          const id = rosterEntry.associateId;
+          if (!parsedAgents[id]) continue;
+          const a = parsedAgents[id];
+          const finalPctIdx = colMap["Final %"] !== undefined ? colMap["Final %"] : colMap["Score %"];
+          const scoreIdx = colMap["Score"];
+          const tierIdx = colMap["Tier"];
+          const qualifiesIdx = colMap["Qualifies For Bonus"] !== undefined ? colMap["Qualifies For Bonus"] : colMap["QualifiesForBonus"];
+          const bonusReasonIdx = colMap["BonusReason"] !== undefined ? colMap["BonusReason"] : colMap["Bono Status"];
+          const behaviorIdx = colMap["BehaviorActive"];
+          if (finalPctIdx !== undefined && row[finalPctIdx] !== null) a.finalScore = pct(row[finalPctIdx]);
+          if (scoreIdx !== undefined && row[scoreIdx] !== null && row[scoreIdx] <= 5) a.stars = Math.round(row[scoreIdx]);
+          if (tierIdx !== undefined && row[tierIdx]) {
+            const tierRaw = String(row[tierIdx]);
+            a.tier = tierRaw.replace(/[^A-Za-z]/g, "").trim() || "Golden";
+            a.tierIcon = tierRaw.includes("Platinum") ? "🏆" :
+                         tierRaw.includes("Golden") ? "🥇" :
+                         tierRaw.includes("Bronze") ? "🥉" :
+                         tierRaw.includes("Critical") ? "🚨" : "⚠️";
+          }
+          if (qualifiesIdx !== undefined) {
+            const q = row[qualifiesIdx];
+            a.qualifiesForBonus = String(q).toLowerCase() === "yes" || q === true;
+          }
+          if (bonusReasonIdx !== undefined) a.bonusReason = String(row[bonusReasonIdx] || "");
+          if (behaviorIdx !== undefined) {
+            const b = row[behaviorIdx];
+            a.behaviorActive = b === true || b === 1 || String(b) === "1";
+          }
+          computeBonus(a);
+        }
       });
     });
+    console.log("[Parser] SC sheets procesadas");
 
-    // Fallback for agents without SC data
+    // STEP 6: Enrich with Roster metadata
     Object.values(parsedAgents).forEach(a => {
+      const rosterEntry = rosterMap[a.associateId];
+      if (rosterEntry) {
+        a.team = "Team " + rosterEntry.team;
+        a.tenure = rosterEntry.isNewHire ? "New Hire" : "Tenure";
+        a.category = rosterEntry.category === "SME"
+          ? "SME"
+          : (rosterEntry.isNewHire ? "Agent NH" : "Agent");
+        a.name = rosterEntry.name;
+        a.firstName = a.name.split(",")[1]?.trim().split(" ")[0] || a.name.split(" ")[0];
+      } else {
+        console.warn("[Parser] Agente sin roster:", a.name, a.associateId);
+      }
       if (a.finalScore === undefined) a.finalScore = 0;
       if (a.stars === undefined) a.stars = 0;
       if (!a.tier) a.tier = "Unsatisfactory";
@@ -1846,10 +1743,9 @@ async function handleFile(file) {
       }
     });
 
-    // Save to localStorage
+    // STEP 7: Save & replace AGENTS
     localStorage.setItem("ptl_uploadedData", JSON.stringify(parsedAgents));
-
-    // Update global AGENTS and re-render
+    Object.keys(AGENTS).forEach(k => delete AGENTS[k]);
     Object.assign(AGENTS, parsedAgents);
     renderAgentSelector();
     const firstKey = Object.keys(parsedAgents)[0];
@@ -1857,11 +1753,13 @@ async function handleFile(file) {
       document.getElementById("agentSelector").value = firstKey;
       renderAgent(firstKey);
     }
-
+    const footerPeriod = document.querySelector(".footer em");
+    if (footerPeriod && firstKey) {
+      footerPeriod.textContent = "Período: " + parsedAgents[firstKey].month;
+    }
     document.getElementById("demoBanner").classList.add("hidden");
-    showStatus("success", `¡Listo! Cargué ${Object.keys(parsedAgents).length} agentes. Cerrando...`);
+    showStatus("success", `¡Listo! Cargué ${Object.keys(parsedAgents).length} agentes de ${currentMonth}. Cerrando...`);
     setTimeout(closeUploadModal, 1500);
-
   } catch (err) {
     console.error(err);
     showStatus("error", "Error leyendo el archivo: " + err.message);
@@ -1874,7 +1772,6 @@ function pct(val) {
 }
 
 function computeBonus(a) {
-  // Bonus table
   const table = {
     "Agent":      { Platinum: 100, Golden: 85, Bronze: 70, Unsatisfactory: 0 },
     "Agent NH":   { Platinum: 100, Golden: 85, Bronze: 70, Unsatisfactory: 0 },
@@ -1886,7 +1783,6 @@ function computeBonus(a) {
   const tier = a.tier || "Unsatisfactory";
   const baseAmount = (table[cat] || table["Agent"])[tier] || 0;
   const qualifies = a.qualifiesForBonus === true;
-
   a.fixedBonus = { eligible: true, amount: 12, reason: "Todos reciben +$12 de eficiencia siempre." };
   a.performanceBonus = qualifies
     ? { eligible: true, amount: baseAmount, reason: `Tier ${tier} — Performance Bonus de $${baseAmount}.` }
@@ -1902,7 +1798,6 @@ function clearData() {
   location.reload();
 }
 
-// Load previously uploaded data on init
 function loadStoredData() {
   const stored = localStorage.getItem("ptl_uploadedData");
   if (!stored) return false;
@@ -1916,30 +1811,8 @@ function loadStoredData() {
   }
 }
 
-
-// ========== INIT ==========
-const hasStored = loadStoredData();
-renderAgentSelector();
-initTheme();
-checkBanner();
-const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0] || "ingrid";
-const actualAgent = AGENTS[savedAgent] ? savedAgent : Object.keys(AGENTS)[0];
-document.getElementById("agentSelector").value = actualAgent;
-renderAgent(actualAgent);
-
-// Re-render chart on window resize (for responsive tooltip positioning)
-let resizeTimer;
-window.addEventListener("resize", () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    const agentKey = document.getElementById("agentSelector").value;
-    renderEvoChart(AGENTS[agentKey], currentEvoMetric);
-  }, 200);
-});
-
-// ========== V4.5 - TL MODE ==========
+// ========== TL MODE ==========
 const TL_PASSWORD = "EHCC2026";
-
 function openTLPasswordModal() {
   document.getElementById("tlPasswordModal").classList.add("visible");
   const input = document.getElementById("tlPasswordInput");
@@ -1949,15 +1822,12 @@ function openTLPasswordModal() {
   status.className = "modal-status";
   status.innerHTML = "";
 }
-
 function closeTLPasswordModal() {
   document.getElementById("tlPasswordModal").classList.remove("visible");
 }
-
 function checkTLPassword() {
   const input = document.getElementById("tlPasswordInput").value;
   const status = document.getElementById("tlPasswordStatus");
-
   if (input === TL_PASSWORD) {
     localStorage.setItem("ptl_tlMode", "true");
     status.className = "modal-status visible success";
@@ -1965,7 +1835,6 @@ function checkTLPassword() {
     setTimeout(() => {
       closeTLPasswordModal();
       updateTLModeUI();
-      // Re-render current view
       const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0];
       renderAgent(savedAgent);
     }, 800);
@@ -1975,16 +1844,11 @@ function checkTLPassword() {
     document.getElementById("tlPasswordInput").value = "";
   }
 }
-
 function toggleTLMode() {
   const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
-  if (isTLMode) {
-    exitTLMode();
-  } else {
-    openTLPasswordModal();
-  }
+  if (isTLMode) exitTLMode();
+  else openTLPasswordModal();
 }
-
 function exitTLMode() {
   if (!confirm("¿Salir del Modo TL? Vas a volver a la vista pública sin montos.")) return;
   localStorage.removeItem("ptl_tlMode");
@@ -1992,12 +1856,10 @@ function exitTLMode() {
   const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0];
   renderAgent(savedAgent);
 }
-
 function updateTLModeUI() {
   const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
   const btn = document.getElementById("tlModeBtn");
   const banner = document.getElementById("tlModeBanner");
-
   if (isTLMode) {
     if (btn) {
       btn.classList.add("active");
@@ -2014,17 +1876,39 @@ function updateTLModeUI() {
     if (banner) banner.classList.remove("visible");
   }
 }
-
-// Close TL modal on outside click or Esc
 document.getElementById("tlPasswordModal").addEventListener("click", (e) => {
   if (e.target.id === "tlPasswordModal") closeTLPasswordModal();
 });
 
-// Init on load
+// ========== INIT ==========
+loadStoredData();
+renderAgentSelector();
+initTheme();
+checkBanner();
 updateTLModeUI();
 
+const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0] || "ingrid";
+const actualAgent = AGENTS[savedAgent] ? savedAgent : Object.keys(AGENTS)[0];
+if (actualAgent) {
+  document.getElementById("agentSelector").value = actualAgent;
+  renderAgent(actualAgent);
+}
 
+// Update footer with current month if data loaded
+const footerPeriod = document.querySelector(".footer em");
+if (footerPeriod && actualAgent && AGENTS[actualAgent]) {
+  footerPeriod.textContent = "Período: " + (AGENTS[actualAgent].month || "Junio 2026");
+}
+
+// Re-render chart on window resize
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    const agentKey = document.getElementById("agentSelector").value;
+    if (AGENTS[agentKey]) renderEvoChart(AGENTS[agentKey], currentEvoMetric);
+  }, 200);
+});
 </script>
-
 </body>
 </html>
