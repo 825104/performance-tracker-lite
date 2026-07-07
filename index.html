@@ -755,8 +755,7 @@
     background: var(--warning-bg); color: var(--warning);
   }
   .team-metrics-heatmap {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 10px;
+    display: block;
   }
   .metric-heatmap-card {
     background: var(--card-bg-soft); border-radius: 12px;
@@ -828,6 +827,8 @@
   .tier-badge-mini.bronze { background: #fed7aa; color: #9a3412; }
   .tier-badge-mini.unsat { background: var(--danger-bg); color: var(--danger); }
   .tier-badge-mini.critical { background: var(--danger); color: white; }
+ .team-scorecard-table th:last-child,
+  .team-scorecard-table td:last-child { display: none; }
  /* ===== METRIC SUB-TABS ===== */
   .metric-subtabs {
     display: flex; gap: 4px; margin-bottom: 14px;
