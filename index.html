@@ -1923,7 +1923,7 @@ function exitTLMode() {
   const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0];
   renderAgent(savedAgent);
 }
-function updateTLModeUI() updateDownloadBtn() {
+function updateTLModeUI() {) updateDownloadBtn() {
   const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
   const btn = document.getElementById("tlModeBtn");
   const banner = document.getElementById("tlModeBanner");
@@ -1933,7 +1933,11 @@ function updateTLModeUI() updateDownloadBtn() {
       btn.innerHTML = "Modo TL";
       btn.title = "Salir del Modo TL";
     }
-    if (banner) banner.classList.add("visible");
+    
+  if (banner) banner.classList.remove("visible");
+  }
+  updateDownloadBtn();
+}   
   } else {
     if (btn) {
       btn.classList.remove("active");
