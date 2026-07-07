@@ -1923,7 +1923,7 @@ function exitTLMode() {
   const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0];
   renderAgent(savedAgent);
 }
-function updateTLModeUI() {) updateDownloadBtn() {
+function updateTLModeUI() {
   const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
   const btn = document.getElementById("tlModeBtn");
   const banner = document.getElementById("tlModeBanner");
@@ -1933,11 +1933,7 @@ function updateTLModeUI() {) updateDownloadBtn() {
       btn.innerHTML = "Modo TL";
       btn.title = "Salir del Modo TL";
     }
-    
-  if (banner) banner.classList.remove("visible");
-  }
-  updateDownloadBtn();
-}   
+    if (banner) banner.classList.add("visible");
   } else {
     if (btn) {
       btn.classList.remove("active");
@@ -1946,6 +1942,7 @@ function updateTLModeUI() {) updateDownloadBtn() {
     }
     if (banner) banner.classList.remove("visible");
   }
+  updateDownloadBtn();
 }
 document.getElementById("tlPasswordModal").addEventListener("click", (e) => {
   if (e.target.id === "tlPasswordModal") closeTLPasswordModal();
