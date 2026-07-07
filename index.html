@@ -791,6 +791,7 @@
     <div class="modal-status" id="modalStatus"></div>
     <div class="modal-actions">
       <button class="modal-btn danger" onclick="clearData()">🗑️ Limpiar datos</button>
+      <button class="modal-btn" onclick="downloadDataJSON()" id="downloadDataBtn" style="display:none;">📥 Publicar data.json</button>
       <div style="display:flex; gap:8px;">
         <button class="modal-btn" onclick="closeUploadModal()">Cancelar</button>
       </div>
@@ -968,7 +969,7 @@ function getMetricProgress(metric) {
 }
 
 function formatMetricValue(metric) {
-  if (metric.format === "pct") return metric.value.toFixed(metric.value % 1 === 0 ? 0 : 2) + "%";
+  if (metric.format === "pct") return metric.value.toFixed(2) + "%";
   return metric.value + metric.unit;
 }
 
@@ -1292,7 +1293,7 @@ function renderHero(agent) {
           </defs>
         </svg>
         <div class="donut-text">
-          <div class="donut-value">${scoreVal.toFixed(1)}%</div>
+          <div class="donut-value">${scoreVal.toFixed(2)}%</div>
           <div class="donut-label">Score Final</div>
         </div>
       </div>
@@ -1838,7 +1839,45 @@ function loadStoredData() {
     return false;
   }
 }
+// ========== PUBLISHED DATA (Opción A - shared via repo) ==========
+async function loadPublishedData() {
+  try {
+    const res = await fetch("data.json?v=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) return false;
+    const data = await res.json();
+    if (!data || typeof data !== "object" || Object.keys(data).length === 0) return false;
+    Object.keys(AGENTS).forEach(k => delete AGENTS[k]);
+    Object.assign(AGENTS, data);
+    console.log("[Data] Loaded published data.json:", Object.keys(data).length, "agentes");
+    return true;
+  } catch (e) {
+    console.log("[Data] No published data.json found:", e.message);
+    return false;
+  }
+}
 
+function downloadDataJSON() {
+  const dataStr = JSON.stringify(AGENTS, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "data.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showStatus("success", "data.json descargado. Súbelo al repo (mismo folder que index.html) y commit para publicar al equipo.");
+}
+
+// Show/hide download button based on TL mode + having data loaded
+function updateDownloadBtn() {
+  const btn = document.getElementById("downloadDataBtn");
+  if (!btn) return;
+  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
+  const hasData = Object.keys(AGENTS).length > 4; // more than demo agents
+  btn.style.display = (isTLMode && hasData) ? "" : "none";
+}
 // ========== TL MODE ==========
 const TL_PASSWORD = "EHCC2026";
 function openTLPasswordModal() {
@@ -1884,7 +1923,7 @@ function exitTLMode() {
   const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0];
   renderAgent(savedAgent);
 }
-function updateTLModeUI() {
+function updateTLModeUI() updateDownloadBtn() {
   const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
   const btn = document.getElementById("tlModeBtn");
   const banner = document.getElementById("tlModeBanner");
@@ -1909,24 +1948,36 @@ document.getElementById("tlPasswordModal").addEventListener("click", (e) => {
 });
 
 // ========== INIT ==========
-loadStoredData();
-renderAgentSelector();
-initTheme();
-checkBanner();
-updateTLModeUI();
+(async function initApp() {
+  // Fallback chain: localStorage (own upload) > data.json (published) > demo AGENTS
+  const hasLocal = loadStoredData();
+  if (!hasLocal) {
+    const hasPublished = await loadPublishedData();
+    if (hasPublished) {
+      // Hide demo banner because we have real published data
+      const banner = document.getElementById("demoBanner");
+      if (banner) banner.classList.add("hidden");
+    }
+  }
+  renderAgentSelector();
+  initTheme();
+  checkBanner();
+  updateTLModeUI();
+  updateDownloadBtn();
 
-const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0] || "ingrid";
-const actualAgent = AGENTS[savedAgent] ? savedAgent : Object.keys(AGENTS)[0];
-if (actualAgent) {
-  document.getElementById("agentSelector").value = actualAgent;
-  renderAgent(actualAgent);
-}
+  const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0] || "ingrid";
+  const actualAgent = AGENTS[savedAgent] ? savedAgent : Object.keys(AGENTS)[0];
+  if (actualAgent) {
+    document.getElementById("agentSelector").value = actualAgent;
+    renderAgent(actualAgent);
+  }
 
-// Update footer with current month if data loaded
-const footerPeriod = document.querySelector(".footer em");
-if (footerPeriod && actualAgent && AGENTS[actualAgent]) {
-  footerPeriod.textContent = "Período: " + (AGENTS[actualAgent].month || "Junio 2026");
-}
+  // Update footer with current month if data loaded
+  const footerPeriod = document.querySelector(".footer em");
+  if (footerPeriod && actualAgent && AGENTS[actualAgent]) {
+    footerPeriod.textContent = "Período: " + (AGENTS[actualAgent].month || "Junio 2026");
+  }
+})();
 
 // Re-render chart on window resize
 let resizeTimer;
