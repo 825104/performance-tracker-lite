@@ -2603,20 +2603,19 @@ function renderTeamScorecard() {
   table.innerHTML = header + rows;
 }
 
-// Hook into TL mode toggle to show/hide view-toggle
+// View toggle is always visible (public + TL) - metrics tab is public data
 const _origUpdateTLModeUI_teamview = updateTLModeUI;
 updateTLModeUI = function() {
   _origUpdateTLModeUI_teamview();
-  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
   const toggle = document.getElementById("viewToggle");
-  if (toggle) toggle.classList.toggle("visible", isTLMode);
-  if (!isTLMode && currentView === "team") {
-    switchView("agent");
-  }
+  if (toggle) toggle.classList.add("visible");
 };
 
-// Re-run on load to catch initial state
-setTimeout(() => { if (typeof updateTLModeUI === "function") updateTLModeUI(); }, 200);
+// Show toggle immediately on load (regardless of TL mode)
+setTimeout(() => {
+  const toggle = document.getElementById("viewToggle");
+  if (toggle) toggle.classList.add("visible");
+}, 100);
 // Re-render chart on window resize
 let resizeTimer;
 window.addEventListener("resize", () => {
