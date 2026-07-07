@@ -666,6 +666,168 @@
     text-transform: uppercase; letter-spacing: 0.5px;
     margin-top: 4px; font-weight: 600;
   }
+ /* ===== TEAM VIEW ===== */
+  .view-toggle {
+    display: none; gap: 6px;
+    background: var(--card-bg); border-radius: 12px;
+    padding: 4px; margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .view-toggle.visible { display: flex; }
+  .view-toggle-btn {
+    flex: 1; padding: 10px 14px; border: none;
+    background: transparent; color: var(--text-soft);
+    border-radius: 10px; font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .view-toggle-btn:hover { background: var(--card-bg-soft); }
+  .view-toggle-btn.active {
+    background: linear-gradient(135deg, var(--purple), var(--info));
+    color: white;
+  }
+  .team-view { display: none; }
+  .team-view.visible { display: block; }
+  .team-filter {
+    display: flex; gap: 6px; margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .team-filter-pill {
+    padding: 6px 12px; border: 1px solid var(--border);
+    background: var(--card-bg); color: var(--text-soft);
+    border-radius: 20px; font-size: 11px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+  }
+  .team-filter-pill:hover { transform: translateY(-1px); }
+  .team-filter-pill.active {
+    background: var(--purple); color: white; border-color: var(--purple);
+  }
+  .team-tabs {
+    display: flex; gap: 4px; margin-bottom: 16px;
+    background: var(--card-bg); border-radius: 12px;
+    padding: 4px; box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+  .team-tab {
+    flex: 1; min-width: 110px; padding: 8px 10px;
+    border: none; background: transparent; color: var(--text-soft);
+    border-radius: 8px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .team-tab:hover { background: var(--card-bg-soft); }
+  .team-tab.active { background: var(--info); color: white; }
+  .team-kpi-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; margin-bottom: 16px;
+  }
+  .team-kpi-card {
+    background: var(--card-bg-soft); border-radius: 12px;
+    padding: 14px; border: 1px solid var(--border-soft);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .team-kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--rainbow);
+  }
+  .team-kpi-icon { font-size: 22px; margin-bottom: 4px; }
+  .team-kpi-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text-muted); font-weight: 600; margin-bottom: 4px;
+  }
+  .team-kpi-value { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1; }
+  .team-kpi-sub { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+  .focus-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .focus-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; background: var(--card-bg-soft);
+    border-radius: 10px; border-left: 3px solid var(--danger);
+  }
+  .focus-item.warning { border-left-color: var(--warning); }
+  .focus-item-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .focus-item-count { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+  .focus-item-badge {
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px;
+    background: var(--danger-bg); color: var(--danger);
+  }
+  .focus-item.warning .focus-item-badge {
+    background: var(--warning-bg); color: var(--warning);
+  }
+  .team-metrics-heatmap {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+  }
+  .metric-heatmap-card {
+    background: var(--card-bg-soft); border-radius: 12px;
+    padding: 12px; border: 1px solid var(--border-soft);
+  }
+  .metric-heatmap-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .metric-heatmap-name {
+    font-size: 12px; font-weight: 700; color: var(--text);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .metric-heatmap-avg {
+    font-size: 16px; font-weight: 700; color: var(--text);
+  }
+  .metric-heatmap-avg.success { color: var(--success); }
+  .metric-heatmap-avg.warning { color: var(--warning); }
+  .metric-heatmap-avg.danger { color: var(--danger); }
+  .metric-heatmap-bar {
+    display: flex; height: 8px; border-radius: 4px;
+    overflow: hidden; margin-bottom: 6px;
+    background: var(--donut-bg);
+  }
+  .metric-heatmap-seg { height: 100%; }
+  .metric-heatmap-seg.success { background: var(--success); }
+  .metric-heatmap-seg.warning { background: var(--warning); }
+  .metric-heatmap-seg.danger { background: var(--danger); }
+  .metric-heatmap-legend {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--text-muted);
+  }
+  .team-scroll-wrapper {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+  }
+  .team-scorecard-table {
+    width: 100%; border-collapse: collapse;
+    background: var(--card-bg-soft); font-size: 11px;
+    min-width: 700px;
+  }
+  .team-scorecard-table th {
+    background: var(--card-bg); padding: 10px 8px;
+    text-align: center; font-weight: 700; color: var(--text-soft);
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0;
+  }
+  .team-scorecard-table td {
+    padding: 8px; border-bottom: 1px solid var(--border-soft);
+    color: var(--text); text-align: center;
+  }
+  .team-scorecard-table td.name-cell {
+    font-weight: 600; text-align: left; min-width: 140px;
+    position: sticky; left: 0; background: var(--card-bg-soft);
+  }
+  .team-scorecard-table td.metric-cell {
+    font-weight: 700;
+  }
+  .team-scorecard-table td.metric-cell.success { background: var(--success-bg); color: var(--success); }
+  .team-scorecard-table td.metric-cell.warning { background: var(--warning-bg); color: var(--warning); }
+  .team-scorecard-table td.metric-cell.danger { background: var(--danger-bg); color: var(--danger); }
+  .tier-badge-mini {
+    display: inline-block; padding: 3px 8px; border-radius: 10px;
+    font-size: 10px; font-weight: 700;
+  }
+  .tier-badge-mini.platinum { background: var(--purple-bg); color: var(--purple); }
+  .tier-badge-mini.golden { background: #fef3c7; color: #b45309; }
+  .tier-badge-mini.bronze { background: #fed7aa; color: #9a3412; }
+  .tier-badge-mini.unsat { background: var(--danger-bg); color: var(--danger); }
+  .tier-badge-mini.critical { background: var(--danger); color: white; }
 </style>
 </head>
   <body>
@@ -734,7 +896,65 @@
     </div>
     <div class="evo-insight-card" id="evoInsightCard"></div>
   </div>
+<!-- ===== TOGGLE VIEW (solo Modo TL) ===== -->
+  <div class="view-toggle" id="viewToggle">
+    <button class="view-toggle-btn active" data-view="agent" onclick="switchView('agent')">
+      👤 Vista Agente
+    </button>
+    <button class="view-toggle-btn" data-view="team" onclick="switchView('team')">
+      👥 Vista Equipo
+    </button>
+  </div>
 
+  <!-- ===== TEAM VIEW CONTAINER ===== -->
+  <div class="team-view" id="teamView">
+    <div class="team-filter" id="teamFilter"></div>
+    <div class="team-tabs">
+      <button class="team-tab active" data-tab="health" onclick="switchTeamTab('health')">
+        🏥 Team Health
+      </button>
+      <button class="team-tab" data-tab="metrics" onclick="switchTeamTab('metrics')">
+        📊 Métricas
+      </button>
+      <button class="team-tab" data-tab="scorecard" onclick="switchTeamTab('scorecard')">
+        🏆 Scorecard
+      </button>
+    </div>
+
+    <div id="teamHealthTab">
+      <div class="card card-rainbow">
+        <div class="card-title">🏥 Overview del Equipo</div>
+        <div class="team-kpi-row" id="teamKpiRow"></div>
+      </div>
+      <div class="card card-rainbow">
+        <div class="card-title">🏆 Distribución por Tier</div>
+        <div class="tier-dist-grid" id="tierDistGrid"></div>
+      </div>
+      <div class="card card-rainbow">
+        <div class="card-title">🎯 Focus Areas</div>
+        <div class="card-subtitle">Métricas donde más agentes están fuera de meta</div>
+        <div class="focus-list" id="focusList"></div>
+      </div>
+    </div>
+
+    <div id="teamMetricsTab" style="display:none;">
+      <div class="card card-rainbow">
+        <div class="card-title">📊 Métricas del Equipo</div>
+        <div class="card-subtitle">Heat map: verde = en meta, amarillo = cerca, rojo = fuera</div>
+        <div class="team-metrics-heatmap" id="teamMetricsHeatmap"></div>
+      </div>
+    </div>
+
+    <div id="teamScorecardTab" style="display:none;">
+      <div class="card card-rainbow">
+        <div class="card-title">🏆 Scorecard del Equipo</div>
+        <div class="card-subtitle">Vista tipo Excel Master con todas las métricas y tiers</div>
+        <div class="team-scroll-wrapper">
+          <table class="team-scorecard-table" id="teamScorecardTable"></table>
+        </div>
+      </div>
+    </div>
+  </div>
   <footer class="footer">
     <strong>Performance Tracker Lite</strong> v4.6.1<br>
     Powered by Cognizant CR · EmblemHealth Contact Center<br>
@@ -1980,7 +2200,297 @@ document.getElementById("tlPasswordModal").addEventListener("click", (e) => {
     footerPeriod.textContent = "Período: " + (AGENTS[actualAgent].month || "Junio 2026");
   }
 })();
+// ========== TEAM VIEW ==========
+let currentView = "agent";
+let currentTeamTab = "health";
+let currentTeamFilter = "all";
 
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll(".view-toggle-btn").forEach(b =>
+    b.classList.toggle("active", b.dataset.view === view)
+  );
+  const agentCardIds = ["heroCard", "bonusGrid", "metricsGrid", "tipsList", "evoInsights"];
+  const showAgent = view === "agent";
+  agentCardIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const card = el.closest(".card");
+      if (card) card.style.display = showAgent ? "" : "none";
+    }
+  });
+  const selector = document.getElementById("agentSelector");
+  if (selector) selector.style.display = showAgent ? "" : "none";
+  const teamView = document.getElementById("teamView");
+  if (teamView) teamView.classList.toggle("visible", !showAgent);
+  if (!showAgent) renderTeamView();
+}
+
+function switchTeamTab(tab) {
+  currentTeamTab = tab;
+  document.querySelectorAll(".team-tab").forEach(t =>
+    t.classList.toggle("active", t.dataset.tab === tab)
+  );
+  document.getElementById("teamHealthTab").style.display = tab === "health" ? "" : "none";
+  document.getElementById("teamMetricsTab").style.display = tab === "metrics" ? "" : "none";
+  document.getElementById("teamScorecardTab").style.display = tab === "scorecard" ? "" : "none";
+  renderTeamView();
+}
+
+function getFilteredTeamAgents() {
+  const all = Object.values(AGENTS);
+  if (currentTeamFilter === "all") return all;
+  return all.filter(a => {
+    const team = String(a.team || "").replace(/^Team\s+/i, "").trim();
+    return team === currentTeamFilter;
+  });
+}
+
+function renderTeamFilter() {
+  const teams = new Set();
+  Object.values(AGENTS).forEach(a => {
+    const t = String(a.team || "").replace(/^Team\s+/i, "").trim();
+    if (t) teams.add(t);
+  });
+  const teamOrder = ["Ange", "Shary", "Geo"];
+  const sortedTeams = teamOrder.filter(t => teams.has(t));
+  const teamIcons = { Ange: "🟣", Shary: "🟢", Geo: "🟠" };
+  const teamList = ["all", ...sortedTeams];
+  const container = document.getElementById("teamFilter");
+  container.innerHTML = teamList.map(t => {
+    const label = t === "all" ? "🌐 Todos" : `${teamIcons[t] || "👥"} Team ${t}`;
+    return `<button class="team-filter-pill ${t === currentTeamFilter ? 'active' : ''}"
+              onclick="setTeamFilter('${t}')">${label}</button>`;
+  }).join("");
+}
+
+function setTeamFilter(t) {
+  currentTeamFilter = t;
+  renderTeamFilter();
+  renderTeamView();
+}
+
+function renderTeamView() {
+  renderTeamFilter();
+  if (currentTeamTab === "health") renderTeamHealth();
+  else if (currentTeamTab === "metrics") renderTeamMetrics();
+  else if (currentTeamTab === "scorecard") renderTeamScorecard();
+}
+
+function renderTeamHealth() {
+  const agents = getFilteredTeamAgents();
+  const total = agents.length;
+  if (total === 0) {
+    document.getElementById("teamKpiRow").innerHTML = "<div style='grid-column:1/-1;text-align:center;color:var(--text-muted);padding:20px;'>Sin agentes en este equipo</div>";
+    document.getElementById("tierDistGrid").innerHTML = "";
+    document.getElementById("focusList").innerHTML = "";
+    return;
+  }
+  const avgScore = agents.reduce((s, a) => s + (a.finalScore || 0), 0) / total;
+  const eligibleCount = agents.filter(a => a.qualifiesForBonus).length;
+  const eligiblePct = (eligibleCount / total * 100).toFixed(0);
+  const platinumCount = agents.filter(a => a.tier === "Platinum").length;
+  const goldenCount = agents.filter(a => a.tier === "Golden").length;
+  const bronzeCount = agents.filter(a => a.tier === "Bronze").length;
+  const unsatCount = agents.filter(a => a.tier === "Unsatisfactory" || a.tier === "Critical").length;
+
+  document.getElementById("teamKpiRow").innerHTML = `
+    <div class="team-kpi-card">
+      <div class="team-kpi-icon">👥</div>
+      <div class="team-kpi-label">Agentes</div>
+      <div class="team-kpi-value">${total}</div>
+    </div>
+    <div class="team-kpi-card">
+      <div class="team-kpi-icon">📊</div>
+      <div class="team-kpi-label">Score Promedio</div>
+      <div class="team-kpi-value">${avgScore.toFixed(2)}%</div>
+    </div>
+    <div class="team-kpi-card">
+      <div class="team-kpi-icon">💰</div>
+      <div class="team-kpi-label">Bono Elegible</div>
+      <div class="team-kpi-value">${eligiblePct}%</div>
+      <div class="team-kpi-sub">${eligibleCount} de ${total}</div>
+    </div>
+    <div class="team-kpi-card">
+      <div class="team-kpi-icon">🏆</div>
+      <div class="team-kpi-label">Top Tier</div>
+      <div class="team-kpi-value">${platinumCount + goldenCount}</div>
+      <div class="team-kpi-sub">Platinum + Golden</div>
+    </div>
+  `;
+
+  document.getElementById("tierDistGrid").innerHTML = `
+    <div class="tier-count-card platinum">
+      <div class="tier-count-icon">🏆</div>
+      <div class="tier-count-number">${platinumCount}</div>
+      <div class="tier-count-label">Platinum</div>
+    </div>
+    <div class="tier-count-card golden">
+      <div class="tier-count-icon">🥇</div>
+      <div class="tier-count-number">${goldenCount}</div>
+      <div class="tier-count-label">Golden</div>
+    </div>
+    <div class="tier-count-card bronze">
+      <div class="tier-count-icon">🥉</div>
+      <div class="tier-count-number">${bronzeCount}</div>
+      <div class="tier-count-label">Bronze</div>
+    </div>
+    <div class="tier-count-card unsat">
+      <div class="tier-count-icon">⚠️</div>
+      <div class="tier-count-number">${unsatCount}</div>
+      <div class="tier-count-label">Unsat</div>
+    </div>
+  `;
+
+  const failCount = {};
+  agents.forEach(a => {
+    (a.metrics || []).forEach(m => {
+      const s = getMetricStatus(m);
+      if (s.class === "danger" || s.class === "warning") {
+        failCount[m.name] = failCount[m.name] || { danger: 0, warning: 0 };
+        failCount[m.name][s.class]++;
+      }
+    });
+  });
+  const focusList = Object.entries(failCount)
+    .map(([name, counts]) => ({ name, total: counts.danger + counts.warning, ...counts }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 5);
+
+  document.getElementById("focusList").innerHTML = focusList.length === 0
+    ? "<div style='color:var(--text-muted);text-align:center;padding:20px;font-size:12px;'>¡Todo el equipo está en meta! 🎉</div>"
+    : focusList.map(f => `
+        <div class="focus-item ${f.danger === 0 ? 'warning' : ''}">
+          <div>
+            <div class="focus-item-name">${f.name}</div>
+            <div class="focus-item-count">${f.danger} fuera · ${f.warning} cerca</div>
+          </div>
+          <div class="focus-item-badge">${f.total} de ${total}</div>
+        </div>
+      `).join("");
+}
+
+function renderTeamMetrics() {
+  const agents = getFilteredTeamAgents();
+  const container = document.getElementById("teamMetricsHeatmap");
+  if (agents.length === 0) {
+    container.innerHTML = "<div style='grid-column:1/-1;text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>Sin agentes en este equipo</div>";
+    return;
+  }
+  const metricStats = {};
+  agents.forEach(a => {
+    (a.metrics || []).forEach(m => {
+      if (!metricStats[m.name]) {
+        metricStats[m.name] = {
+          name: m.name, unit: m.unit, goal: m.goal, goalOp: m.goalOp, format: m.format,
+          values: [], success: 0, warning: 0, danger: 0
+        };
+      }
+      metricStats[m.name].values.push(m.value);
+      const s = getMetricStatus(m);
+      metricStats[m.name][s.class]++;
+    });
+  });
+  const cards = Object.values(metricStats).map(ms => {
+    const total = ms.values.length;
+    const avg = ms.values.reduce((s, v) => s + v, 0) / total;
+    const avgFmt = ms.format === "pct"
+      ? avg.toFixed(2) + "%"
+      : Math.round(avg) + (ms.unit || "");
+    const avgMetric = { value: avg, goal: ms.goal, goalOp: ms.goalOp };
+    const avgStatus = getMetricStatus(avgMetric);
+    const successPct = (ms.success / total * 100).toFixed(0);
+    const warningPct = (ms.warning / total * 100).toFixed(0);
+    const dangerPct = (ms.danger / total * 100).toFixed(0);
+    const goalFmt = ms.format === "pct" ? `${ms.goalOp} ${ms.goal}%` : `${ms.goalOp} ${ms.goal}${ms.unit || ""}`;
+    return `
+      <div class="metric-heatmap-card">
+        <div class="metric-heatmap-header">
+          <div>
+            <div class="metric-heatmap-name">${ms.name}</div>
+            <div style="font-size:10px;color:var(--text-muted);">Meta: ${goalFmt}</div>
+          </div>
+          <div class="metric-heatmap-avg ${avgStatus.class}">${avgFmt}</div>
+        </div>
+        <div class="metric-heatmap-bar">
+          <div class="metric-heatmap-seg success" style="width:${successPct}%"></div>
+          <div class="metric-heatmap-seg warning" style="width:${warningPct}%"></div>
+          <div class="metric-heatmap-seg danger" style="width:${dangerPct}%"></div>
+        </div>
+        <div class="metric-heatmap-legend">
+          <span style="color:var(--success);">✓ ${ms.success}</span>
+          <span style="color:var(--warning);">⚠ ${ms.warning}</span>
+          <span style="color:var(--danger);">✗ ${ms.danger}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+  container.innerHTML = cards;
+}
+
+function renderTeamScorecard() {
+  const agents = getFilteredTeamAgents();
+  const table = document.getElementById("teamScorecardTable");
+  if (agents.length === 0) {
+    table.innerHTML = "<tr><td style='text-align:center;color:var(--text-muted);padding:20px;'>Sin agentes en este equipo</td></tr>";
+    return;
+  }
+  const metricNames = [];
+  agents.forEach(a => (a.metrics || []).forEach(m => {
+    if (!metricNames.includes(m.name)) metricNames.push(m.name);
+  }));
+  const sorted = [...agents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+  const header = `
+    <tr>
+      <th class="name-cell" style="text-align:left;">Agente</th>
+      <th>Score</th>
+      <th>Tier</th>
+      ${metricNames.map(n => `<th>${n}</th>`).join("")}
+      <th>Bono</th>
+    </tr>
+  `;
+  const rows = sorted.map(a => {
+    const metricCells = metricNames.map(mn => {
+      const m = (a.metrics || []).find(x => x.name === mn);
+      if (!m) return `<td style="color:var(--text-muted);">—</td>`;
+      const s = getMetricStatus(m);
+      const val = m.format === "pct" ? m.value.toFixed(1) + "%" : Math.round(m.value) + (m.unit || "");
+      return `<td class="metric-cell ${s.class}">${val}</td>`;
+    }).join("");
+    const tierClass = (a.tier || "").toLowerCase();
+    const tierIcon = a.tier === "Platinum" ? "🏆" :
+                     a.tier === "Golden" ? "🥇" :
+                     a.tier === "Bronze" ? "🥉" :
+                     a.tier === "Critical" ? "🚨" : "⚠️";
+    const bonoUSD = a.totalUSD || 12;
+    const bonoColor = a.qualifiesForBonus ? "var(--success)" : "var(--text-muted)";
+    return `
+      <tr>
+        <td class="name-cell">${a.name}</td>
+        <td style="font-weight:700;">${(a.finalScore || 0).toFixed(2)}%</td>
+        <td><span class="tier-badge-mini ${tierClass}">${tierIcon} ${a.tier || "?"}</span></td>
+        ${metricCells}
+        <td style="font-weight:700;color:${bonoColor};">$${bonoUSD}</td>
+      </tr>
+    `;
+  }).join("");
+  table.innerHTML = header + rows;
+}
+
+// Hook into TL mode toggle to show/hide view-toggle
+const _origUpdateTLModeUI_teamview = updateTLModeUI;
+updateTLModeUI = function() {
+  _origUpdateTLModeUI_teamview();
+  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
+  const toggle = document.getElementById("viewToggle");
+  if (toggle) toggle.classList.toggle("visible", isTLMode);
+  if (!isTLMode && currentView === "team") {
+    switchView("agent");
+  }
+};
+
+// Re-run on load to catch initial state
+setTimeout(() => { if (typeof updateTLModeUI === "function") updateTLModeUI(); }, 200);
 // Re-render chart on window resize
 let resizeTimer;
 window.addEventListener("resize", () => {
