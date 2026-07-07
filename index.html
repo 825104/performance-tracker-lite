@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0f172a">
-<title>Performance Tracker Lite v4.6 | Cognizant CR</title>
+<title>Performance Tracker Lite v4.6.1 | Cognizant CR</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -695,7 +695,7 @@
     <div class="header-top">
       <div class="logo">
         📊 Performance Tracker
-        <span class="logo-badge">LITE v4.6</span>
+        <span class="logo-badge">LITE v4.6.1</span>
       </div>
       <div class="header-actions">
         <button class="tl-mode-btn" id="tlModeBtn" onclick="toggleTLMode()" title="Modo Team Lead">🔒 Modo TL</button>
@@ -713,6 +713,16 @@
     <div class="bonus-grid" id="bonusGrid"></div>
   </div>
 
+   <div class="card card-rainbow">
+    <div class="card-title">📊 Mis Métricas del Mes</div>
+    <div class="metrics-grid" id="metricsGrid"></div>
+  </div>
+
+  <div class="card card-rainbow">
+    <div class="card-title">💡 Tips Personalizados</div>
+    <div class="tips-list" id="tipsList"></div>
+  </div>
+
   <div class="card card-rainbow">
     <div class="card-title">📈 Mi Evolución</div>
     <div class="card-subtitle">Últimos 6 meses de performance</div>
@@ -725,18 +735,8 @@
     <div class="evo-insight-card" id="evoInsightCard"></div>
   </div>
 
-  <div class="card card-rainbow">
-    <div class="card-title">📊 Mis Métricas del Mes</div>
-    <div class="metrics-grid" id="metricsGrid"></div>
-  </div>
-
-  <div class="card card-rainbow">
-    <div class="card-title">💡 Tips Personalizados</div>
-    <div class="tips-list" id="tipsList"></div>
-  </div>
-
   <footer class="footer">
-    <strong>Performance Tracker Lite</strong> v4.6<br>
+    <strong>Performance Tracker Lite</strong> v4.6.1<br>
     Powered by Cognizant CR · EmblemHealth Contact Center<br>
     <em>Período: Junio 2026</em> · Vista Pública + Modo TL con password
   </footer>
