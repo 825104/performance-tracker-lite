@@ -2553,7 +2553,8 @@ function setMetricSubtab(metricName) {
   currentMetricSubtab = metricName;
   renderTeamMetrics();
 }
-  const agents = getFilteredTeamAgents();
+function renderTeamScorecard() {
+ const agents = getFilteredTeamAgents();
   const table = document.getElementById("teamScorecardTable");
   if (agents.length === 0) {
     table.innerHTML = "<tr><td style='text-align:center;color:var(--text-muted);padding:20px;'>Sin agentes en este equipo</td></tr>";
