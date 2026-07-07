@@ -667,13 +667,24 @@
     margin-top: 4px; font-weight: 600;
   }
  /* ===== TEAM VIEW ===== */
-  .view-toggle {
+.view-toggle {
     display: none; gap: 6px;
     background: var(--card-bg); border-radius: 12px;
     padding: 4px; margin-bottom: 16px;
     box-shadow: var(--shadow);
+    position: sticky;
+    top: 8px;
+    z-index: 100;
   }
   .view-toggle.visible { display: flex; }
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  .view-toggle { order: -10; }
+  .demo-banner { order: -20; }
+  .tl-mode-banner { order: -15; }
+  .app-header { order: -5; }
   .view-toggle-btn {
     flex: 1; padding: 10px 14px; border: none;
     background: transparent; color: var(--text-soft);
