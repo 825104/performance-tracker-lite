@@ -1951,12 +1951,80 @@ async function handleFile(file) {
     }
     console.log("[Parser] IMPORT sheets:", importSheets);
 
-    // ========== STEP 4: Parse IMPORT sheets ==========
-    // FIX v4.7.5: filtrar solo filas del mes en curso (evita que históricos sobrescriban métricas)
+   // ========== STEP 4: Parse IMPORT sheets ==========
+    // FIX v4.7.5: filtrar solo filas del mes en curso
     const MONTH_ES_TO_EN = {
-      "enero": "January", "febrero": "February", "marzo": "March",
-      "abril": "April", "mayo": "May", "junio": "June",
+      "enero": "january", "febrero": "february", "marzo": "march",
+      "abril": "april", "mayo": "may", "junio": "june",
+      "julio": "july", "agosto": "august", "septiembre": "september",
+      "octubre": "october", "noviembre": "november", "diciembre": "december"
+    };
+    function normalizeMonth(str) {
+      if (!str) return "";
+      let s = String(str).toLowerCase().trim();
+     s = s.replace(/\s+\d{4}$/, "").trim();
+      return MONTH_ES_TO_EN[s] || s;
+    }
+    function extractMonthKey(scoreMonthValue) {
+      if (!scoreMonthValue) return "";
+      const s = String(scoreMonthValue).toLowerCase().trim();
+      const parts = s.split(/\s+/);
+      return normalizeMonth(parts[0] || "");
+    }
+    const currentMonthKey = extractMonthKey(currentMonth);
+    console.log("[Parser] Filtro mes actual (normalizado):", currentMonthKey);
 
+    const parsedAgents = {};
+    importSheets.forEach(sheetName => {
+      const { rows } = parseTableWithHeaderSearch(wb.Sheets[sheetName]);
+      rows.forEach(row => {
+        const importStatus = String(row["ImportStatus"] || "READY").trim();
+        if (/excluded/i.test(importStatus)) return;
+
+        // FIX v4.7.5: solo procesar filas del mes en curso
+        const rowMonthKey = extractMonthKey(row["ScoreMonth"]);
+        if (currentMonthKey && rowMonthKey && rowMonthKey !== currentMonthKey) return;
+
+        const id = String(row["AssociateID"] || row["Associate ID"] || "").trim();
+        if (!id) {
+          console.warn("[Parser] Fila sin AssociateID en", sheetName, ":", row["Advocate Name"]);
+          return;
+        }
+        const name = row["Advocate Name"] || row["Name"] || "";
+        const lob = row["LOB"] || "";
+        const isACPNY = /ACPNY/i.test(lob);
+        const isMedicare = /Medicare/i.test(lob);
+        parsedAgents[id] = parsedAgents[id] || {
+          associateId: id,
+          name: name,
+          firstName: name.split(",")[1]?.trim().split(" ")[0] || name.split(" ")[0],
+          team: row["Team"] || "N/A",
+          lob: lob,
+          category: row["Category"] || "Agent",
+          tenure: (row["IsNewHire"] === "Yes" || row["IsNewHire"] === true) ? "New Hire" : "Tenure",
+          month: currentMonth,
+          badges: [],
+          metrics: [],
+          history: { Score: [] },
+          availableMetrics: ["Score"]
+        };
+        const a = parsedAgents[id];
+        const metrics = [];
+        if (row["ACSS_CSAT"] && row["ACSS_CSAT"] !== 0 && !isACPNY) {
+          metrics.push({ name: "CSAT", value: pct(row["ACSS_CSAT"]), unit: "%", goal: isMedicare ? 95 : 94.3, goalOp: ">=", format: "pct" });
+        }
+        if (row["Adherence"]) metrics.push({ name: "ADH", value: pct(row["Adherence"]), unit: "%", goal: isACPNY ? 96 : 95.5, goalOp: ">=", format: "pct" });
+        if (row["AHT"]) metrics.push({ name: "AHT", value: Math.round(row["AHT"]), unit: "s", goal: isACPNY ? 400 : 690, goalOp: "<=", format: "num" });
+        if (row["Attendance"]) metrics.push({ name: "ATT", value: pct(row["Attendance"]), unit: "%", goal: isACPNY ? 95 : 98, goalOp: ">=", format: "pct" });
+        if (row["Opened_Within_Month"] && !isACPNY) metrics.push({ name: "Opened", value: pct(row["Opened_Within_Month"]), unit: "%", goal: 95, goalOp: ">=", format: "pct" });
+        if (row["SC_NR"] !== undefined && row["SC_NR"] !== null) metrics.push({ name: "SC+NR", value: pct(row["SC_NR"]), unit: "%", goal: isACPNY ? 1 : (isMedicare ? 2 : 3), goalOp: "<=", format: "pct" });
+        if (row["QA"]) metrics.push({ name: "QA", value: pct(row["QA"]), unit: "%", goal: isACPNY ? 93 : 95.5, goalOp: ">=", format: "pct", cap: isACPNY ? 91.5 : 95 });
+        if (row["CE"] && isACPNY) metrics.push({ name: "CE", value: pct(row["CE"]), unit: "%", goal: 75, goalOp: ">=", format: "pct" });
+        if (row["PKT"]) metrics.push({ name: "PKT", value: pct(row["PKT"]), unit: "%", goal: 90, goalOp: ">=", format: "pct" });
+        a.metrics = metrics;
+      });
+    });
+    console.log("[Parser] Agentes parseados desde IMPORT:", Object.keys(parsedAgents).length);
 
     // ========== STEP 5: Parse SC sheets (multi-section) for tier/score ==========
     const scSheets = wb.SheetNames.filter(n =>
