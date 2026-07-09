@@ -1145,6 +1145,7 @@
       </button>
       <button class="team-tab" data-tab="scorecard" onclick="switchTeamTab('scorecard')">
         🏆 Scorecard
+       <button class="team-tab" data-tab="topperformers" onclick="setTeamTab('topperformers')">👑 Top Performers</button>
       </button>
     </div>
 
@@ -1188,7 +1189,11 @@
     <em>Período: Junio 2026</em> · Vista Pública + Modo TL con password
   </footer>
 </div>
-
+<div id="teamTopPerformersContainer" class="team-tab-content" style="display:none;">
+  <div class="card">
+    <div id="topPerformersContent"></div>
+  </div>
+</div>
 <!-- TL PASSWORD MODAL -->
 <div class="modal-overlay" id="tlPasswordModal">
   <div class="modal-card">
