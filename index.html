@@ -1782,7 +1782,45 @@ const METRIC_GOALS = {
   AHT:   { goal: 690, goalOp: "<=" },
   ADH:   { goal: 95.5, goalOp: ">=" }
 };
-
+// ========== I18N ==========
+function isEN(agent) { return agent && agent.site === "Tampa"; }
+const I18N = {
+  greeting:      { es: "Hola",              en: "Hello" },
+  bonusEligible: { es: "Bono Elegible",     en: "Bonus Eligible" },
+  noBonus:       { es: "Sin Bono",          en: "No Bonus" },
+  scoreFinal:    { es: "Score Final",       en: "Final Score" },
+  metricsTitle:  { es: "📊 Mis Métricas del Mes", en: "📊 My Monthly Metrics" },
+  tipsTitle:     { es: "💡 Tips Personalizados", en: "💡 Personalized Tips" },
+  evoTitle:      { es: "📈 Mi Evolución",   en: "📈 My Evolution" },
+  evoSubtitle:   { es: "Últimos 6 meses de performance", en: "Last 6 months of performance" },
+  goal:          { es: "Meta:",             en: "Goal:" },
+  inGoal:        { es: "En meta",           en: "On target" },
+  close:         { es: "Cerca",             en: "Close" },
+  outGoal:       { es: "Fuera",             en: "Off target" },
+  bestMonth:     { es: "Mejor mes",         en: "Best month" },
+  avg:           { es: "Promedio",          en: "Average" },
+  trend:         { es: "Tendencia",         en: "Trend" },
+  improving:     { es: "Mejorando",         en: "Improving" },
+  stable:        { es: "Estable",           en: "Stable" },
+  decreasing:    { es: "Bajando",           en: "Decreasing" },
+  increasing:    { es: "Subiendo",          en: "Rising" }
+};
+function t(key, agent) {
+  const lang = isEN(agent) ? "en" : "es";
+  return (I18N[key] && I18N[key][lang]) || I18N[key].es;
+}
+// Métrica status con idioma dinámico
+function getMetricStatusLang(metric, agent) {
+  const s = getMetricStatus(metric);
+  if (!agent) return s;
+  const lang = isEN(agent) ? "en" : "es";
+  const labels = {
+    success: I18N.inGoal[lang],
+    warning: I18N.close[lang],
+    danger:  I18N.outGoal[lang]
+  };
+  return { ...s, label: labels[s.class] };
+}
 // ========== METRIC HELPERS ==========
 function getMetricStatus(metric) {
   const { value, goal, goalOp } = metric;
@@ -2088,9 +2126,12 @@ function renderAgentSelector() {
 }
 
 function renderHero(agent) {
+  const isTampa = (agent.site === "Tampa");
   const badgeClass = agent.qualifiesForBonus ? "badge-success" : "badge-danger";
   const badgeIcon = agent.qualifiesForBonus ? "✅" : "❌";
-  const badgeText = agent.qualifiesForBonus ? "Bono Elegible" : "Sin Bono";
+  const badgeText = isEN(agent) 
+    ? (agent.qualifiesForBonus ? "Bonus Eligible" : "No Bonus")
+    : (agent.qualifiesForBonus ? "Bono Elegible" : "Sin Bono");
   const badgesHTML = (agent.badges || []).map(b => {
     let cls = "badge-info";
     if (b.includes("Top") || b.includes("Platinum") || b.includes("Perfecto")) cls = "badge-purple";
@@ -2107,10 +2148,10 @@ function renderHero(agent) {
   const offset = circumference - (scoreVal / 100) * circumference;
   document.getElementById("heroCard").innerHTML = `
     <div class="hero-info">
-      <h1>👋 Hola, ${agent.firstName || agent.name}</h1>
+      <h1>👋 ${isEN(agent) ? "Hello" : "Hola"}, ${agent.firstName || agent.name}</h1>
       <div class="hero-meta">${agent.name} · ${agent.category || "Agent"} · ${agent.lob || ""} · ${agent.team || ""} · ${agent.month || ""}</div>
       <div class="hero-badges">
-        <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
+        ${isTampa ? "" : `<span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>`}
         ${badgesHTML}
       </div>
     </div>
@@ -2131,7 +2172,7 @@ function renderHero(agent) {
         </svg>
         <div class="donut-text">
           <div class="donut-value">${scoreVal.toFixed(2)}%</div>
-          <div class="donut-label">Score Final</div>
+                 <div class="donut-label">${isEN(agent) ? "Final Score" : "Score Final"}</div>
         </div>
       </div>
       <div class="stars-container">
@@ -2194,12 +2235,21 @@ function renderStatusCard(agent) {
   if (existingTotal) existingTotal.remove();
 }
 
-function renderBonus(agent) {
+ function renderBonus(agent) {
   const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
-  const cardTitle = document.querySelector("#bonusGrid").parentElement.querySelector(".card-title");
+  const isTampa = (agent.site === "Tampa");
+  const bonusCard = document.querySelector("#bonusGrid").parentElement;
+  const cardTitle = bonusCard.querySelector(".card-title");
+  // Tampa agents don't have bonus scheme — hide entire card
+  if (isTampa) {
+    bonusCard.style.display = "none";
+    return;
+  } else {
+    bonusCard.style.display = "";
+  }
   if (!isTLMode) {
     renderStatusCard(agent);
-    if (cardTitle) cardTitle.innerHTML = "🎯 Estado del Mes";
+    if (cardTitle) cardTitle.innerHTML = isTampa ? "🎯 Monthly Status" : "🎯 Estado del Mes";
     return;
   }
   if (cardTitle) cardTitle.innerHTML = "💰 Resumen de Bonos";
@@ -2298,6 +2348,22 @@ function renderAgent(key) {
   const agent = AGENTS[key];
   if (!agent) return;
   if (!agent.availableMetrics || !agent.availableMetrics.includes(currentEvoMetric)) currentEvoMetric = "Score";
+  // Update card titles based on agent language
+  const en = isEN(agent);
+  document.querySelectorAll(".card .card-title").forEach(el => {
+    const txt = el.textContent.trim();
+    if (txt.includes("Mis Métricas") || txt.includes("My Monthly Metrics"))
+      el.textContent = en ? "📊 My Monthly Metrics" : "📊 Mis Métricas del Mes";
+    else if (txt.includes("Tips Personalizados") || txt.includes("Personalized Tips"))
+      el.textContent = en ? "💡 Personalized Tips" : "💡 Tips Personalizados";
+    else if (txt.includes("Mi Evolución") || txt.includes("My Evolution"))
+      el.textContent = en ? "📈 My Evolution" : "📈 Mi Evolución";
+  });
+  document.querySelectorAll(".card .card-subtitle").forEach(el => {
+    const txt = el.textContent.trim();
+    if (txt.includes("Últimos 6 meses") || txt.includes("Last 6 months"))
+      el.textContent = en ? "Last 6 months of performance" : "Últimos 6 meses de performance";
+  });
   renderHero(agent);
   renderBonus(agent);
   renderEvoToggle(agent);
