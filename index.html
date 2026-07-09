@@ -2965,6 +2965,9 @@ function getFilteredTeamAgents() {
     return team === currentTeamFilter;
   });
 }
+function isTampaView() {
+  return currentTeamFilter === "Tami";
+}
 
 function renderTeamFilter() {
   const teams = new Set();
@@ -2992,6 +2995,40 @@ function setTeamFilter(t) {
 
 function renderTeamView() {
   renderTeamFilter();
+  const en = isTampaView();
+  // Update tabs labels
+  const tabs = document.querySelectorAll(".team-tab");
+  tabs.forEach(t => {
+    if (t.dataset.tab === "health") t.innerHTML = en ? "🏥 Team Health" : "🏥 Team Health";
+    else if (t.dataset.tab === "metrics") t.innerHTML = en ? "📊 Metrics" : "📊 Métricas";
+    else if (t.dataset.tab === "scorecard") t.innerHTML = en ? "🏆 Scorecard" : "🏆 Scorecard";
+  });
+  // Update card titles inside team view
+  const teamViewEl = document.getElementById("teamView");
+  if (teamViewEl) {
+    teamViewEl.querySelectorAll(".card-title").forEach(el => {
+      const txt = el.textContent.trim();
+      if (txt.includes("Overview del Equipo") || txt.includes("Team Overview"))
+        el.textContent = en ? "🏥 Team Overview" : "🏥 Overview del Equipo";
+      else if (txt.includes("Distribución por Tier") || txt.includes("Tier Distribution"))
+        el.textContent = en ? "🏆 Tier Distribution" : "🏆 Distribución por Tier";
+      else if (txt.includes("Focus Areas"))
+        el.textContent = "🎯 Focus Areas";
+      else if (txt.includes("Métricas del Equipo") || txt.includes("Team Metrics"))
+        el.textContent = en ? "📊 Team Metrics" : "📊 Métricas del Equipo";
+      else if (txt.includes("Scorecard del Equipo") || txt.includes("Team Scorecard"))
+        el.textContent = en ? "🏆 Team Scorecard" : "🏆 Scorecard del Equipo";
+    });
+    teamViewEl.querySelectorAll(".card-subtitle").forEach(el => {
+      const txt = el.textContent.trim();
+      if (txt.includes("Métricas donde más agentes") || txt.includes("Metrics where most agents"))
+        el.textContent = en ? "Metrics where most agents are off target" : "Métricas donde más agentes están fuera de meta";
+      else if (txt.includes("Heat map"))
+        el.textContent = en ? "Heat map: green = on target, yellow = close, red = off" : "Heat map: verde = en meta, amarillo = cerca, rojo = fuera";
+      else if (txt.includes("Vista tipo Excel Master") || txt.includes("Excel Master view"))
+        el.textContent = en ? "Excel Master style view with all metrics and tiers" : "Vista tipo Excel Master con todas las métricas y tiers";
+    });
+  }
   if (currentTeamTab === "health") renderTeamHealth();
   else if (currentTeamTab === "metrics") renderTeamMetrics();
   else if (currentTeamTab === "scorecard") renderTeamScorecard();
@@ -3000,8 +3037,9 @@ function renderTeamView() {
 function renderTeamHealth() {
   const agents = getFilteredTeamAgents();
   const total = agents.length;
+  const en = isTampaView();
   if (total === 0) {
-    document.getElementById("teamKpiRow").innerHTML = "<div style='grid-column:1/-1;text-align:center;color:var(--text-muted);padding:20px;'>Sin agentes en este equipo</div>";
+    document.getElementById("teamKpiRow").innerHTML = `<div style='grid-column:1/-1;text-align:center;color:var(--text-muted);padding:20px;'>${en ? "No agents in this team" : "Sin agentes en este equipo"}</div>`;
     document.getElementById("tierDistGrid").innerHTML = "";
     document.getElementById("focusList").innerHTML = "";
     return;
@@ -3012,33 +3050,35 @@ function renderTeamHealth() {
   const platinumCount = agents.filter(a => a.tier === "Platinum").length;
   const goldenCount = agents.filter(a => a.tier === "Golden").length;
   const bronzeCount = agents.filter(a => a.tier === "Bronze").length;
-  const unsatCount = agents.filter(a => a.tier === "Unsatisfactory" || a.tier === "Critical").length;
-
-  document.getElementById("teamKpiRow").innerHTML = `
-    <div class="team-kpi-card">
-      <div class="team-kpi-icon">👥</div>
-      <div class="team-kpi-label">Agentes</div>
-      <div class="team-kpi-value">${total}</div>
-    </div>
-    <div class="team-kpi-card">
-      <div class="team-kpi-icon">📊</div>
-      <div class="team-kpi-label">Score Promedio</div>
-      <div class="team-kpi-value">${avgScore.toFixed(2)}%</div>
-    </div>
+  const unsatCount = agents.filter(a => a.tier === "Unsatisfactory" || a.tier === "Critical" || a.tier === "Standard").length;
+  // Bonus KPI card only for non-Tampa views
+  const bonusKpi = en ? "" : `
     <div class="team-kpi-card">
       <div class="team-kpi-icon">💰</div>
       <div class="team-kpi-label">Bono Elegible</div>
       <div class="team-kpi-value">${eligiblePct}%</div>
       <div class="team-kpi-sub">${eligibleCount} de ${total}</div>
     </div>
+  `;
+  document.getElementById("teamKpiRow").innerHTML = `
+    <div class="team-kpi-card">
+      <div class="team-kpi-icon">👥</div>
+      <div class="team-kpi-label">${en ? "Agents" : "Agentes"}</div>
+      <div class="team-kpi-value">${total}</div>
+    </div>
+    <div class="team-kpi-card">
+      <div class="team-kpi-icon">📊</div>
+      <div class="team-kpi-label">${en ? "Average Score" : "Score Promedio"}</div>
+      <div class="team-kpi-value">${avgScore.toFixed(2)}%</div>
+    </div>
+    ${bonusKpi}
     <div class="team-kpi-card">
       <div class="team-kpi-icon">🏆</div>
-      <div class="team-kpi-label">Top Tier</div>
+      <div class="team-kpi-label">${en ? "Top Tier" : "Top Tier"}</div>
       <div class="team-kpi-value">${platinumCount + goldenCount}</div>
       <div class="team-kpi-sub">Platinum + Golden</div>
     </div>
   `;
-
   document.getElementById("tierDistGrid").innerHTML = `
     <div class="tier-count-card platinum">
       <div class="tier-count-icon">🏆</div>
@@ -3058,10 +3098,9 @@ function renderTeamHealth() {
     <div class="tier-count-card unsat">
       <div class="tier-count-icon">⚠️</div>
       <div class="tier-count-number">${unsatCount}</div>
-      <div class="tier-count-label">Unsat</div>
+      <div class="tier-count-label">${en ? "Standard" : "Unsat"}</div>
     </div>
   `;
-
   const failCount = {};
   agents.forEach(a => {
     (a.metrics || []).forEach(m => {
@@ -3076,22 +3115,18 @@ function renderTeamHealth() {
     .map(([name, counts]) => ({ name, total: counts.danger + counts.warning, ...counts }))
     .sort((a, b) => b.total - a.total)
     .slice(0, 5);
-
   document.getElementById("focusList").innerHTML = focusList.length === 0
-    ? "<div style='color:var(--text-muted);text-align:center;padding:20px;font-size:12px;'>¡Todo el equipo está en meta! 🎉</div>"
+    ? `<div style='color:var(--text-muted);text-align:center;padding:20px;font-size:12px;'>${en ? "The whole team is on target! 🎉" : "¡Todo el equipo está en meta! 🎉"}</div>`
     : focusList.map(f => `
         <div class="focus-item ${f.danger === 0 ? 'warning' : ''}">
           <div>
             <div class="focus-item-name">${f.name}</div>
-            <div class="focus-item-count">${f.danger} fuera · ${f.warning} cerca</div>
+            <div class="focus-item-count">${f.danger} ${en ? "off" : "fuera"} · ${f.warning} ${en ? "close" : "cerca"}</div>
           </div>
-          <div class="focus-item-badge">${f.total} de ${total}</div>
+          <div class="focus-item-badge">${f.total} ${en ? "of" : "de"} ${total}</div>
         </div>
       `).join("");
 }
-
-let currentMetricSubtab = null;
-
 function renderTeamMetrics() {
   const agents = getFilteredTeamAgents();
   const container = document.getElementById("teamMetricsHeatmap");
