@@ -1055,100 +1055,244 @@
   .oneone-footer-note {
     font-size: 10px; color: var(--text-muted);
     text-align: center; margin-top: 8px; font-style: italic;
-  /* ===== TOP PERFORMERS TAB ===== */
-.tp-section-header { margin-bottom: 12px; }
-.tp-podium {
-  display: grid; grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px; margin-bottom: 20px; align-items: end;
+ /* ===== TOP PERFORMERS TAB v2 ===== */
+@keyframes tpFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.tp-podium-card {
-  background: var(--card-bg); border-radius: 14px; padding: 16px 14px;
-  box-shadow: var(--shadow); border: 2px solid transparent;
-  position: relative; text-align: left;
+@keyframes tpShine {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(5deg); }
 }
-.tp-podium-card.first {
-  border-color: #f97316; transform: translateY(-8px);
-  box-shadow: 0 8px 24px rgba(249,115,22,0.2);
+
+.tp-hero {
+  background: linear-gradient(135deg, #fef3c7 0%, #fce7f3 50%, #ede9fe 100%);
+  border-radius: 20px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
-.tp-podium-badge {
-  position: absolute; top: 10px; left: 10px;
-  color: #fff; font-weight: 700; font-size: 11px;
-  padding: 3px 9px; border-radius: 10px;
+[data-theme="dark"] .tp-hero {
+  background: linear-gradient(135deg, rgba(251,191,36,0.15) 0%, rgba(236,72,153,0.15) 50%, rgba(139,92,246,0.15) 100%);
 }
-.tp-podium-icon { position: absolute; top: 10px; right: 12px; font-size: 20px; }
-.tp-podium-name { font-size: 14px; font-weight: 700; margin-top: 28px; color: var(--text); }
-.tp-team-pill {
-  display: inline-block; background: var(--info-bg); color: var(--info);
-  padding: 2px 9px; border-radius: 10px; font-size: 10px;
-  font-weight: 600; margin-top: 5px;
+.tp-hero-title h2 {
+  font-size: 22px; font-weight: 800; color: var(--text);
+  margin: 8px 0 4px;
 }
-.tp-stars { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
-.tp-score-label {
-  margin-top: 10px; font-size: 9px; color: var(--text-muted);
-  letter-spacing: 1px; font-weight: 700;
+.tp-hero-title p {
+  font-size: 12px; color: var(--text-soft); margin: 0 0 20px;
 }
-.tp-score-value {
-  font-size: 26px; font-weight: 800; color: #f97316; margin-top: 2px;
+.tp-hero-crown {
+  font-size: 36px; display: inline-block;
+  animation: tpShine 2s ease-in-out infinite;
 }
-.tp-tier-section {
-  border-radius: 14px; padding: 16px; margin-bottom: 14px;
-  border: 1px solid var(--border-soft);
+
+.tp-podium-v2 {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  gap: 10px;
+  align-items: end;
+  max-width: 100%;
+  margin: 0 auto;
 }
-.tp-tier-header {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+.tp-podium-card-v2 {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  position: relative;
+  opacity: 0;
+  animation: tpFadeUp 0.6s ease forwards;
 }
-.tp-tier-header-left { display: flex; align-items: center; gap: 10px; }
-.tp-tier-icon {
-  width: 40px; height: 40px; border-radius: 10px;
+.tp-podium-card-v2.tp-rank-1 {
+  transform: translateY(-16px);
+  box-shadow: 0 8px 24px rgba(249,115,22,0.25);
+  border: 2px solid #f97316;
+}
+.tp-podium-medal {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin: 0 auto 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.tp-podium-rank {
+  font-size: 20px; font-weight: 800; margin-bottom: 4px;
+}
+.tp-podium-name-v2 {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  line-height: 1.3; margin-bottom: 6px;
+  min-height: 34px; display: flex; align-items: center; justify-content: center;
+}
+.tp-podium-badges {
+  display: flex; gap: 4px; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 8px;
+}
+.tp-badge-pill {
+  font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 8px;
+  background: var(--info-bg); color: var(--info);
+  text-transform: uppercase; letter-spacing: 0.3px;
+}
+.tp-badge-pill.team {
+  background: var(--purple-bg); color: var(--purple);
+}
+.tp-podium-stars {
+  font-size: 11px; letter-spacing: 1px; margin-bottom: 8px;
+}
+.tp-podium-score-v2 {
+  font-size: 24px; font-weight: 800; line-height: 1;
+}
+.tp-podium-score-label {
+  font-size: 8px; color: var(--text-muted);
+  letter-spacing: 1px; font-weight: 700; margin-top: 2px;
+}
+
+/* ===== TIER TABS ===== */
+.tp-tier-tabs {
+  display: flex; gap: 6px;
+  background: var(--card-bg-soft);
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.tp-tier-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px;
+  color: var(--text-soft);
+  transition: all 0.2s;
+}
+.tp-tier-tab:hover { background: var(--card-bg); }
+.tp-tier-tab.active {
+  background: var(--card-bg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  color: var(--tier-color);
+}
+.tp-tier-tab-icon { font-size: 16px; }
+.tp-tier-tab-label { font-size: 12px; font-weight: 700; }
+.tp-tier-tab-count {
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 10px;
+  background: var(--card-bg-soft); color: var(--text-muted);
+}
+.tp-tier-tab.active .tp-tier-tab-count {
+  background: var(--tier-color); color: #fff;
+}
+
+/* ===== TIER HERO ===== */
+.tp-tier-hero {
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; flex-wrap: wrap;
+}
+.tp-tier-hero-content { display: flex; align-items: center; gap: 12px; }
+.tp-tier-hero-icon {
+  width: 44px; height: 44px; border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
   font-size: 22px;
 }
-.tp-quote {
-  font-style: italic; font-size: 11px; color: var(--text-soft);
-  background: rgba(255,255,255,0.7); padding: 8px 12px;
-  border-radius: 10px; max-width: 60%; text-align: right;
+.tp-tier-hero h3 { margin: 0; font-size: 16px; font-weight: 800; }
+.tp-tier-hero p { margin: 2px 0 0; font-size: 11px; color: var(--text-soft); }
+.tp-tier-quote {
+  font-style: italic; font-size: 12px; color: var(--text-soft);
+  background: var(--card-bg);
+  padding: 10px 14px; border-radius: 8px;
+  max-width: 55%;
+  position: relative;
 }
-[data-theme="dark"] .tp-quote { background: rgba(255,255,255,0.05); }
-.tp-agents-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+.tp-quote-mark {
+  font-size: 32px; color: var(--text-muted);
+  position: absolute; top: -8px; left: 8px;
+  font-family: Georgia, serif;
+}
+
+/* ===== AGENT CARDS v2 ===== */
+.tp-agents-grid-v2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 10px;
 }
-.tp-agent-card {
-  background: var(--card-bg); border-radius: 10px; padding: 12px;
+.tp-agent-card-v2 {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 14px;
   border: 1px solid var(--border-soft);
+  display: flex; align-items: center; gap: 12px;
+  transition: all 0.2s;
+  opacity: 0;
+  animation: tpFadeUp 0.4s ease forwards;
 }
-.tp-agent-rank {
-  display: inline-block; font-size: 10px; font-weight: 700;
-  padding: 3px 9px; border-radius: 9px; margin-bottom: 6px;
+.tp-agent-card-v2:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
-.tp-agent-name { font-size: 13px; font-weight: 700; color: var(--text); }
-.tp-agent-meta {
-  font-size: 11px; color: var(--text-muted); margin-top: 3px;
-  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+.tp-agent-rank-badge {
+  width: 32px; height: 32px; border-radius: 8px;
+  color: #fff; font-weight: 800; font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
-.tp-team-pill-mini {
+.tp-agent-body { flex: 1; min-width: 0; }
+.tp-agent-name-v2 {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tp-agent-tags {
+  display: flex; gap: 4px; margin-top: 4px;
+  flex-wrap: wrap;
+}
+.tp-tag {
+  font-size: 9px; font-weight: 700;
+  padding: 2px 6px; border-radius: 6px;
   background: var(--info-bg); color: var(--info);
-  padding: 2px 7px; border-radius: 8px; font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.3px;
 }
-.tp-agent-stars { margin-top: 8px; font-size: 11px; }
-.tp-agent-score-row {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: 10px;
+.tp-tag.team { background: var(--purple-bg); color: var(--purple); }
+.tp-agent-stars-v2 {
+  font-size: 10px; letter-spacing: 1px; margin-top: 4px;
 }
-.tp-agent-score-label {
-  font-size: 9px; color: var(--text-muted); letter-spacing: 1px; font-weight: 700;
+.tp-agent-metrics {
+  text-align: right; min-width: 90px;
 }
-.tp-agent-score-val { font-size: 18px; font-weight: 800; }
-.tp-progress-bar {
-  margin-top: 8px; height: 5px; background: var(--donut-bg);
-  border-radius: 3px; overflow: hidden;
+.tp-agent-score-v2 {
+  font-size: 18px; font-weight: 800; line-height: 1;
 }
-.tp-progress-fill { height: 100%; transition: width 0.4s ease; } 
-  }</style>
-</head>
-  <body>
-<div class="container">
+.tp-progress-bar-v2 {
+  margin-top: 6px; height: 4px;
+  background: var(--donut-bg); border-radius: 2px;
+  overflow: hidden; width: 90px; margin-left: auto;
+}
+.tp-progress-fill-v2 {
+  height: 100%; transition: width 0.5s ease;
+}
+
+.tp-empty-tier {
+  text-align: center; padding: 40px 20px;
+  color: var(--text-muted); font-size: 13px;
+}
+.tp-empty-tier p { margin-top: 12px; }
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+  .tp-podium-v2 { grid-template-columns: 1fr; gap: 8px; }
+  .tp-podium-card-v2.tp-rank-1 { transform: none; }
+  .tp-tier-hero { flex-direction: column; align-items: flex-start; }
+  .tp-tier-quote { max-width: 100%; }
+  .tp-agent-card-v2 { flex-wrap: wrap; }
+  .tp-agent-metrics { min-width: auto; text-align: left; }
+  .tp-progress-bar-v2 { margin-left: 0; width: 100%; }
+}
   <!-- DEMO BANNER -->
   <div class="demo-banner" id="demoBanner">
     <div class="demo-banner-icon">ℹ️</div>
