@@ -3130,8 +3130,9 @@ function renderTeamHealth() {
 function renderTeamMetrics() {
   const agents = getFilteredTeamAgents();
   const container = document.getElementById("teamMetricsHeatmap");
+  const en = isTampaView();
   if (agents.length === 0) {
-    container.innerHTML = "<div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>Sin agentes en este equipo</div>";
+    container.innerHTML = `<div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>${en ? "No agents in this team" : "Sin agentes en este equipo"}</div>`;
     return;
   }
   // Get all unique metrics available in this team
@@ -3145,39 +3146,42 @@ function renderTeamMetrics() {
   });
   const metricList = Array.from(metricSet);
   if (metricList.length === 0) {
-    container.innerHTML = "<div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>Sin métricas disponibles</div>";
+    container.innerHTML = `<div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>${en ? "No metrics available" : "Sin métricas disponibles"}</div>`;
     return;
   }
-  // Auto-select first metric if none selected or current one not available
+  // Reset if current is not in list (fix bug when switching teams)
   if (!currentMetricSubtab || !metricList.includes(currentMetricSubtab)) {
     currentMetricSubtab = metricList[0];
   }
-  // Build sub-tabs
   const subtabsHTML = metricList.map(m => `
     <button class="metric-subtab ${m === currentMetricSubtab ? 'active' : ''}"
             onclick="setMetricSubtab('${m}')">${m}</button>
   `).join("");
-  // Build header card for selected metric
   const selectedSample = metricSample[currentMetricSubtab];
+  if (!selectedSample) {
+    container.innerHTML = `<div class="metric-subtabs">${subtabsHTML}</div><div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>${en ? "No data for this metric" : "Sin datos para esta métrica"}</div>`;
+    return;
+  }
   const goalFmt = selectedSample.format === "pct"
     ? `${selectedSample.goalOp} ${selectedSample.goal}%`
     : `${selectedSample.goalOp} ${selectedSample.goal}${selectedSample.unit || ""}`;
-  // Get all values for this metric
   const agentValues = agents
     .map(a => {
       const m = (a.metrics || []).find(x => x.name === currentMetricSubtab);
       if (!m) return null;
-      const status = getMetricStatus(m);
+      const status = getMetricStatusLang(m, en ? { site: "Tampa" } : null);
       return { agent: a, metric: m, status };
     })
     .filter(x => x !== null);
-  // Sort: for lower-is-better (AHT/SCNR), ascending; for higher-is-better, descending
+  if (agentValues.length === 0) {
+    container.innerHTML = `<div class="metric-subtabs">${subtabsHTML}</div><div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>${en ? "No data for this metric" : "Sin datos para esta métrica"}</div>`;
+    return;
+  }
   const isLowerBetter = selectedSample.goalOp === "<=";
   agentValues.sort((a, b) => {
     if (isLowerBetter) return a.metric.value - b.metric.value;
     return b.metric.value - a.metric.value;
   });
-  // Team average
   const avg = agentValues.reduce((s, x) => s + x.metric.value, 0) / agentValues.length;
   const avgFmt = selectedSample.format === "pct"
     ? avg.toFixed(2) + "%"
@@ -3186,7 +3190,6 @@ function renderTeamMetrics() {
   const successCount = agentValues.filter(x => x.status.class === "success").length;
   const warningCount = agentValues.filter(x => x.status.class === "warning").length;
   const dangerCount = agentValues.filter(x => x.status.class === "danger").length;
-  // Build agent list rows
   const rowsHTML = agentValues.map((x, idx) => {
     const rank = idx + 1;
     const rankMedal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `#${rank}`;
@@ -3210,12 +3213,12 @@ function renderTeamMetrics() {
     <div class="metric-subtabs">${subtabsHTML}</div>
     <div class="metric-header-card">
       <div class="metric-header-title">📊 ${currentMetricSubtab}</div>
-      <div class="metric-header-goal">Meta: ${goalFmt}</div>
+      <div class="metric-header-goal">${en ? "Goal" : "Meta"}: ${goalFmt}</div>
       <div class="metric-header-stats">
-        <span class="metric-header-stat avg">📊 Promedio: <span class="${avgStatus.class}">${avgFmt}</span></span>
-        <span class="metric-header-stat success">✓ ${successCount} en meta</span>
-        <span class="metric-header-stat warning">⚠ ${warningCount} cerca</span>
-        <span class="metric-header-stat danger">✗ ${dangerCount} fuera</span>
+        <span class="metric-header-stat avg">📊 ${en ? "Average" : "Promedio"}: <span class="${avgStatus.class}">${avgFmt}</span></span>
+        <span class="metric-header-stat success">✓ ${successCount} ${en ? "on target" : "en meta"}</span>
+        <span class="metric-header-stat warning">⚠ ${warningCount} ${en ? "close" : "cerca"}</span>
+        <span class="metric-header-stat danger">✗ ${dangerCount} ${en ? "off target" : "fuera"}</span>
       </div>
     </div>
     <div class="metric-agent-list">${rowsHTML}</div>
