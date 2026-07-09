@@ -2899,9 +2899,9 @@ function renderTeamFilter() {
     const t = String(a.team || "").replace(/^Team\s+/i, "").trim();
     if (t) teams.add(t);
   });
-  const teamOrder = ["Ange", "Shary", "Geo"];
-  const sortedTeams = teamOrder.filter(t => teams.has(t));
-  const teamIcons = { Ange: "🟣", Shary: "🟢", Geo: "🟠" };
+const teamOrder = ["Ange", "Shary", "Geo", "Tami"];
+const sortedTeams = teamOrder.filter(t => teams.has(t));
+const teamIcons = { Ange: "🟣", Shary: "🟢", Geo: "🟠", Tami: "🔵" };
   const teamList = ["all", ...sortedTeams];
   const container = document.getElementById("teamFilter");
   container.innerHTML = teamList.map(t => {
