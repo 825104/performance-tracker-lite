@@ -3576,7 +3576,20 @@ const TIER_STYLES = {
   "Golden":   { icon: "🥇", label: "Golden Tier",   color: "#eab308", bg: "#fef9c3", subtitle: "Consistencia y resultados sólidos." },
   "Bronze":   { icon: "🥉", label: "Bronze Tier",   color: "#f97316", bg: "#ffedd5", subtitle: "Crecimiento constante y gran potencial." }
 };
+// Nombre corto: "Apellido1, Nombre1" (más limpio en tablas)
+function shortName(fullName) {
+  if (!fullName) return "";
+  const parts = String(fullName).split(",");
+  if (parts.length < 2) return fullName;
+  const surnames = parts[0].trim().split(/\s+/);
+  const givenNames = parts[1].trim().split(/\s+/);
+  const firstSurname = surnames[0] || "";
+  const firstGiven = givenNames[0] || "";
+  return `${firstSurname}, ${firstGiven}`;
+}
 
+function renderTopStars(count) {
+``
 function renderTopStars(count) {
   const filled = "⭐".repeat(count || 0);
   const empty = "☆".repeat(5 - (count || 0));
