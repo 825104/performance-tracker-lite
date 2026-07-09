@@ -2700,8 +2700,13 @@ function loadStoredData() {
   if (!stored) return false;
   try {
     const data = JSON.parse(stored);
-    Object.keys(AGENTS).forEach(k => delete AGENTS[k]);
-    Object.assign(AGENTS, data);
+    // Preserve Team Tami demo agents (they're not in the CR data source)
+    const tamiAgents = {};
+    Object.keys(AGENTS).forEach(k => {
+      if (k.startsWith("tami_")) tamiAgents[k] = AGENTS[k];
+      delete AGENTS[k];
+    });
+    Object.assign(AGENTS, data, tamiAgents);
     return true;
   } catch (e) {
     return false;
@@ -2714,9 +2719,14 @@ async function loadPublishedData() {
     if (!res.ok) return false;
     const data = await res.json();
     if (!data || typeof data !== "object" || Object.keys(data).length === 0) return false;
-    Object.keys(AGENTS).forEach(k => delete AGENTS[k]);
-    Object.assign(AGENTS, data);
-    console.log("[Data] Loaded published data.json:", Object.keys(data).length, "agentes");
+    // Preserve Team Tami demo agents (they're not in the CR data source)
+    const tamiAgents = {};
+    Object.keys(AGENTS).forEach(k => {
+      if (k.startsWith("tami_")) tamiAgents[k] = AGENTS[k];
+      delete AGENTS[k];
+    });
+    Object.assign(AGENTS, data, tamiAgents);
+    console.log("[Data] Loaded published data.json:", Object.keys(data).length, "agentes CR + Tampa demo");
     return true;
   } catch (e) {
     console.log("[Data] No published data.json found:", e.message);
