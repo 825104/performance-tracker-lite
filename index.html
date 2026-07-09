@@ -1145,7 +1145,9 @@
       </button>
       <button class="team-tab" data-tab="scorecard" onclick="switchTeamTab('scorecard')">
         🏆 Scorecard
-       <button class="team-tab" data-tab="topperformers" onclick="setTeamTab('topperformers')">👑 Top Performers</button>
+      </button>
+      <button class="team-tab" data-tab="topperformers" onclick="switchTeamTab('topperformers')">
+        👑 Top Performers
       </button>
     </div>
 
@@ -1174,26 +1176,28 @@
     </div>
 
     <div id="teamScorecardTab" style="display:none;">
-      <div class="card card-rainbow">
-        <div class="card-title">🏆 Scorecard del Equipo</div>
-        <div class="card-subtitle">Vista tipo Excel Master con todas las métricas y tiers</div>
-        <div class="team-scroll-wrapper">
-          <table class="team-scorecard-table" id="teamScorecardTable"></table>
-        </div>
-      </div>
-    </div>
+     <div class="card card-rainbow">
+  <div class="card-title">🏆 Scorecard del Equipo</div>
+  <div class="card-subtitle">Vista tipo Excel Master con todas las métricas y tiers</div>
+  <div class="team-scroll-wrapper">
+    <table class="team-scorecard-table" id="teamScorecardTable"></table>
   </div>
+</div>
+</div>
+<div id="teamTopPerformersTab" style="display:none;">
+  <div class="card card-rainbow">
+    <div class="card-title">👑 Top Performers del Mes</div>
+    <div class="card-subtitle">Reconocimiento de tus estrellas 🌟</div>
+    <div id="topPerformersContent"></div>
+  </div>
+</div>
+</div>
+</div>
   <footer class="footer">
     <strong>Performance Tracker Lite</strong> v4.6.1<br>
     Powered by Cognizant CR · Contact Center<br>
     <em>Período: Junio 2026</em> · Vista Pública + Modo TL con password
   </footer>
-</div>
-<div id="teamTopPerformersContainer" class="team-tab-content" style="display:none;">
-  <div class="card">
-    <div id="topPerformersContent"></div>
-  </div>
-</div>
 <!-- TL PASSWORD MODAL -->
 <div class="modal-overlay" id="tlPasswordModal">
   <div class="modal-card">
