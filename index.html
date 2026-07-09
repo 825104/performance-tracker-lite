@@ -3520,10 +3520,15 @@ function renderTeamScorecard() {
     const oneOneCell = isTLMode
       ? `<td><button class="oneone-btn" onclick="openOneOneModal('${agentKey}')" title="Abrir sesión 1:1">📝 1:1</button></td>`
       : "";
+    const starRating = a.stars || 0;
+    const starsHTML = "⭐".repeat(starRating) + `<span style="opacity:0.25;">${"⭐".repeat(5 - starRating)}</span>`;
     return `
       <tr>
         <td class="name-cell">${a.name}</td>
-        <td style="font-weight:700;">${(a.finalScore || 0).toFixed(2)}%</td>
+        <td style="font-weight:700; white-space:nowrap;">
+          <span style="letter-spacing:1px; font-size:11px;">${starsHTML}</span>
+          <span style="color:var(--text-muted); font-size:10px; margin-left:4px;">${starRating}/5</span>
+        </td>
         <td><span class="tier-badge-mini ${tierClass}">${tierIcon} ${a.tier || "?"}</span></td>
         ${metricCells}
         ${oneOneCell}
