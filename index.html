@@ -1750,7 +1750,7 @@ const AGENTS = {
     history: { Score: [null, null, null, null, null, 86] },
     availableMetrics: ["Score"]
   },
-  tami_singleton: {
+    tami_singleton: {
     name: "Singleton, Susan Renay", firstName: "Susan", associateId: "389422",
     team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
     month: "June 2026",
@@ -1761,11 +1761,6 @@ const AGENTS = {
     performanceBonus: { eligible: true, amount: 200, reason: "Exceptional! SME Platinum — Max Performance Bonus of $200." },
     totalUSD: 212, totalCRC: 105364,
     badges: ["🌟 SME", "🏆 Platinum", "💡 Innovation Leader"],
-   
-    history: { Score: [null, null, null, null, null, 98.82] },
-    availableMetrics: ["Score"]
-  }
-};
     metrics: [
       { name: "CSAT", value: 98.33, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
       { name: "QA", value: 95.5, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
@@ -1774,6 +1769,10 @@ const AGENTS = {
       { name: "ATT", value: 100, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
       { name: "PKT", value: 100, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
     ],
+    history: { Score: [null, null, null, null, null, 98.82] },
+    availableMetrics: ["Score"]
+  }
+};
 // Metric goals for chart meta line and status
 const METRIC_GOALS = {
   Score: { goal: 94, goalOp: ">=" },
