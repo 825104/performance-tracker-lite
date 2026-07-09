@@ -3425,93 +3425,161 @@ function renderTopStars(count) {
 function renderTopPerformers() {
   const container = document.getElementById("topPerformersContent");
   if (!container) return;
-  const agents = getFilteredTeamAgents();
-  if (agents.length === 0) {
-    container.innerHTML = "<div style='text-align:center;padding:40px;color:var(--text-muted);'>Sin datos disponibles</div>";
+
+  // Filter: only Agent + Agent NH (excluir SME, TL, Supervisor)
+  const allAgents = getFilteredTeamAgents().filter(a => {
+    const cat = String(a.category || "Agent").toLowerCase();
+    return cat === "agent" || cat === "agent nh";
+  });
+
+  if (allAgents.length === 0) {
+    container.innerHTML = "<div style='text-align:center;padding:40px;color:var(--text-muted);'>Sin agentes disponibles</div>";
     return;
   }
-  const sorted = [...agents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+
+  const sorted = [...allAgents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
   const top3 = sorted.slice(0, 3);
-  const monthLabel = agents[0].month || "";
+  const monthLabel = allAgents[0].month || "";
   const week = getWeekOfMonth();
 
-  // Podium: #2 left, #1 center, #3 right
+  // === PODIUM top 3 (order: #2 left, #1 center, #3 right) ===
   const podiumOrder = [top3[1], top3[0], top3[2]].filter(Boolean);
-  const podiumBadges = [
-    { rank: 2, bg: "#94a3b8", icon: "⭐" },
-    { rank: 1, bg: "#f97316", icon: "👑" },
-    { rank: 3, bg: "#ef4444", icon: "⭐" }
+  const podiumMeta = [
+    { rank: 2, color: "#94a3b8", medal: "🥈", bg: "linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%)" },
+    { rank: 1, color: "#f59e0b", medal: "👑", bg: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" },
+    { rank: 3, color: "#c2410c", medal: "🥉", bg: "linear-gradient(135deg, #fdba74 0%, #c2410c 100%)" }
   ];
 
-  const overallHTML = `
-    <div class="tp-section-header">
-      <h2 style="margin:0;font-size:18px;color:var(--text);">👑 Overall Champions — ${monthLabel}</h2>
-      <p style="margin:4px 0 12px;font-size:12px;color:var(--text-muted);">Top 3 agents de este mes</p>
+  const podiumHTML = `
+    <div class="tp-hero">
+      <div class="tp-hero-title">
+        <span class="tp-hero-crown">👑</span>
+        <h2>Champions of ${monthLabel}</h2>
+        <p>Top ${sorted.length} agents · Recognizing excellence 🌟</p>
+      </div>
+      <div class="tp-podium-v2">
+        ${podiumOrder.map((a, i) => {
+          if (!a) return "";
+          const m = podiumMeta[i];
+          const team = String(a.team || "").replace(/^Team\s+/i, "");
+          return `
+            <div class="tp-podium-card-v2 tp-rank-${m.rank}" style="animation-delay:${i * 0.15}s;">
+              <div class="tp-podium-medal" style="background:${m.bg};">${m.medal}</div>
+              <div class="tp-podium-rank" style="color:${m.color};">#${m.rank}</div>
+              <div class="tp-podium-name-v2">${a.name}</div>
+              <div class="tp-podium-badges">
+                <span class="tp-badge-pill">${a.lob || ""}</span>
+                <span class="tp-badge-pill team">${team}</span>
+              </div>
+              <div class="tp-podium-stars">${renderTopStars(a.stars)}</div>
+              <div class="tp-podium-score-v2" style="color:${m.color};">${(a.finalScore || 0).toFixed(2)}%</div>
+              <div class="tp-podium-score-label">FINAL SCORE</div>
+            </div>
+          `;
+        }).join("")}
+      </div>
     </div>
-    <div class="tp-podium">
-      ${podiumOrder.map((a, i) => {
-        if (!a) return "";
-        const b = podiumBadges[i];
+  `;
+
+  // === TIER TABS ===
+  const tiers = ["Platinum", "Golden", "Bronze"];
+  const tierCounts = {};
+  tiers.forEach(t => { tierCounts[t] = sorted.filter(a => a.tier === t).length; });
+
+  const tabsHTML = `
+    <div class="tp-tier-tabs">
+      ${tiers.map((t, i) => {
+        const style = TIER_STYLES[t];
+        return `
+          <button class="tp-tier-tab ${i === 0 ? 'active' : ''}" 
+                  data-tier="${t}" 
+                  onclick="setTopPerformersTier('${t}')"
+                  style="--tier-color:${style.color};">
+            <span class="tp-tier-tab-icon">${style.icon}</span>
+            <span class="tp-tier-tab-label">${style.label}</span>
+            <span class="tp-tier-tab-count">${tierCounts[t]}</span>
+          </button>
+        `;
+      }).join("")}
+    </div>
+    <div id="tpTierContent"></div>
+  `;
+
+  container.innerHTML = podiumHTML + tabsHTML;
+  renderTopPerformersTier("Platinum", sorted, week);
+}
+
+let currentTPTier = "Platinum";
+function setTopPerformersTier(tier) {
+  currentTPTier = tier;
+  document.querySelectorAll(".tp-tier-tab").forEach(t =>
+    t.classList.toggle("active", t.dataset.tier === tier)
+  );
+  const agents = getFilteredTeamAgents().filter(a => {
+    const cat = String(a.category || "Agent").toLowerCase();
+    return cat === "agent" || cat === "agent nh";
+  });
+  const sorted = [...agents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+  const week = getWeekOfMonth();
+  renderTopPerformersTier(tier, sorted, week);
+}
+
+function renderTopPerformersTier(tier, sorted, week) {
+  const box = document.getElementById("tpTierContent");
+  if (!box) return;
+  const tierAgents = sorted.filter(a => a.tier === tier);
+  const style = TIER_STYLES[tier];
+  const quote = TIER_QUOTES[tier][week - 1] || TIER_QUOTES[tier][0];
+
+  if (tierAgents.length === 0) {
+    box.innerHTML = `
+      <div class="tp-empty-tier">
+        <div style="font-size:48px;">${style.icon}</div>
+        <p>No hay agentes en ${style.label} este mes</p>
+      </div>
+    `;
+    return;
+  }
+
+  box.innerHTML = `
+    <div class="tp-tier-hero" style="background:linear-gradient(135deg, ${style.color}22 0%, transparent 100%); border-left:4px solid ${style.color};">
+      <div class="tp-tier-hero-content">
+        <div class="tp-tier-hero-icon" style="background:${style.color}; color:#fff;">${style.icon}</div>
+        <div>
+          <h3 style="color:${style.color};">${style.label}</h3>
+          <p>${style.subtitle}</p>
+        </div>
+      </div>
+      <div class="tp-tier-quote" style="border-left:3px solid ${style.color};">
+        <span class="tp-quote-mark">"</span>
+        ${quote}
+      </div>
+    </div>
+    <div class="tp-agents-grid-v2">
+      ${tierAgents.map((a, i) => {
         const team = String(a.team || "").replace(/^Team\s+/i, "");
         return `
-          <div class="tp-podium-card ${b.rank === 1 ? 'first' : ''}">
-            <div class="tp-podium-badge" style="background:${b.bg};">#${b.rank}</div>
-            <div class="tp-podium-icon">${b.icon}</div>
-            <div class="tp-podium-name">${a.name}</div>
-            <div class="tp-team-pill">${team}</div>
-            <div class="tp-stars">${renderTopStars(a.stars)} <span style="margin-left:4px;">${a.stars || 0}/5</span></div>
-            <div class="tp-score-label">FINAL SCORE</div>
-            <div class="tp-score-value">${(a.finalScore || 0).toFixed(2)}%</div>
+          <div class="tp-agent-card-v2" style="animation-delay:${Math.min(i * 0.05, 0.6)}s;">
+            <div class="tp-agent-rank-badge" style="background:${style.color};">#${i + 1}</div>
+            <div class="tp-agent-body">
+              <div class="tp-agent-name-v2">${a.name}</div>
+              <div class="tp-agent-tags">
+                <span class="tp-tag">${a.lob || ""}</span>
+                <span class="tp-tag team">${team}</span>
+              </div>
+              <div class="tp-agent-stars-v2">${renderTopStars(a.stars)}</div>
+            </div>
+            <div class="tp-agent-metrics">
+              <div class="tp-agent-score-v2" style="color:${style.color};">${(a.finalScore || 0).toFixed(2)}%</div>
+              <div class="tp-progress-bar-v2">
+                <div class="tp-progress-fill-v2" style="width:${Math.min(a.finalScore || 0, 100)}%; background:linear-gradient(90deg, ${style.color}, ${style.color}dd);"></div>
+              </div>
+            </div>
           </div>
         `;
       }).join("")}
     </div>
   `;
-
-  const tiers = ["Platinum", "Golden", "Bronze"];
-  const tierHTML = tiers.map(tier => {
-    const tierAgents = sorted.filter(a => a.tier === tier);
-    if (tierAgents.length === 0) return "";
-    const style = TIER_STYLES[tier];
-    const quote = TIER_QUOTES[tier][week - 1] || TIER_QUOTES[tier][0];
-    return `
-      <div class="tp-tier-section" style="background:linear-gradient(135deg, ${style.bg} 0%, var(--card-bg) 100%);">
-        <div class="tp-tier-header">
-          <div class="tp-tier-header-left">
-            <div class="tp-tier-icon" style="background:${style.color}22;">${style.icon}</div>
-            <div>
-              <h3 style="margin:0;font-size:15px;color:${style.color};">${style.label}</h3>
-              <p style="margin:2px 0 0;font-size:11px;color:var(--text-muted);">${style.subtitle}</p>
-            </div>
-          </div>
-          <div class="tp-quote">"${quote}"</div>
-        </div>
-        <div class="tp-agents-grid">
-          ${tierAgents.map((a, i) => {
-            const team = String(a.team || "").replace(/^Team\s+/i, "");
-            const rank = i + 1;
-            return `
-              <div class="tp-agent-card">
-                <div class="tp-agent-rank" style="background:${style.color}22;color:${style.color};">⭐ #${rank}</div>
-                <div class="tp-agent-name">${a.name}</div>
-                <div class="tp-agent-meta">${a.lob || ""} <span class="tp-team-pill-mini">${team}</span></div>
-                <div class="tp-agent-stars">${renderTopStars(a.stars)} <span style="margin-left:4px;color:var(--text-muted);">${a.stars || 0}/5</span></div>
-                <div class="tp-agent-score-row">
-                  <span class="tp-agent-score-label">SCORE</span>
-                  <span class="tp-agent-score-val" style="color:${style.color};">${(a.finalScore || 0).toFixed(2)}%</span>
-                </div>
-                <div class="tp-progress-bar">
-                  <div class="tp-progress-fill" style="width:${Math.min(a.finalScore || 0, 100)}%; background:${style.color};"></div>
-                </div>
-              </div>
-            `;
-          }).join("")}
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  container.innerHTML = overallHTML + tierHTML;
 }
 // View toggle is always visible (public + TL) - metrics tab is public data
 const _origUpdateTLModeUI_teamview = updateTLModeUI;
