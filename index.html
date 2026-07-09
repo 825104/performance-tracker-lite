@@ -3127,6 +3127,7 @@ function renderTeamHealth() {
         </div>
       `).join("");
 }
+ let currentMetricSubtab = null;
 function renderTeamMetrics() {
   const agents = getFilteredTeamAgents();
   const container = document.getElementById("teamMetricsHeatmap");
