@@ -3494,12 +3494,13 @@ function renderTeamScorecard() {
     if (!metricNames.includes(m.name)) metricNames.push(m.name);
   }));
   const sorted = [...agents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
-  const header = `
+    const header = `
     <tr>
       <th class="name-cell" style="text-align:left;">Agente</th>
       <th>Score</th>
       <th>Tier</th>
       ${metricNames.map(n => `<th>${n}</th>`).join("")}
+      <th>Final %</th>
       ${isTLMode ? `<th>1:1</th>` : ""}
     </tr>
   `;
@@ -3521,16 +3522,21 @@ function renderTeamScorecard() {
       ? `<td><button class="oneone-btn" onclick="openOneOneModal('${agentKey}')" title="Abrir sesión 1:1">📝 1:1</button></td>`
       : "";
     const starRating = a.stars || 0;
-    const starsHTML = "⭐".repeat(starRating) + `<span style="opacity:0.25;">${"⭐".repeat(5 - starRating)}</span>`;
+    const finalPct = (a.finalScore || 0).toFixed(2) + "%";
+    const finalPctColor = starRating >= 5 ? "var(--purple)" :
+                          starRating >= 4 ? "#eab308" :
+                          starRating >= 3 ? "#f97316" :
+                          "var(--danger)";
     return `
       <tr>
         <td class="name-cell">${a.name}</td>
         <td style="font-weight:700; white-space:nowrap;">
-          <span style="letter-spacing:1px; font-size:11px;">${starsHTML}</span>
-          <span style="color:var(--text-muted); font-size:10px; margin-left:4px;">${starRating}/5</span>
+          <span style="font-size:14px;">⭐</span>
+          <span style="color:var(--text); font-size:12px; font-weight:800; margin-left:4px;">${starRating}/5</span>
         </td>
         <td><span class="tier-badge-mini ${tierClass}">${tierIcon} ${a.tier || "?"}</span></td>
         ${metricCells}
+        <td style="font-weight:800; font-size:12px; color:${finalPctColor};">${finalPct}</td>
         ${oneOneCell}
       </tr>
     `;
