@@ -1454,6 +1454,401 @@
 .sv-toast.visible {
   opacity: 1; transform: translateX(-50%) translateY(0);
 }
+ /* ===== SPRINT 2 - TEAM SNAPSHOT ===== */
+.sv-team-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+}
+.sv-team-header-title {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;
+  color: var(--text-muted); font-weight: 700;
+}
+.sv-team-header-subtitle {
+  font-size: 15px; color: var(--text); font-weight: 700;
+}
+.sv-team-hint {
+  font-size: 10px; padding: 4px 10px; border-radius: 12px;
+  background: var(--info-bg); color: var(--info); font-weight: 600;
+}
+.sv-teams-grid {
+  display: grid; grid-template-columns: 1fr; gap: 14px;
+}
+@media (min-width: 800px) { .sv-teams-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1200px) { .sv-teams-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.sv-team-card {
+  background: var(--card-bg); border-radius: 16px; padding: 18px;
+  border: 1px solid var(--border-soft); position: relative; overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.sv-team-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 4px; background: var(--team-gradient);
+}
+.sv-team-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: var(--team-gradient); opacity: 0;
+  transition: opacity 0.3s; pointer-events: none; border-radius: 16px;
+}
+.sv-team-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px -8px var(--team-shadow);
+}
+.sv-team-card:hover::after { opacity: 0.03; }
+.sv-team-card.team-ange { --team-gradient: linear-gradient(135deg, #8b5cf6, #ec4899); --team-shadow: rgba(139,92,246,0.35); --team-color: #8b5cf6; }
+.sv-team-card.team-shary { --team-gradient: linear-gradient(135deg, #22c55e, #14b8a6); --team-shadow: rgba(34,197,94,0.35); --team-color: #22c55e; }
+.sv-team-card.team-geo { --team-gradient: linear-gradient(135deg, #f97316, #eab308); --team-shadow: rgba(249,115,22,0.35); --team-color: #f97316; }
+.sv-team-card.team-tami { --team-gradient: linear-gradient(135deg, #3b82f6, #06b6d4); --team-shadow: rgba(59,130,246,0.35); --team-color: #3b82f6; }
+
+.sv-team-title-row {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.sv-team-title {
+  font-size: 17px; font-weight: 800; color: var(--text);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.sv-team-lob {
+  font-size: 9px; padding: 3px 8px; border-radius: 8px;
+  background: var(--team-gradient); color: white; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.3px;
+}
+.sv-team-count {
+  font-size: 12px; color: var(--text-soft); font-weight: 600;
+}
+.sv-team-arrow {
+  color: var(--text-muted); font-size: 18px;
+  transition: transform 0.2s;
+}
+.sv-team-card:hover .sv-team-arrow { transform: translateX(4px); color: var(--team-color); }
+
+.sv-team-meta { font-size: 11px; color: var(--text-soft); margin-bottom: -4px; }
+.sv-team-meta strong { color: var(--text); font-weight: 700; }
+
+.sv-team-score-block {
+  padding: 12px 14px; background: var(--card-bg-soft);
+  border-radius: 12px; margin-bottom: 4px;
+  position: relative; overflow: hidden;
+}
+.sv-team-score-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--text-muted); font-weight: 700; margin-bottom: 4px;
+}
+.sv-team-score-value {
+  font-size: 28px; font-weight: 800; color: var(--text);
+  line-height: 1;
+  background: var(--team-gradient);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.sv-team-score-bar {
+  height: 6px; background: var(--donut-bg); border-radius: 3px;
+  overflow: hidden; margin-top: 8px; position: relative;
+}
+.sv-team-score-fill {
+  height: 100%; background: var(--team-gradient);
+  border-radius: 3px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative; overflow: hidden;
+}
+.sv-team-score-fill::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.sv-team-score-hint {
+  font-size: 10px; color: var(--text-muted); margin-top: 4px;
+}
+
+.sv-team-metrics-list {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.sv-team-metric {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 10px; background: var(--card-bg-soft);
+  border-radius: 8px; font-size: 12px;
+  border-left: 3px solid var(--success);
+}
+.sv-team-metric.warning { border-left-color: var(--warning); }
+.sv-team-metric.danger { border-left-color: var(--danger); }
+.sv-team-metric-info {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.sv-team-metric-name {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-weight: 700; color: var(--text);
+}
+.sv-team-metric-goal { font-size: 10px; color: var(--text-muted); }
+.sv-team-metric-value {
+  font-size: 14px; font-weight: 800; color: var(--success);
+}
+.sv-team-metric.warning .sv-team-metric-value { color: var(--warning); }
+.sv-team-metric.danger .sv-team-metric-value { color: var(--danger); }
+
+.sv-team-tl-btn {
+  background: var(--team-gradient); color: white;
+  border: none; padding: 10px 16px;
+  border-radius: 10px; font-size: 12px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: all 0.2s; margin-top: auto;
+  box-shadow: 0 4px 12px -4px var(--team-shadow);
+}
+.sv-team-tl-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -4px var(--team-shadow);
+}
+
+/* ===== SPRINT 2 - METRIC HEATMAP ===== */
+.sv-heatmap-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.sv-heatmap-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  font-size: 12px; min-width: 500px;
+}
+.sv-heatmap-table th {
+  padding: 12px 10px; text-align: center;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px;
+  color: var(--text-muted); font-weight: 700;
+  border-bottom: 2px solid var(--border);
+  background: var(--card-bg-soft);
+}
+.sv-heatmap-table th.metric-col {
+  text-align: left; min-width: 100px; position: sticky; left: 0;
+  background: var(--card-bg-soft); z-index: 5;
+}
+.sv-heatmap-table th.team-col-header {
+  background: var(--card-bg-soft);
+}
+.sv-heatmap-table th .team-col-name {
+  font-size: 12px; font-weight: 800; color: var(--text);
+  display: block; margin-bottom: 2px;
+}
+.sv-heatmap-table th .team-col-lob {
+  font-size: 9px; color: var(--text-muted); font-weight: 600;
+}
+.sv-heatmap-table td {
+  padding: 10px 12px; text-align: center;
+  border-bottom: 1px solid var(--border-soft);
+  font-weight: 700; transition: all 0.2s;
+}
+.sv-heatmap-table td.metric-name {
+  text-align: left; font-weight: 600; color: var(--text);
+  position: sticky; left: 0; background: var(--card-bg); z-index: 4;
+}
+.sv-heatmap-table tr:hover td { background: var(--card-bg-soft); }
+.sv-heatmap-table tr:hover td.metric-name { background: var(--card-bg-soft); }
+.sv-heatmap-cell {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 8px; border-radius: 8px;
+}
+.sv-heatmap-cell.success { background: var(--success-bg); color: var(--success); }
+.sv-heatmap-cell.warning { background: var(--warning-bg); color: var(--warning); }
+.sv-heatmap-cell.danger { background: var(--danger-bg); color: var(--danger); }
+.sv-heatmap-cell.na { background: transparent; color: var(--text-muted); }
+.sv-heatmap-cell-goal { font-size: 10px; font-weight: 500; opacity: 0.7; }
+
+/* ===== SPRINT 2 - SCORE DISTRIBUTION ===== */
+.sv-dist-grid {
+  display: grid; grid-template-columns: 1fr; gap: 12px;
+}
+@media (min-width: 640px) { .sv-dist-grid { grid-template-columns: 1fr 1fr; } }
+.sv-dist-card {
+  padding: 14px; background: var(--card-bg-soft);
+  border-radius: 12px; border: 1px solid var(--border-soft);
+}
+.sv-dist-card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.sv-dist-card-title {
+  font-size: 13px; font-weight: 700; color: var(--text);
+}
+.sv-dist-card-badge {
+  font-size: 9px; padding: 3px 8px; border-radius: 8px;
+  background: var(--info-bg); color: var(--info); font-weight: 700;
+}
+.sv-dist-card-count {
+  font-size: 11px; color: var(--text-muted); font-weight: 600;
+  margin-bottom: 10px;
+}
+.sv-dist-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 4px 0;
+}
+.sv-dist-range {
+  font-size: 11px; font-weight: 600; color: var(--text-soft);
+  width: 60px; flex-shrink: 0;
+}
+.sv-dist-bar-wrapper {
+  flex: 1; height: 6px; background: var(--donut-bg);
+  border-radius: 3px; overflow: hidden;
+}
+.sv-dist-bar {
+  height: 100%; border-radius: 3px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sv-dist-bar.excellent { background: linear-gradient(90deg, #22c55e, #14b8a6); }
+.sv-dist-bar.good { background: linear-gradient(90deg, #06b6d4, #3b82f6); }
+.sv-dist-bar.warning { background: linear-gradient(90deg, #eab308, #f97316); }
+.sv-dist-bar.danger { background: linear-gradient(90deg, #ef4444, #ec4899); }
+.sv-dist-count {
+  font-size: 12px; font-weight: 800; color: var(--text);
+  width: 24px; text-align: right;
+}
+
+/* ===== SPRINT 2 - TOP PERFORMERS RECAP ===== */
+.sv-top-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  font-size: 12px;
+}
+.sv-top-table th {
+  padding: 10px 8px; text-align: left;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--text-muted); font-weight: 700;
+  border-bottom: 2px solid var(--border);
+}
+.sv-top-table td {
+  padding: 10px 8px; border-bottom: 1px solid var(--border-soft);
+}
+.sv-top-rank {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 8px;
+  font-size: 11px; font-weight: 800; color: white;
+}
+.sv-top-name { font-weight: 700; color: var(--text); }
+.sv-top-role { font-size: 10px; color: var(--text-muted); }
+.sv-top-team-badge {
+  font-size: 10px; padding: 2px 8px; border-radius: 8px;
+  font-weight: 700;
+}
+.sv-top-score {
+  font-weight: 800; font-size: 13px;
+}
+.sv-top-rating-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 3px 8px; border-radius: 12px;
+  background: #fef3c7; color: #b45309; font-weight: 800; font-size: 11px;
+}
+
+/* ===== SPRINT 2 - TL CARD MODAL ===== */
+.tlcard-modal { max-width: 560px; }
+.tlcard-modal .modal-card {
+  background: linear-gradient(180deg, var(--card-bg) 0%, #faf5ff 100%);
+}
+[data-theme="dark"] .tlcard-modal .modal-card {
+  background: linear-gradient(180deg, var(--card-bg) 0%, #1e1b2e 100%);
+}
+.tlcard-header {
+  padding: 16px 18px; margin: -20px -20px 14px;
+  background: linear-gradient(135deg, var(--tl-color1), var(--tl-color2));
+  color: white; position: relative; overflow: hidden;
+  border-radius: 18px 18px 0 0;
+}
+.tlcard-header::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent 50%);
+}
+.tlcard-header-content { position: relative; z-index: 2; }
+.tlcard-icon-title {
+  font-size: 14px; font-weight: 700; opacity: 0.9;
+  margin-bottom: 4px; display: inline-flex; align-items: center; gap: 6px;
+}
+.tlcard-team-name {
+  font-size: 20px; font-weight: 800;
+}
+.tlcard-lob {
+  font-size: 11px; opacity: 0.85; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;
+}
+.tlcard-close-btn {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(255,255,255,0.2); border: none;
+  color: white; width: 28px; height: 28px;
+  border-radius: 50%; cursor: pointer;
+  font-size: 14px; font-weight: 800;
+  transition: all 0.2s;
+}
+.tlcard-close-btn:hover { background: rgba(255,255,255,0.35); transform: rotate(90deg); }
+
+.tlcard-section {
+  padding: 12px 14px; margin-bottom: 10px;
+  background: var(--card-bg-soft); border-radius: 12px;
+  border: 1px solid var(--border-soft);
+  position: relative;
+}
+.tlcard-section-title {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px;
+  color: var(--text-muted); font-weight: 800; margin-bottom: 8px;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+
+.tlcard-tier-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+}
+@media (min-width: 500px) { .tlcard-tier-grid { grid-template-columns: repeat(4, 1fr); } }
+.tlcard-tier-item {
+  background: var(--card-bg); padding: 8px 10px;
+  border-radius: 8px; text-align: center;
+  border: 1px solid var(--border-soft);
+}
+.tlcard-tier-label {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.4px;
+  color: var(--text-muted); font-weight: 700; margin-bottom: 3px;
+}
+.tlcard-tier-value {
+  font-size: 13px; font-weight: 800; color: var(--text);
+}
+.tlcard-tier-value.platinum { color: var(--purple); }
+.tlcard-tier-value.golden { color: #eab308; }
+.tlcard-tier-value.bronze { color: #f97316; }
+.tlcard-tier-value.unsat, .tlcard-tier-value.danger { color: var(--danger); }
+.tlcard-tier-value.bonus { color: var(--success); }
+
+.tlcard-improve-item {
+  padding: 8px 10px; background: var(--card-bg);
+  border-radius: 8px; border-left: 3px solid var(--info);
+  font-size: 12px; margin-bottom: 6px;
+}
+.tlcard-improve-item.success { border-left-color: var(--success); }
+.tlcard-improve-item strong { color: var(--text); }
+
+.tlcard-bonus-line {
+  font-size: 13px; color: var(--text-soft);
+  display: inline-flex; align-items: center; gap: 6px;
+  flex-wrap: wrap; line-height: 1.7;
+}
+.tlcard-bonus-line strong { color: var(--text); font-weight: 800; }
+
+.tlcard-goal-text {
+  font-size: 12px; color: var(--text-soft); line-height: 1.5;
+}
+
+.tlcard-tips-item {
+  font-size: 12px; color: var(--text-soft); line-height: 1.6;
+  padding-left: 18px; position: relative;
+}
+.tlcard-tips-item::before {
+  content: '•'; position: absolute; left: 6px;
+  color: var(--purple); font-weight: 800;
+}
+
+.tlcard-close-footer {
+  text-align: center; padding: 8px 0 0;
+}
+.tlcard-close-footer button {
+  padding: 8px 20px; border-radius: 10px;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text); font-family: inherit;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: all 0.2s;
+}
+.tlcard-close-footer button:hover {
+  background: var(--card-bg-soft); transform: translateY(-1px);
+}
+
 /* Responsive tweaks */
 @media (max-width: 640px) {
   .tp-podium-v2 { grid-template-columns: 1fr; gap: 8px; }
@@ -1653,6 +2048,40 @@
     </div>
   </div>
 </div>
+  <!-- Snapshot by Team -->
+  <div class="card card-rainbow">
+    <div class="sv-team-header">
+      <div>
+        <div class="sv-team-header-title">Team Comparison</div>
+        <div class="sv-team-header-subtitle">Snapshot by team</div>
+      </div>
+      <div class="sv-team-hint">✨ Click "Ver TL Card" to open detail</div>
+    </div>
+    <div class="sv-teams-grid" id="svTeamsGrid"></div>
+  </div>
+
+  <!-- Metric Heatmap -->
+  <div class="card card-rainbow">
+    <div class="card-title">🔥 Metric Heatmap</div>
+    <div class="card-subtitle">Comparativo rápido por métrica y equipo</div>
+    <div class="sv-heatmap-wrapper">
+      <table class="sv-heatmap-table" id="svHeatmapTable"></table>
+    </div>
+  </div>
+
+  <!-- Score Distribution + Top Performers -->
+  <div style="display:grid; grid-template-columns: 1fr; gap: 16px;">
+    <div class="card card-rainbow">
+      <div class="card-title">📊 Score Distribution</div>
+      <div class="card-subtitle" id="svDistSubtitle">Distribución de ratings del período</div>
+      <div class="sv-dist-grid" id="svDistGrid"></div>
+    </div>
+    <div class="card card-rainbow">
+      <div class="card-title">🏆 Top Performers</div>
+      <div class="card-subtitle">Reconocimiento destacado del período</div>
+      <table class="sv-top-table" id="svTopTable"></table>
+    </div>
+  </div>
 
 <!-- Toast -->
 <div class="sv-toast" id="svToast">🚀 Próximamente</div>
@@ -1727,7 +2156,17 @@
         <div class="oneone-agent-meta" id="oneOneAgentMeta"></div>
       </div>
     </div>
-
+<!-- TL CARD MODAL -->
+<div class="modal-overlay" id="tlCardModal">
+  <div class="modal-card tlcard-modal">
+    <button class="tlcard-close-btn" onclick="closeTLCardModal()">✕</button>
+    <div class="tlcard-header" id="tlcardHeader"></div>
+    <div id="tlcardBody"></div>
+    <div class="tlcard-close-footer">
+      <button onclick="closeTLCardModal()" id="tlcardCloseText">Cerrar</button>
+    </div>
+  </div>
+</div>
     <div class="oneone-section">
       <div class="oneone-section-title">📅 Fecha del 1:1</div>
       <input type="date" class="oneone-input" id="oneOneDate">
@@ -4634,6 +5073,10 @@ function renderSupervisorKPIs() {
 function renderSupervisorView() {
   renderSupervisorMonths();
   renderSupervisorKPIs();
+  renderSVTeams();
+  renderSVHeatmap();
+  renderSVDistribution();
+  renderSVTopTable();
 }
 
 function svGoToTopPerformers() {
@@ -4651,6 +5094,471 @@ function svGoToAtRisk() {
     switchTeamTab("metrics");
   }, 50);
 }
+ // ========== SPRINT 2 - TEAM DATA ==========
+const SV_TEAM_CONFIG = {
+  Ange:  { icon: "🟣", name: "Team Ange",  lob: "ACPNY",    tlName: "Ange",  color1: "#8b5cf6", color2: "#ec4899", cssClass: "team-ange",  en: false },
+  Shary: { icon: "🟢", name: "Team Shary", lob: "EH Comm",  tlName: "Shary", color1: "#22c55e", color2: "#14b8a6", cssClass: "team-shary", en: false },
+  Geo:   { icon: "🟠", name: "Team Geo",   lob: "Medicare", tlName: "Geo",   color1: "#f97316", color2: "#eab308", cssClass: "team-geo",   en: false },
+  Tami:  { icon: "🔵", name: "Team Tami",  lob: "NYSHIP",   tlName: "Tami",  color1: "#3b82f6", color2: "#06b6d4", cssClass: "team-tami",  en: true  }
+};
+
+function svGetTeamAgents(teamKey) {
+  return Object.values(AGENTS).filter(a => {
+    const t = String(a.team || "").replace(/^Team\s+/i, "").trim();
+    const cat = String(a.category || "").toLowerCase();
+    return t === teamKey && (cat === "agent" || cat === "agent nh" || cat === "sme");
+  });
+}
+
+function svTeamStats(teamKey) {
+  const agents = svGetTeamAgents(teamKey);
+  if (agents.length === 0) return null;
+  const scores = agents.map(a => a.finalScore || 0);
+  const stars = agents.map(a => a.stars || 0);
+  const avgScore = scores.reduce((s, v) => s + v, 0) / scores.length;
+  const minStars = Math.min(...stars);
+  const maxStars = Math.max(...stars);
+  const teamAvgStars = stars.reduce((s, v) => s + v, 0) / stars.length;
+
+  // Aggregate metrics
+  const metricMap = {};
+  agents.forEach(a => (a.metrics || []).forEach(m => {
+    if (!metricMap[m.name]) metricMap[m.name] = { values: [], goal: m.goal, goalOp: m.goalOp, format: m.format, unit: m.unit };
+    if (m.value !== null && m.value !== undefined) metricMap[m.name].values.push(m.value);
+  }));
+  const metrics = Object.entries(metricMap).map(([name, data]) => {
+    const avg = data.values.length > 0 ? data.values.reduce((s, v) => s + v, 0) / data.values.length : null;
+    return { name, value: avg, goal: data.goal, goalOp: data.goalOp, format: data.format, unit: data.unit };
+  });
+
+  // Team QA
+  const qaMetric = metrics.find(m => m.name === "QA");
+  const teamQA = qaMetric ? qaMetric.value : null;
+
+  return { agents, avgScore, minStars, maxStars, teamAvgStars, metrics, teamQA };
+}
+
+function svGetTierFromScore(avgStars) {
+  if (avgStars >= 4.0) return "Platinum";
+  if (avgStars >= 3.0) return "Golden";
+  if (avgStars >= 2.0) return "Bronze";
+  return "Unsatisfactory";
+}
+
+function svTLBonus(teamKey, stats) {
+  const cfg = SV_TEAM_CONFIG[teamKey];
+  if (!cfg) return null;
+  if (teamKey === "Tami") return { na: true, reason: cfg.en ? "Tampa team has no bonus scheme" : "Tampa no aplica bonos" };
+
+  const tier = svGetTierFromScore(stats.teamAvgStars);
+  const baseTable = { Platinum: 300, Golden: 200, Bronze: 0, Unsatisfactory: 0 };
+  const base = baseTable[tier] || 0;
+  const eff = 12;
+
+  // QA thresholds: Ange 92%, Shary/Geo 95%
+  const qaThreshold = teamKey === "Ange" ? 0.92 : 0.95;
+  const teamQANormalized = stats.teamQA ? (stats.teamQA > 1 ? stats.teamQA / 100 : stats.teamQA) : null;
+  const qaFails = teamQANormalized !== null && teamQANormalized < qaThreshold;
+
+  const finalBase = qaFails ? 0 : base;
+  const total = finalBase + eff;
+
+  return {
+    na: false,
+    tier, base, eff, finalBase, total,
+    qaFails,
+    qaThreshold: qaThreshold * 100,
+    teamQA: teamQANormalized !== null ? teamQANormalized * 100 : null,
+    reason: qaFails
+      ? `Team QA ${(teamQANormalized*100).toFixed(2)}% < ${(qaThreshold*100)}% → lose base bonus`
+      : `Tier ${tier} — Team QA on target`
+  };
+}
+
+// ========== SNAPSHOT BY TEAM ==========
+function renderSVTeams() {
+  const container = document.getElementById("svTeamsGrid");
+  if (!container) return;
+  const teams = ["Ange", "Shary", "Geo", "Tami"];
+  container.innerHTML = teams.map(t => renderSVTeamCard(t)).filter(Boolean).join("");
+}
+
+function renderSVTeamCard(teamKey) {
+  const cfg = SV_TEAM_CONFIG[teamKey];
+  const stats = svTeamStats(teamKey);
+  if (!stats || !cfg) return "";
+  const en = cfg.en;
+  const agentCount = stats.agents.filter(a => String(a.category || "").toLowerCase() !== "sme").length;
+  const scoreClamp = Math.min(stats.avgScore, 100);
+  const label = en ? "agents" : "agentes";
+
+  const metricsHTML = stats.metrics.slice(0, 8).map(m => {
+    const status = getMetricStatus(m);
+    const val = m.format === "pct" ? m.value.toFixed(2) + "%" : Math.round(m.value) + (m.unit || "");
+    const goalFmt = m.format === "pct" ? `${m.goalOp} ${m.goal}%` : `${m.goalOp} ${m.goal}${m.unit || ""}`;
+    const icon = status.class === "success" ? "✅" : status.class === "warning" ? "⚠️" : "🔴";
+    return `
+      <div class="sv-team-metric ${status.class}">
+        <div class="sv-team-metric-info">
+          <span class="sv-team-metric-name">${icon} ${m.name}</span>
+          <span class="sv-team-metric-goal">Goal ${goalFmt} · 1 mes</span>
+        </div>
+        <span class="sv-team-metric-value">${val}</span>
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <div class="sv-team-card ${cfg.cssClass}">
+      <div class="sv-team-title-row">
+        <div class="sv-team-title">
+          ${cfg.icon} ${cfg.name}
+          <span class="sv-team-lob">${cfg.lob}</span>
+        </div>
+        <span class="sv-team-arrow">→</span>
+      </div>
+      <div class="sv-team-meta">
+        <strong>TL:</strong> ${cfg.tlName} · <strong>${agentCount}</strong> ${label} · ${en ? "Data" : "Datos"}: 1/1 ${en ? "months" : "meses"}
+      </div>
+      <div class="sv-team-score-block">
+        <div class="sv-team-score-label">${en ? "Average Score" : "Score Promedio"}</div>
+        <div class="sv-team-score-value">${stats.avgScore.toFixed(2)}%</div>
+        <div class="sv-team-score-bar">
+          <div class="sv-team-score-fill" style="width:${scoreClamp}%"></div>
+        </div>
+        <div class="sv-team-score-hint">${en ? "Progress toward full 100% team benchmark" : "Progreso hacia el 100% del team benchmark"}</div>
+      </div>
+      <div class="sv-team-metrics-list">${metricsHTML}</div>
+      <button class="sv-team-tl-btn" onclick="openTLCardModal('${teamKey}')">💼 Ver TL Card</button>
+    </div>
+  `;
+}
+
+// ========== METRIC HEATMAP ==========
+function renderSVHeatmap() {
+  const table = document.getElementById("svHeatmapTable");
+  if (!table) return;
+  const teamKeys = ["Ange", "Shary", "Geo", "Tami"];
+  const teamsData = {};
+  const allMetrics = new Set();
+
+  teamKeys.forEach(k => {
+    const stats = svTeamStats(k);
+    if (stats) {
+      teamsData[k] = stats;
+      stats.metrics.forEach(m => allMetrics.add(m.name));
+    }
+  });
+
+  const metricOrder = ["Adherence", "ADH", "AHT", "Attendance", "ATT", "QA", "SC+NR", "PKT", "CE", "CSAT", "ACSS/CSAT", "Opened"];
+  const orderedMetrics = metricOrder.filter(m => allMetrics.has(m));
+  Array.from(allMetrics).forEach(m => { if (!orderedMetrics.includes(m)) orderedMetrics.push(m); });
+
+  let header = `<thead><tr><th class="metric-col">MÉTRICA</th>`;
+  teamKeys.forEach(k => {
+    if (!teamsData[k]) return;
+    const cfg = SV_TEAM_CONFIG[k];
+    header += `<th class="team-col-header">
+      <span class="team-col-name">${cfg.tlName.toUpperCase()}</span>
+      <span class="team-col-lob">${cfg.lob}</span>
+    </th>`;
+  });
+  header += `</tr></thead>`;
+
+  let body = `<tbody>`;
+  orderedMetrics.forEach(mName => {
+    body += `<tr><td class="metric-name">${mName}</td>`;
+    teamKeys.forEach(k => {
+      if (!teamsData[k]) return;
+      const m = teamsData[k].metrics.find(x => x.name === mName);
+      if (!m || m.value === null || m.value === undefined) {
+        body += `<td><span class="sv-heatmap-cell na">N/A</span></td>`;
+      } else {
+        const status = getMetricStatus(m);
+        const icon = status.class === "success" ? "✅" : status.class === "warning" ? "⚠️" : "🔴";
+        const val = m.format === "pct" ? m.value.toFixed(2) + "%" : Math.round(m.value) + (m.unit || "");
+        const goalFmt = m.format === "pct" ? `(${m.goalOp}${m.goal}%)` : `(${m.goalOp}${m.goal}${m.unit || ""})`;
+        body += `<td><span class="sv-heatmap-cell ${status.class}">${val} <span class="sv-heatmap-cell-goal">${goalFmt}</span> ${icon}</span></td>`;
+      }
+    });
+    body += `</tr>`;
+  });
+  body += `</tbody>`;
+
+  table.innerHTML = header + body;
+}
+
+// ========== SCORE DISTRIBUTION ==========
+function renderSVDistribution() {
+  const container = document.getElementById("svDistGrid");
+  if (!container) return;
+  const teamKeys = ["Ange", "Shary", "Geo", "Tami"];
+  const cards = teamKeys.map(k => {
+    const cfg = SV_TEAM_CONFIG[k];
+    const agents = svGetTeamAgents(k).filter(a => String(a.category || "").toLowerCase() !== "sme");
+    if (agents.length === 0) return null;
+    const ranges = { excellent: 0, good: 0, warning: 0, danger: 0 };
+    agents.forEach(a => {
+      const s = a.finalScore || 0;
+      if (s >= 95) ranges.excellent++;
+      else if (s >= 90) ranges.good++;
+      else if (s >= 80) ranges.warning++;
+      else ranges.danger++;
+    });
+    const total = agents.length;
+    const maxVal = Math.max(1, ranges.excellent, ranges.good, ranges.warning, ranges.danger);
+    return `
+      <div class="sv-dist-card">
+        <div class="sv-dist-card-header">
+          <div class="sv-dist-card-title">${cfg.icon} ${cfg.name}</div>
+          <span class="sv-dist-card-badge">${cfg.lob}</span>
+        </div>
+        <div class="sv-dist-card-count">${total} ${cfg.en ? "advocates evaluated" : "agentes evaluados"}</div>
+        <div class="sv-dist-row">
+          <span class="sv-dist-range">95-100%</span>
+          <div class="sv-dist-bar-wrapper"><div class="sv-dist-bar excellent" style="width:${(ranges.excellent/maxVal)*100}%"></div></div>
+          <span class="sv-dist-count">${ranges.excellent}</span>
+        </div>
+        <div class="sv-dist-row">
+          <span class="sv-dist-range">90-94.9%</span>
+          <div class="sv-dist-bar-wrapper"><div class="sv-dist-bar good" style="width:${(ranges.good/maxVal)*100}%"></div></div>
+          <span class="sv-dist-count">${ranges.good}</span>
+        </div>
+        <div class="sv-dist-row">
+          <span class="sv-dist-range">80-89.9%</span>
+          <div class="sv-dist-bar-wrapper"><div class="sv-dist-bar warning" style="width:${(ranges.warning/maxVal)*100}%"></div></div>
+          <span class="sv-dist-count">${ranges.warning}</span>
+        </div>
+        <div class="sv-dist-row">
+          <span class="sv-dist-range">&lt;80%</span>
+          <div class="sv-dist-bar-wrapper"><div class="sv-dist-bar danger" style="width:${(ranges.danger/maxVal)*100}%"></div></div>
+          <span class="sv-dist-count">${ranges.danger}</span>
+        </div>
+      </div>
+    `;
+  }).filter(Boolean);
+
+  // Vista global
+  const allAgents = Object.values(AGENTS).filter(a => {
+    const cat = String(a.category || "").toLowerCase();
+    return cat === "agent" || cat === "agent nh";
+  });
+  const totalG = allAgents.length;
+  const rG = { excellent: 0, good: 0, warning: 0, danger: 0 };
+  allAgents.forEach(a => {
+    const s = a.finalScore || 0;
+    if (s >= 95) rG.excellent++;
+    else if (s >= 90) rG.good++;
+    else if (s >= 80) rG.warning++;
+    else rG.danger++;
+  });
+  const maxG = Math.max(1, rG.excellent, rG.good, rG.warning, rG.danger);
+  cards.push(`
+    <div class="sv-dist-card" style="grid-column: 1 / -1; border: 2px solid var(--purple);">
+      <div class="sv-dist-card-header">
+        <div class="sv-dist-card-title">🌐 Vista global</div>
+        <span class="sv-dist-card-badge" style="background:var(--purple-bg);color:var(--purple);">All Teams</span>
+      </div>
+      <div class="sv-dist-card-count">${totalG} agentes evaluados</div>
+      <div class="sv-dist-row"><span class="sv-dist-range">95-100%</span><div class="sv-dist-bar-wrapper"><div class="sv-dist-bar excellent" style="width:${(rG.excellent/maxG)*100}%"></div></div><span class="sv-dist-count">${rG.excellent}</span></div>
+      <div class="sv-dist-row"><span class="sv-dist-range">90-94.9%</span><div class="sv-dist-bar-wrapper"><div class="sv-dist-bar good" style="width:${(rG.good/maxG)*100}%"></div></div><span class="sv-dist-count">${rG.good}</span></div>
+      <div class="sv-dist-row"><span class="sv-dist-range">80-89.9%</span><div class="sv-dist-bar-wrapper"><div class="sv-dist-bar warning" style="width:${(rG.warning/maxG)*100}%"></div></div><span class="sv-dist-count">${rG.warning}</span></div>
+      <div class="sv-dist-row"><span class="sv-dist-range">&lt;80%</span><div class="sv-dist-bar-wrapper"><div class="sv-dist-bar danger" style="width:${(rG.danger/maxG)*100}%"></div></div><span class="sv-dist-count">${rG.danger}</span></div>
+    </div>
+  `);
+  container.innerHTML = cards.join("");
+}
+
+// ========== TOP PERFORMERS TABLE ==========
+function renderSVTopTable() {
+  const table = document.getElementById("svTopTable");
+  if (!table) return;
+  const allAgents = Object.values(AGENTS).filter(a => {
+    const cat = String(a.category || "").toLowerCase();
+    return cat === "agent" || cat === "agent nh" || cat === "sme";
+  });
+  const sorted = [...allAgents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0)).slice(0, 5);
+
+  const teamBadgeColor = {
+    Ange:  "background:#ede9fe;color:#8b5cf6;",
+    Shary: "background:#dcfce7;color:#22c55e;",
+    Geo:   "background:#ffedd5;color:#f97316;",
+    Tami:  "background:#dbeafe;color:#3b82f6;"
+  };
+  const rankColors = ["#f59e0b", "#94a3b8", "#c2410c", "#3b82f6", "#8b5cf6"];
+
+  let html = `<thead><tr>
+    <th>#</th><th>AGENTE</th><th>TEAM</th><th>LOB</th><th style="text-align:right;">SCORE</th><th>RATING</th>
+  </tr></thead><tbody>`;
+  sorted.forEach((a, i) => {
+    const team = String(a.team || "").replace(/^Team\s+/i, "").trim();
+    const cfg = SV_TEAM_CONFIG[team];
+    const shortNm = shortName(a.name);
+    html += `<tr>
+      <td><span class="sv-top-rank" style="background:${rankColors[i]};">${i+1}</span></td>
+      <td>
+        <div class="sv-top-name">${shortNm}</div>
+        <div class="sv-top-role">${a.category || "Agent"}</div>
+      </td>
+      <td><span class="sv-top-team-badge" style="${teamBadgeColor[team] || ''}">${cfg ? cfg.tlName : team}</span></td>
+      <td style="font-size:11px;color:var(--text-soft);">${a.lob || ""}</td>
+      <td style="text-align:right;"><span class="sv-top-score" style="color:${rankColors[i]};">${(a.finalScore || 0).toFixed(2)}%</span></td>
+      <td><span class="sv-top-rating-badge">${a.stars || 0}⭐</span></td>
+    </tr>`;
+  });
+  html += `</tbody>`;
+  table.innerHTML = html;
+}
+
+// ========== TL CARD MODAL ==========
+function openTLCardModal(teamKey) {
+  const cfg = SV_TEAM_CONFIG[teamKey];
+  const stats = svTeamStats(teamKey);
+  if (!cfg || !stats) return;
+  const en = cfg.en;
+  const modal = document.getElementById("tlCardModal");
+  const header = document.getElementById("tlcardHeader");
+  const body = document.getElementById("tlcardBody");
+  const closeBtn = document.getElementById("tlcardCloseText");
+
+  modal.querySelector(".modal-card").style.setProperty("--tl-color1", cfg.color1);
+  modal.querySelector(".modal-card").style.setProperty("--tl-color2", cfg.color2);
+
+  header.innerHTML = `
+    <div class="tlcard-header-content">
+      <div class="tlcard-icon-title">💼 ${en ? "TL Card" : "Tarjeta de TL"} — ${cfg.tlName} · ${cfg.name}</div>
+      <div class="tlcard-lob">${cfg.lob}</div>
+    </div>
+  `;
+
+  const tier = svGetTierFromScore(stats.teamAvgStars);
+  const tierIcon = tier === "Platinum" ? "🏆" : tier === "Golden" ? "🥇" : tier === "Bronze" ? "🥉" : "⚠️";
+  const bonus = svTLBonus(teamKey, stats);
+
+  // SECTION 2 - Areas to Improve
+  const offTarget = stats.metrics.filter(m => {
+    const s = getMetricStatus(m);
+    return s.class === "danger" || s.class === "warning";
+  });
+  const improveHTML = offTarget.length === 0
+    ? `<div class="tlcard-improve-item success">✅ <strong>${en ? "No metrics off target" : "No hay métricas fuera de meta"}</strong> ${en ? "for this team in the selected period." : "para este team en el período seleccionado."}</div>`
+    : offTarget.map(m => {
+        const val = m.format === "pct" ? m.value.toFixed(2) + "%" : Math.round(m.value) + (m.unit || "");
+        const goalFmt = m.format === "pct" ? `${m.goalOp} ${m.goal}%` : `${m.goalOp} ${m.goal}${m.unit || ""}`;
+        return `<div class="tlcard-improve-item"><strong>${m.name}</strong>: ${val} (goal ${goalFmt}) — ${en ? "review with team" : "revisar con el equipo"}</div>`;
+      }).join("");
+
+  // SECTION 3 - Bonus
+  let bonusHTML;
+  if (bonus.na) {
+    bonusHTML = `<div class="tlcard-bonus-line">🇺🇸 <strong>${bonus.reason}</strong></div>`;
+  } else {
+    const statusIcon = bonus.qaFails ? "⚠️" : "✅";
+    bonusHTML = `
+      <div class="tlcard-bonus-line">${tierIcon} <strong>${tier}</strong> · 🎯 Tier: $${bonus.base} · ⚡ ${en ? "Efficiency" : "Eficiencia"}: $${bonus.eff} ${statusIcon} · 💵 <strong>Total: $${bonus.total}</strong></div>
+      <div class="tlcard-bonus-line" style="margin-top:6px; font-size:11px; color:var(--text-muted);">📊 Team QA: ${bonus.teamQA !== null ? bonus.teamQA.toFixed(2) + "%" : "N/A"} · ${en ? "Threshold" : "Umbral"}: ${bonus.qaThreshold}%</div>
+    `;
+  }
+
+  // SECTION 4 - Next Goal
+  let nextGoalText;
+  if (tier === "Platinum") {
+    nextGoalText = en ? "To keep Platinum: maintain Team Score ≥97%, care for AHT, reinforce watch metrics." : "Para mantener Platinum: mantené Team Score ≥97%, cuidá AHT, reforzá métricas en watch.";
+  } else if (tier === "Golden") {
+    nextGoalText = en ? "To reach Platinum: get Team Score ≥97% consistently and close off-target metrics." : "Para llegar a Platinum: subí Team Score ≥97% consistentemente y cerrá métricas fuera de meta.";
+  } else if (tier === "Bronze") {
+    nextGoalText = en ? "Focus on QA (weight 30%) and Attendance (weight 13%) to move up to Golden." : "Enfocá QA (peso 30%) y Attendance (peso 13%) para subir a Golden.";
+  } else {
+    nextGoalText = en ? "Immediate action plan needed. Schedule 1:1s and define recovery goals." : "Plan de acción inmediato. Programá 1:1s y definí metas de recuperación.";
+  }
+
+  // SECTION 5 - Tips
+  const TIPS_BY_TIER = {
+    Platinum: {
+      es: ["Reconocé a tus top performers en público", "Compartí tus prácticas con otros TLs", "Documentá tu metodología de coaching"],
+      en: ["Recognize your top performers publicly", "Share your practices with other TLs", "Document your coaching methodology"],
+      quoteES: "Estás en la cima — mantené la calma cuando los KPIs fluctúen. La consistencia es la verdadera marca de un gran líder.",
+      quoteEN: "You're at the top — stay calm when KPIs fluctuate. Consistency is the true mark of a great leader."
+    },
+    Golden: {
+      es: ["Identificá 2-3 agentes con potencial Platinum", "Diseñá micro-metas semanales por métrica", "Aprovechá 1:1s para reforzar objetivos"],
+      en: ["Identify 2-3 agents with Platinum potential", "Design weekly micro-goals per metric", "Use 1:1s to reinforce objectives"],
+      quoteES: "Estás a un paso de Platinum — cada micro-mejora suma. Enfocate en la métrica de mayor peso.",
+      quoteEN: "You're one step from Platinum — every micro-improvement adds up. Focus on the highest-weight metric."
+    },
+    Bronze: {
+      es: ["Prioriza QA y Attendance con action plans concretos", "Aumentá frecuencia de 1:1s a semanal", "Reforzá cultura de accountability en el team"],
+      en: ["Prioritize QA and Attendance with concrete action plans", "Increase 1:1 frequency to weekly", "Reinforce accountability culture in the team"],
+      quoteES: "El bronce es el punto de partida. Con foco y disciplina, Golden está al alcance.",
+      quoteEN: "Bronze is the starting point. With focus and discipline, Golden is within reach."
+    },
+    Unsatisfactory: {
+      es: ["Reunión urgente con Fiana para plan de recuperación", "Auditoría inmediata de procesos del team", "Comunicá expectativas claras y consecuencias"],
+      en: ["Urgent meeting with Supervisor for recovery plan", "Immediate audit of team processes", "Communicate clear expectations and consequences"],
+      quoteES: "Este es el momento de líder. Un plan claro + accountability = recuperación.",
+      quoteEN: "This is a leadership moment. A clear plan + accountability = recovery."
+    }
+  };
+  const tips = TIPS_BY_TIER[tier];
+  const tipsList = (en ? tips.en : tips.es).map(t => `<div class="tlcard-tips-item">${t}</div>`).join("");
+  const quote = en ? tips.quoteEN : tips.quoteES;
+
+  body.innerHTML = `
+    <div class="tlcard-section">
+      <div class="tlcard-section-title">💎 SECTION 1 — TIER & BONUS</div>
+      <div class="tlcard-tier-grid">
+        <div class="tlcard-tier-item">
+          <div class="tlcard-tier-label">TIER</div>
+          <div class="tlcard-tier-value ${tier.toLowerCase()}">${tierIcon} ${tier.toUpperCase()}</div>
+        </div>
+        <div class="tlcard-tier-item">
+          <div class="tlcard-tier-label">TEAM SCORE</div>
+          <div class="tlcard-tier-value">${stats.avgScore.toFixed(1)}%</div>
+        </div>
+        <div class="tlcard-tier-item">
+          <div class="tlcard-tier-label">RATING</div>
+          <div class="tlcard-tier-value">${stats.minStars.toFixed(1)} – ${stats.maxStars.toFixed(1)}</div>
+        </div>
+        <div class="tlcard-tier-item">
+          <div class="tlcard-tier-label">${en ? "TL BONUS" : "BONO TL"}</div>
+          <div class="tlcard-tier-value bonus">💰 ${bonus.na ? "N/A" : "$" + bonus.total}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tlcard-section">
+      <div class="tlcard-section-title">🎯 SECTION 2 — ${en ? "AREAS TO IMPROVE" : "ÁREAS A MEJORAR"}</div>
+      ${improveHTML}
+    </div>
+
+    <div class="tlcard-section">
+      <div class="tlcard-section-title">💰 SECTION 3 — ${en ? "MONTHLY BONUS SUMMARY" : "RESUMEN BONO MES"}</div>
+      ${bonusHTML}
+    </div>
+
+    <div class="tlcard-section">
+      <div class="tlcard-section-title">🎯 SECTION 4 — ${en ? "NEXT OBJECTIVE" : "PRÓXIMO OBJETIVO"}</div>
+      <div class="tlcard-goal-text">${nextGoalText}</div>
+    </div>
+
+    <div class="tlcard-section">
+      <div class="tlcard-section-title">💡 SECTION 5 — ${en ? "TIPS OF THE MONTH" : "CONSEJOS DEL MES"}</div>
+      <div class="tlcard-goal-text" style="font-style:italic; margin-bottom:10px; padding-bottom:8px; border-bottom:1px dashed var(--border);">☀️ ${quote}</div>
+      <div style="display:flex; flex-direction:column; gap:6px;">${tipsList}</div>
+    </div>
+  `;
+
+  closeBtn.textContent = en ? "Close" : "Cerrar";
+  modal.classList.add("visible");
+}
+
+function closeTLCardModal() {
+  document.getElementById("tlCardModal").classList.remove("visible");
+}
+
+document.getElementById("tlCardModal").addEventListener("click", (e) => {
+  if (e.target.id === "tlCardModal") closeTLCardModal();
+});
 // Re-render chart on window resize
 let resizeTimer;
 window.addEventListener("resize", () => {
