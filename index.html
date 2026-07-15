@@ -1,1 +1,4300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0f172a">
+<title>Performance Tracker Lite v4.7.1 | Cognizant </title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    transition: background 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+  :root {
+    --bg: linear-gradient(135deg, #fef3f2 0%, #fef7cd 20%, #ecfdf5 40%, #eff6ff 60%, #f5f3ff 80%, #fdf2f8 100%);
+    --card-bg: #ffffff;
+    --card-bg-soft: #f8fafc;
+    --text: #0f172a;
+    --text-soft: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --border-soft: #f1f5f9;
+    --shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08);
+    --success: #22c55e;
+    --success-bg: #dcfce7;
+    --warning: #f97316;
+    --warning-bg: #ffedd5;
+    --danger: #ef4444;
+    --danger-bg: #fee2e2;
+    --info: #3b82f6;
+    --info-bg: #dbeafe;
+    --purple: #8b5cf6;
+    --purple-bg: #ede9fe;
+    --rainbow: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6, #ec4899);
+    --donut-bg: #e2e8f0;
+    --chart-grid: #f1f5f9;
+    --chart-meta: #94a3b8;
+  }
+  [data-theme="dark"] {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --card-bg-soft: #334155;
+    --text: #e2e8f0;
+    --text-soft: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --border-soft: #1e293b;
+    --success-bg: rgba(34,197,94,0.15);
+    --warning-bg: rgba(249,115,22,0.15);
+    --danger-bg: rgba(239,68,68,0.15);
+    --info-bg: rgba(59,130,246,0.15);
+    --purple-bg: rgba(139,92,246,0.15);
+    --donut-bg: #334155;
+    --chart-grid: #334155;
+    --chart-meta: #64748b;
+  }
+  .container { max-width: 480px; margin: 0 auto; padding: 12px; }
+  @media (min-width: 768px) { .container { max-width: 720px; padding: 20px; } }
+  @media (min-width: 1024px) { .container { max-width: 960px; padding: 24px; } }
+  .app-header {
+    background: var(--card-bg); border-radius: 16px; padding: 16px;
+    margin-bottom: 16px; box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+  }
+  .app-header::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--rainbow);
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .logo { font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .logo-badge { font-size: 10px; background: var(--info-bg); color: var(--info); padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+  .icon-btn {
+    background: var(--card-bg-soft); border: 1px solid var(--border);
+    border-radius: 10px; width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; color: var(--text); transition: all 0.2s;
+  }
+  .icon-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  .agent-selector {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+    border-radius: 10px; background: var(--card-bg-soft); color: var(--text);
+    font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
+  }
+  .card {
+    background: var(--card-bg); border-radius: 16px; padding: 20px;
+    margin-bottom: 16px; box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+  }
+  .card-rainbow::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--rainbow);
+  }
+  .card-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--text-muted); font-weight: 600; margin-bottom: 4px;
+  }
+  .card-subtitle { font-size: 12px; color: var(--text-soft); margin-bottom: 14px; }
+  .hero-info h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  .hero-meta { font-size: 13px; color: var(--text-soft); margin-bottom: 12px; }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+  .badge-success { background: var(--success-bg); color: var(--success); }
+  .badge-warning { background: var(--warning-bg); color: var(--warning); }
+  .badge-danger { background: var(--danger-bg); color: var(--danger); }
+  .badge-info { background: var(--info-bg); color: var(--info); }
+  .badge-purple { background: var(--purple-bg); color: var(--purple); }
+  .hero-score-wrapper {
+    display: flex; align-items: center; justify-content: space-around;
+    gap: 20px; padding: 20px 10px; background: var(--card-bg-soft);
+    border-radius: 14px; flex-wrap: wrap;
+  }
+  .donut-container { position: relative; width: 140px; height: 140px; }
+  .donut-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+  .donut-bg-circle { stroke: var(--donut-bg); fill: none; stroke-width: 12; }
+  .donut-progress {
+    fill: none; stroke-width: 12; stroke-linecap: round;
+    stroke-dasharray: 314; stroke-dashoffset: 314;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .donut-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+  .donut-value { font-size: 24px; font-weight: 700; color: var(--text); line-height: 1; }
+  .donut-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .stars-container { text-align: center; }
+  .stars { font-size: 22px; letter-spacing: 2px; margin-bottom: 6px; }
+  .star-filled { color: #eab308; }
+  .star-empty { color: var(--donut-bg); }
+  .tier-label { font-size: 13px; font-weight: 600; color: var(--text); }
+  .tier-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .bonus-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 500px) { .bonus-grid { grid-template-columns: 1fr 1fr; } }
+  .bonus-item { padding: 14px; border-radius: 12px; background: var(--card-bg-soft); border: 1px solid var(--border-soft); }
+  .bonus-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .bonus-item-title { font-size: 13px; font-weight: 600; color: var(--text); }
+  .bonus-item-amount { font-size: 20px; font-weight: 700; color: var(--success); margin: 6px 0; }
+  .bonus-item-reason { font-size: 12px; color: var(--text-soft); line-height: 1.4; }
+  .evo-insights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .evo-insight {
+    background: var(--card-bg-soft);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border-soft);
+    text-align: center;
+  }
+  .evo-insight-icon { font-size: 16px; margin-bottom: 4px; }
+  .evo-insight-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .evo-insight-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .evo-insight-value.success { color: var(--success); }
+  .evo-insight-value.warning { color: var(--warning); }
+  .evo-insight-value.danger { color: var(--danger); }
+  .evo-metric-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .evo-pill {
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-soft);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .evo-pill:hover { transform: translateY(-1px); }
+  .evo-pill.active {
+    background: var(--info);
+    color: white;
+    border-color: var(--info);
+  }
+  .evo-chart-wrapper {
+    background: var(--card-bg-soft);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .evo-chart-svg {
+    width: 100%;
+    height: 200px;
+    display: block;
+  }
+  .evo-tooltip {
+    position: absolute;
+    background: var(--text);
+    color: var(--card-bg);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    z-index: 10;
+    transform: translate(-50%, -100%);
+    margin-top: -6px;
+  }
+  .evo-tooltip.visible { opacity: 1; }
+  .evo-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--text);
+  }
+  .evo-insight-card {
+    padding: 12px 14px;
+    background: var(--card-bg-soft);
+    border-radius: 10px;
+    border-left: 3px solid var(--success);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .evo-insight-card.warning { border-left-color: var(--warning); }
+  .evo-insight-card.danger { border-left-color: var(--danger); }
+  .evo-insight-card-icon { font-size: 20px; flex-shrink: 0; }
+  .evo-insight-card-content { flex: 1; }
+  .evo-insight-card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .evo-insight-card-text { font-size: 12px; color: var(--text-soft); line-height: 1.4; }
+  .evo-point {
+    fill: var(--success);
+    stroke: var(--card-bg);
+    stroke-width: 2;
+    cursor: pointer;
+    transition: r 0.2s;
+  }
+  .evo-point.current {
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+  .evo-point:hover { r: 7; }
+  .evo-line { fill: none; stroke-width: 2.5; }
+  .evo-area { opacity: 0.15; }
+  .evo-grid-line { stroke: var(--chart-grid); stroke-width: 1; }
+  .evo-meta-line {
+    stroke: var(--chart-meta);
+    stroke-width: 1;
+    stroke-dasharray: 4 3;
+  }
+  .evo-axis-label {
+    font-size: 9px;
+    fill: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+  }
+  .evo-month-label {
+    font-size: 10px;
+    fill: var(--text-soft);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+  }
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (min-width: 500px) { .metrics-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 768px) { .metrics-grid { grid-template-columns: repeat(4, 1fr); } }
+  .metric-card { padding: 12px; border-radius: 12px; background: var(--card-bg-soft); border: 1px solid var(--border-soft); position: relative; }
+  .metric-name { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
+  .metric-value { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .metric-value.success { color: var(--success); }
+  .metric-value.warning { color: var(--warning); }
+  .metric-value.danger { color: var(--danger); }
+  .metric-goal { font-size: 10px; color: var(--text-muted); margin-bottom: 8px; }
+  .metric-progress { height: 4px; background: var(--donut-bg); border-radius: 2px; overflow: hidden; }
+  .metric-progress-bar { height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .metric-status {
+    display: inline-block; font-size: 9px; font-weight: 600;
+    padding: 2px 6px; border-radius: 4px; margin-top: 6px;
+    text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .tips-list { display: flex; flex-direction: column; gap: 10px; }
+  .tip-item { display: flex; gap: 10px; padding: 12px; background: var(--card-bg-soft); border-radius: 10px; border-left: 3px solid var(--info); }
+  .tip-icon { font-size: 18px; flex-shrink: 0; }
+  .tip-content { flex: 1; }
+  .tip-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .tip-text { font-size: 12px; color: var(--text-soft); line-height: 1.4; }
+  .footer { text-align: center; padding: 20px 12px; font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+  .footer strong { color: var(--text-soft); }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card { animation: fadeInUp 0.5s ease backwards; }
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.1s; }
+  .card:nth-child(3) { animation-delay: 0.15s; }
+  .card:nth-child(4) { animation-delay: 0.2s; }
+  .card:nth-child(5) { animation-delay: 0.25s; }
+  @keyframes drawLine {
+    from { stroke-dashoffset: 1000; }
+    to { stroke-dashoffset: 0; }
+  }
+  .demo-banner {
+    background: linear-gradient(90deg, rgba(239,68,68,0.08), rgba(249,115,22,0.08), rgba(234,179,8,0.08), rgba(34,197,94,0.08), rgba(59,130,246,0.08), rgba(139,92,246,0.08), rgba(236,72,153,0.08));
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: relative;
+    box-shadow: var(--shadow);
+  }
+  .demo-banner.hidden { display: none; }
+  .demo-banner-icon { font-size: 18px; flex-shrink: 0; }
+  .demo-banner-text {
+    flex: 1;
+    font-size: 12px;
+    color: var(--text-soft);
+    line-height: 1.4;
+    min-width: 200px;
+  }
+  .demo-banner-text strong { color: var(--text); }
+  .demo-banner-actions { display: flex; gap: 6px; align-items: center; }
+  .demo-banner-btn {
+    background: var(--info);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+  }
+  .demo-banner-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  .demo-banner-close {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+  }
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-overlay.visible { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal-card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 20px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    position: relative;
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--rainbow);
+    border-radius: 18px 18px 0 0;
+  }
+  .modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .modal-subtitle {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-bottom: 16px;
+  }
+  .modal-steps {
+    background: var(--card-bg-soft);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .modal-step {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 12px;
+    color: var(--text-soft);
+    line-height: 1.4;
+  }
+  .modal-step-num {
+    background: var(--info);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--card-bg-soft);
+    margin-bottom: 14px;
+  }
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--info);
+    background: var(--info-bg);
+  }
+  .dropzone-icon { font-size: 32px; margin-bottom: 8px; }
+  .dropzone-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .dropzone-hint { font-size: 11px; color: var(--text-muted); }
+  .dropzone input { display: none; }
+  .modal-status {
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-bottom: 12px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+  }
+  .modal-status.visible { display: flex; }
+  .modal-status.loading { background: var(--info-bg); color: var(--info); }
+  .modal-status.success { background: var(--success-bg); color: var(--success); }
+  .modal-status.error { background: var(--danger-bg); color: var(--danger); }
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .modal-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    background: var(--card-bg-soft);
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .modal-btn:hover { transform: translateY(-1px); }
+  .modal-btn.primary { background: var(--info); color: white; border-color: var(--info); }
+  .modal-btn.danger { background: transparent; color: var(--danger); border-color: var(--danger); font-size: 11px; }
+  .bonus-total {
+    margin-top: 14px;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--success-bg), var(--info-bg));
+    border-radius: 12px;
+    border: 1px solid var(--border-soft);
+  }
+  .bonus-total-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .bonus-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    font-size: 12px;
+    color: var(--text-soft);
+  }
+  .bonus-total-row.strike { text-decoration: line-through; opacity: 0.6; }
+  .bonus-total-row.big {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    margin-top: 6px;
+  }
+  .bonus-total-row.big .amount { color: var(--success); font-size: 22px; }
+  .bonus-total-note {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    font-style: italic;
+    text-align: right;
+  }
+  .tl-mode-btn {
+    background: var(--card-bg-soft); border: 1px solid var(--border);
+    border-radius: 10px; padding: 6px 12px;
+    cursor: pointer; font-size: 12px; color: var(--text-soft);
+    font-family: inherit; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 5px;
+    transition: all 0.2s;
+  }
+  .tl-mode-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  .tl-mode-btn.active {
+    background: linear-gradient(135deg, var(--purple), var(--info));
+    color: white; border-color: transparent;
+  }
+  .tl-mode-btn.active::before {
+    content: '🔓 '; margin-right: 2px;
+  }
+  .tl-mode-banner {
+    background: linear-gradient(90deg, rgba(139,92,246,0.1), rgba(59,130,246,0.1));
+    border: 1px solid var(--purple);
+    border-radius: 12px; padding: 10px 14px; margin-bottom: 12px;
+    display: none; align-items: center; gap: 10px;
+    font-size: 12px; color: var(--text);
+  }
+  .tl-mode-banner.visible { display: flex; }
+  .tl-mode-banner-icon { font-size: 16px; }
+  .tl-mode-banner-text { flex: 1; }
+  .tl-mode-banner-text strong { color: var(--purple); }
+  .tl-mode-banner-exit {
+    background: transparent; border: 1px solid var(--purple);
+    color: var(--purple); border-radius: 8px;
+    padding: 4px 10px; font-size: 11px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+  }
+  .tl-mode-banner-exit:hover { background: var(--purple); color: white; }
+  .status-card-content {
+    display: flex; flex-direction: column; gap: 12px;
+    padding: 4px;
+  }
+  .status-tier-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--card-bg-soft);
+    border-radius: 12px;
+    border-left: 4px solid var(--info);
+  }
+  .status-tier-row.platinum { border-left-color: var(--purple); }
+  .status-tier-row.golden { border-left-color: #eab308; }
+  .status-tier-row.bronze { border-left-color: #ca8a04; }
+  .status-tier-row.unsat { border-left-color: var(--danger); }
+  .status-tier-info { flex: 1; }
+  .status-tier-label {
+    font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-muted);
+    font-weight: 600; margin-bottom: 3px;
+  }
+  .status-tier-value {
+    font-size: 20px; font-weight: 700; color: var(--text);
+  }
+  .status-tier-icon { font-size: 32px; }
+  .status-tip {
+    padding: 12px 14px;
+    background: var(--card-bg-soft);
+    border-radius: 10px;
+    border-left: 3px solid var(--info);
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .status-tip-icon { font-size: 18px; flex-shrink: 0; }
+  .status-tip-content { flex: 1; }
+  .status-tip-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .status-tip-text { font-size: 12px; color: var(--text-soft); line-height: 1.4; }
+  .status-note {
+    font-size: 11px; color: var(--text-muted);
+    text-align: center; padding: 8px;
+    font-style: italic;
+  }
+  .tier-dist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .tier-count-card {
+    background: var(--card-bg-soft);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+    border: 1px solid var(--border-soft);
+    border-top: 3px solid var(--donut-bg);
+    transition: transform 0.2s;
+  }
+  .tier-count-card:hover { transform: translateY(-2px); }
+  .tier-count-card.platinum { border-top-color: var(--purple); }
+  .tier-count-card.golden { border-top-color: #eab308; }
+  .tier-count-card.bronze { border-top-color: #ca8a04; }
+  .tier-count-card.unsat { border-top-color: var(--danger); }
+  .tier-count-icon { font-size: 22px; margin-bottom: 4px; }
+  .tier-count-number { font-size: 24px; font-weight: 700; color: var(--text); line-height: 1; }
+  .tier-count-label {
+    font-size: 10px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-top: 4px; font-weight: 600;
+  }
+ /* ===== TEAM VIEW ===== */
+.view-toggle {
+    display: none; gap: 6px;
+    background: var(--card-bg); border-radius: 12px;
+    padding: 4px; margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 8px;
+    z-index: 100;
+  }
+  .view-toggle.visible { display: flex; }
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  .view-toggle { order: -10; }
+  .demo-banner { order: -20; }
+  .tl-mode-banner { order: -15; }
+  .app-header { order: -5; }
+  .view-toggle-btn {
+    flex: 1; padding: 10px 14px; border: none;
+    background: transparent; color: var(--text-soft);
+    border-radius: 10px; font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .view-toggle-btn:hover { background: var(--card-bg-soft); }
+  .view-toggle-btn.active {
+    background: linear-gradient(135deg, var(--purple), var(--info));
+    color: white;
+  }
+  .team-view { display: none; }
+  .team-view.visible { display: block; }
+  .team-filter {
+    display: flex; gap: 6px; margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .team-filter-pill {
+    padding: 6px 12px; border: 1px solid var(--border);
+    background: var(--card-bg); color: var(--text-soft);
+    border-radius: 20px; font-size: 11px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+  }
+  .team-filter-pill:hover { transform: translateY(-1px); }
+  .team-filter-pill.active {
+    background: var(--purple); color: white; border-color: var(--purple);
+  }
+  .team-tabs {
+    display: flex; gap: 4px; margin-bottom: 16px;
+    background: var(--card-bg); border-radius: 12px;
+    padding: 4px; box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+  .team-tab {
+    flex: 1; min-width: 110px; padding: 8px 10px;
+    border: none; background: transparent; color: var(--text-soft);
+    border-radius: 8px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .team-tab:hover { background: var(--card-bg-soft); }
+  .team-tab.active { background: var(--info); color: white; }
+  .team-kpi-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; margin-bottom: 16px;
+  }
+  .team-kpi-card {
+    background: var(--card-bg-soft); border-radius: 12px;
+    padding: 14px; border: 1px solid var(--border-soft);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .team-kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: var(--rainbow);
+  }
+  .team-kpi-icon { font-size: 22px; margin-bottom: 4px; }
+  .team-kpi-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text-muted); font-weight: 600; margin-bottom: 4px;
+  }
+  .team-kpi-value { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1; }
+  .team-kpi-sub { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+  .focus-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .focus-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; background: var(--card-bg-soft);
+    border-radius: 10px; border-left: 3px solid var(--danger);
+  }
+  .focus-item.warning { border-left-color: var(--warning); }
+  .focus-item-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .focus-item-count { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+  .focus-item-badge {
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px;
+    background: var(--danger-bg); color: var(--danger);
+  }
+  .focus-item.warning .focus-item-badge {
+    background: var(--warning-bg); color: var(--warning);
+  }
+  .team-metrics-heatmap {
+    display: block;
+  }
+  .metric-heatmap-card {
+    background: var(--card-bg-soft); border-radius: 12px;
+    padding: 12px; border: 1px solid var(--border-soft);
+  }
+  .metric-heatmap-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .metric-heatmap-name {
+    font-size: 12px; font-weight: 700; color: var(--text);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .metric-heatmap-avg {
+    font-size: 16px; font-weight: 700; color: var(--text);
+  }
+  .metric-heatmap-avg.success { color: var(--success); }
+  .metric-heatmap-avg.warning { color: var(--warning); }
+  .metric-heatmap-avg.danger { color: var(--danger); }
+  .metric-heatmap-bar {
+    display: flex; height: 8px; border-radius: 4px;
+    overflow: hidden; margin-bottom: 6px;
+    background: var(--donut-bg);
+  }
+  .metric-heatmap-seg { height: 100%; }
+  .metric-heatmap-seg.success { background: var(--success); }
+  .metric-heatmap-seg.warning { background: var(--warning); }
+  .metric-heatmap-seg.danger { background: var(--danger); }
+  .metric-heatmap-legend {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--text-muted);
+  }
+  .team-scroll-wrapper {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+  }
+  .team-scorecard-table {
+    width: 100%; border-collapse: collapse;
+    background: var(--card-bg-soft); font-size: 11px;
+    min-width: 700px;
+  }
+  .team-scorecard-table th {
+    background: var(--card-bg); padding: 10px 8px;
+    text-align: center; font-weight: 700; color: var(--text-soft);
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0;
+  }
+  .team-scorecard-table td {
+    padding: 8px; border-bottom: 1px solid var(--border-soft);
+    color: var(--text); text-align: center;
+  }
+  .team-scorecard-table td.name-cell {
+    font-weight: 600; text-align: left; min-width: 140px;
+    position: sticky; left: 0; background: var(--card-bg-soft);
+  }
+  .team-scorecard-table td.metric-cell {
+    font-weight: 700;
+  }
+  .team-scorecard-table td.metric-cell.success { background: var(--success-bg); color: var(--success); }
+  .team-scorecard-table td.metric-cell.warning { background: var(--warning-bg); color: var(--warning); }
+  .team-scorecard-table td.metric-cell.danger { background: var(--danger-bg); color: var(--danger); }
+  .tier-badge-mini {
+    display: inline-block; padding: 3px 8px; border-radius: 10px;
+    font-size: 10px; font-weight: 700;
+  }
+  .tier-badge-mini.platinum { background: var(--purple-bg); color: var(--purple); }
+  .tier-badge-mini.golden { background: #fef3c7; color: #b45309; }
+  .tier-badge-mini.bronze { background: #fed7aa; color: #9a3412; }
+  .tier-badge-mini.unsat { background: var(--danger-bg); color: var(--danger); }
+  .tier-badge-mini.critical { background: var(--danger); color: white; }
+
+ /* ===== METRIC SUB-TABS ===== */
+  .metric-subtabs {
+    display: flex; gap: 4px; margin-bottom: 14px;
+    background: var(--card-bg-soft); border-radius: 10px;
+    padding: 4px; overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .metric-subtab {
+    min-width: 60px; padding: 7px 12px;
+    border: none; background: transparent; color: var(--text-soft);
+    border-radius: 7px; font-size: 11px; font-weight: 700;
+    cursor: pointer; font-family: inherit; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .metric-subtab:hover { background: var(--card-bg); }
+  .metric-subtab.active {
+    background: linear-gradient(135deg, var(--info), var(--purple));
+    color: white; box-shadow: var(--shadow);
+  }
+  .metric-header-card {
+    background: var(--card-bg-soft); border-radius: 12px;
+    padding: 14px; margin-bottom: 12px;
+    border-left: 4px solid var(--info);
+  }
+  .metric-header-title {
+    font-size: 20px; font-weight: 700; color: var(--text);
+    margin-bottom: 4px;
+  }
+  .metric-header-goal {
+    font-size: 12px; color: var(--text-soft); margin-bottom: 10px;
+  }
+  .metric-header-stats {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    padding-top: 10px; border-top: 1px dashed var(--border);
+  }
+  .metric-header-stat {
+    font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .metric-header-stat.avg { color: var(--text); }
+  .metric-header-stat.success { color: var(--success); }
+  .metric-header-stat.warning { color: var(--warning); }
+  .metric-header-stat.danger { color: var(--danger); }
+  .metric-agent-list {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .metric-agent-row {
+    display: grid; grid-template-columns: 32px 1fr auto auto;
+    gap: 10px; align-items: center;
+    padding: 10px 14px; border-radius: 10px;
+    background: var(--card-bg-soft);
+    transition: all 0.2s;
+  }
+  .metric-agent-row:hover { transform: translateX(3px); box-shadow: var(--shadow); }
+  .metric-agent-row.success { border-left: 3px solid var(--success); }
+  .metric-agent-row.warning { border-left: 3px solid var(--warning); }
+  .metric-agent-row.danger { border-left: 3px solid var(--danger); }
+  .metric-agent-rank {
+    font-size: 12px; font-weight: 700; color: var(--text-muted);
+    text-align: center;
+  }
+  .metric-agent-name {
+    font-size: 13px; font-weight: 600; color: var(--text);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .metric-agent-name-sub {
+    font-size: 10px; color: var(--text-muted); margin-top: 2px;
+  }
+  .metric-agent-value {
+    font-size: 15px; font-weight: 700;
+  }
+  .metric-agent-value.success { color: var(--success); }
+  .metric-agent-value.warning { color: var(--warning); }
+  .metric-agent-value.danger { color: var(--danger); }
+  .metric-agent-status {
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 10px;
+    text-transform: uppercase;
+  }
+  .metric-agent-status.success { background: var(--success-bg); color: var(--success); }
+  .metric-agent-status.warning { background: var(--warning-bg); color: var(--warning); }
+  .metric-agent-status.danger { background: var(--danger-bg); color: var(--danger); }
+/* ===== MODAL 1:1 ===== */
+  .oneone-btn {
+    background: linear-gradient(135deg, var(--purple), var(--info));
+    color: white; border: none;
+    padding: 5px 10px; border-radius: 8px;
+    font-size: 11px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+    display: inline-flex; align-items: center; gap: 4px;
+    transition: all 0.2s;
+  }
+  .oneone-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  .oneone-modal { max-width: 640px; }
+  .oneone-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 12px; margin-bottom: 12px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border-soft);
+  }
+  .oneone-header-info { flex: 1; }
+  .oneone-agent-name {
+    font-size: 18px; font-weight: 700; color: var(--text);
+    margin-bottom: 4px;
+  }
+  .oneone-agent-meta {
+    font-size: 12px; color: var(--text-soft);
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .oneone-agent-meta span { display: inline-flex; align-items: center; gap: 3px; }
+  .oneone-section {
+    margin-bottom: 14px;
+  }
+  .oneone-section-title {
+    font-size: 12px; font-weight: 700; color: var(--text);
+    margin-bottom: 6px; display: flex; align-items: center; gap: 5px;
+    text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .oneone-input, .oneone-textarea {
+    width: 100%; padding: 8px 10px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--card-bg-soft); color: var(--text);
+    font-size: 13px; font-family: inherit;
+    resize: vertical;
+  }
+  .oneone-textarea { min-height: 60px; }
+  .oneone-input:focus, .oneone-textarea:focus {
+    outline: none; border-color: var(--info);
+  }
+  .oneone-metrics-mini {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 6px; margin-top: 4px;
+  }
+  .oneone-metric-mini {
+    background: var(--card-bg-soft); padding: 6px 8px;
+    border-radius: 6px; border-left: 3px solid var(--info);
+    font-size: 11px;
+  }
+  .oneone-metric-mini.success { border-left-color: var(--success); }
+  .oneone-metric-mini.warning { border-left-color: var(--warning); }
+  .oneone-metric-mini.danger { border-left-color: var(--danger); }
+  .oneone-metric-mini-name {
+    font-size: 9px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.3px; font-weight: 700;
+  }
+  .oneone-metric-mini-value {
+    font-size: 13px; font-weight: 700; color: var(--text);
+  }
+  .oneone-actions-list {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .oneone-action-item {
+    display: flex; gap: 8px; align-items: flex-start;
+    padding: 6px 8px; background: var(--card-bg-soft);
+    border-radius: 6px;
+  }
+  .oneone-action-item input[type="checkbox"] {
+    margin-top: 3px; cursor: pointer;
+    accent-color: var(--info);
+  }
+  .oneone-action-item input[type="text"] {
+    flex: 1; border: none; background: transparent;
+    color: var(--text); font-size: 12px; font-family: inherit;
+    padding: 2px 4px;
+  }
+  .oneone-action-item input[type="text"]:focus { outline: none; }
+  .oneone-action-item input[type="text"].done {
+    text-decoration: line-through; opacity: 0.6;
+  }
+  .oneone-action-remove {
+    background: transparent; border: none; cursor: pointer;
+    color: var(--danger); font-size: 14px; padding: 0 4px;
+  }
+  .oneone-add-action {
+    background: transparent; border: 1px dashed var(--border);
+    color: var(--text-soft); border-radius: 6px;
+    padding: 6px; font-size: 11px; font-weight: 600;
+    cursor: pointer; font-family: inherit; width: 100%;
+    margin-top: 4px;
+  }
+  .oneone-add-action:hover { border-color: var(--info); color: var(--info); }
+  .oneone-history {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px dashed var(--border);
+  }
+  .oneone-history-item {
+    background: var(--card-bg-soft); padding: 8px 10px;
+    border-radius: 8px; margin-bottom: 6px;
+    border-left: 3px solid var(--purple);
+  }
+  .oneone-history-header {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; font-weight: 700; color: var(--text);
+    margin-bottom: 3px;
+  }
+  .oneone-history-preview {
+    font-size: 11px; color: var(--text-soft);
+    line-height: 1.3;
+    max-height: 40px; overflow: hidden;
+  }
+  .oneone-history-actions {
+    display: flex; gap: 4px;
+  }
+  .oneone-history-btn {
+    background: transparent; border: none; cursor: pointer;
+    font-size: 12px; padding: 2px 5px;
+    color: var(--text-muted);
+  }
+  .oneone-history-btn:hover { color: var(--info); }
+  .oneone-history-btn.delete:hover { color: var(--danger); }
+  .oneone-empty-history {
+    text-align: center; color: var(--text-muted);
+    font-size: 11px; padding: 12px; font-style: italic;
+  }
+  .oneone-footer-note {
+    font-size: 10px; color: var(--text-muted);
+    text-align: center; margin-top: 8px; font-style: italic;
+   }
+ /* ===== TOP PERFORMERS TAB v2 ===== */
+@keyframes tpFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes tpShine {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(5deg); }
+}
+
+.tp-hero {
+  background: linear-gradient(135deg, #fef3c7 0%, #fce7f3 50%, #ede9fe 100%);
+  border-radius: 20px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+[data-theme="dark"] .tp-hero {
+  background: linear-gradient(135deg, rgba(251,191,36,0.15) 0%, rgba(236,72,153,0.15) 50%, rgba(139,92,246,0.15) 100%);
+}
+.tp-hero-title h2 {
+  font-size: 22px; font-weight: 800; color: var(--text);
+  margin: 8px 0 4px;
+}
+.tp-hero-title p {
+  font-size: 12px; color: var(--text-soft); margin: 0 0 20px;
+}
+.tp-hero-crown {
+  font-size: 36px; display: inline-block;
+  animation: tpShine 2s ease-in-out infinite;
+}
+
+.tp-podium-v2 {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  gap: 10px;
+  align-items: end;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.tp-podium-card-v2 {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  position: relative;
+  opacity: 0;
+  animation: tpFadeUp 0.6s ease forwards;
+}
+.tp-podium-card-v2.tp-rank-1 {
+  transform: translateY(-16px);
+  box-shadow: 0 8px 24px rgba(249,115,22,0.25);
+  border: 2px solid #f97316;
+}
+.tp-podium-medal {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin: 0 auto 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.tp-podium-rank {
+  font-size: 20px; font-weight: 800; margin-bottom: 4px;
+}
+.tp-podium-name-v2 {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  line-height: 1.3; margin-bottom: 6px;
+  min-height: 34px; display: flex; align-items: center; justify-content: center;
+}
+.tp-podium-badges {
+  display: flex; gap: 4px; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 8px;
+}
+.tp-badge-pill {
+  font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 8px;
+  background: var(--info-bg); color: var(--info);
+  text-transform: uppercase; letter-spacing: 0.3px;
+}
+.tp-badge-pill.team {
+  background: var(--purple-bg); color: var(--purple);
+}
+.tp-podium-stars {
+  font-size: 11px; letter-spacing: 1px; margin-bottom: 8px;
+}
+.tp-podium-score-v2 {
+  font-size: 24px; font-weight: 800; line-height: 1;
+}
+.tp-podium-score-label {
+  font-size: 8px; color: var(--text-muted);
+  letter-spacing: 1px; font-weight: 700; margin-top: 2px;
+}
+
+/* ===== TIER TABS ===== */
+.tp-tier-tabs {
+  display: flex; gap: 6px;
+  background: var(--card-bg-soft);
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.tp-tier-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px;
+  color: var(--text-soft);
+  transition: all 0.2s;
+}
+.tp-tier-tab:hover { background: var(--card-bg); }
+.tp-tier-tab.active {
+  background: var(--card-bg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  color: var(--tier-color);
+}
+.tp-tier-tab-icon { font-size: 16px; }
+.tp-tier-tab-label { font-size: 12px; font-weight: 700; }
+.tp-tier-tab-count {
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 10px;
+  background: var(--card-bg-soft); color: var(--text-muted);
+}
+.tp-tier-tab.active .tp-tier-tab-count {
+  background: var(--tier-color); color: #fff;
+}
+
+/* ===== TIER HERO ===== */
+.tp-tier-hero {
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; flex-wrap: wrap;
+}
+.tp-tier-hero-content { display: flex; align-items: center; gap: 12px; }
+.tp-tier-hero-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.tp-tier-hero h3 { margin: 0; font-size: 16px; font-weight: 800; }
+.tp-tier-hero p { margin: 2px 0 0; font-size: 11px; color: var(--text-soft); }
+.tp-tier-quote {
+  font-style: italic; font-size: 12px; color: var(--text-soft);
+  background: var(--card-bg);
+  padding: 10px 14px; border-radius: 8px;
+  max-width: 55%;
+  position: relative;
+}
+.tp-quote-mark {
+  font-size: 32px; color: var(--text-muted);
+  position: absolute; top: -8px; left: 8px;
+  font-family: Georgia, serif;
+}
+
+/* ===== AGENT CARDS v2 ===== */
+.tp-agents-grid-v2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+.tp-agent-card-v2 {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 14px;
+  border: 1px solid var(--border-soft);
+  display: flex; align-items: center; gap: 12px;
+  transition: all 0.2s;
+  opacity: 0;
+  animation: tpFadeUp 0.4s ease forwards;
+}
+.tp-agent-card-v2:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.tp-agent-rank-badge {
+  width: 32px; height: 32px; border-radius: 8px;
+  color: #fff; font-weight: 800; font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.tp-agent-body { flex: 1; min-width: 0; }
+.tp-agent-name-v2 {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tp-agent-tags {
+  display: flex; gap: 4px; margin-top: 4px;
+  flex-wrap: wrap;
+}
+.tp-tag {
+  font-size: 9px; font-weight: 700;
+  padding: 2px 6px; border-radius: 6px;
+  background: var(--info-bg); color: var(--info);
+  text-transform: uppercase; letter-spacing: 0.3px;
+}
+.tp-tag.team { background: var(--purple-bg); color: var(--purple); }
+.tp-agent-stars-v2 {
+  font-size: 10px; letter-spacing: 1px; margin-top: 4px;
+}
+.tp-agent-metrics {
+  text-align: right; min-width: 90px;
+}
+.tp-agent-score-v2 {
+  font-size: 18px; font-weight: 800; line-height: 1;
+}
+.tp-progress-bar-v2 {
+  margin-top: 6px; height: 4px;
+  background: var(--donut-bg); border-radius: 2px;
+  overflow: hidden; width: 90px; margin-left: auto;
+}
+.tp-progress-fill-v2 {
+  height: 100%; transition: width 0.5s ease;
+}
+
+.tp-empty-tier {
+  text-align: center; padding: 40px 20px;
+  color: var(--text-muted); font-size: 13px;
+}
+.tp-empty-tier p { margin-top: 12px; }
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+  .tp-podium-v2 { grid-template-columns: 1fr; gap: 8px; }
+  .tp-podium-card-v2.tp-rank-1 { transform: none; }
+  .tp-tier-hero { flex-direction: column; align-items: flex-start; }
+  .tp-tier-quote { max-width: 100%; }
+  .tp-agent-card-v2 { flex-wrap: wrap; }
+  .tp-agent-metrics { min-width: auto; text-align: left; }
+    .tp-progress-bar-v2 { margin-left: 0; width: 100%; }  
+}  
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- DEMO BANNER -->
+  <!-- DEMO BANNER -->
+  <div class="demo-banner" id="demoBanner">
+    <div class="demo-banner-icon">ℹ️</div>
+    <div class="demo-banner-text">
+      <strong>Data demo · Solo 4 agentes</strong> — Cargá el Excel Master para ver los 34 agentes reales con data del mes.
+    </div>
+    <div class="demo-banner-actions">
+      <button class="demo-banner-btn" onclick="openUploadModal()">📤 Cargar Excel</button>
+      <button class="demo-banner-close" onclick="dismissBanner()">×</button>
+    </div>
+  </div>
+
+  <!-- TL MODE BANNER -->
+  <div class="tl-mode-banner" id="tlModeBanner">
+    <div class="tl-mode-banner-icon">🔓</div>
+    <div class="tl-mode-banner-text">
+      <strong>Modo Team Lead activo</strong> — Vés información completa incluyendo bonos y montos.
+    </div>
+    <button class="tl-mode-banner-exit" onclick="exitTLMode()">Salir</button>
+  </div>
+
+  <header class="app-header">
+    <div class="header-top">
+      <div class="logo">
+        📊 Performance Tracker
+        <span class="logo-badge">LITE v4.6.1</span>
+      </div>
+      <div class="header-actions">
+        <button class="tl-mode-btn" id="tlModeBtn" onclick="toggleTLMode()" title="Modo Team Lead">🔒 Modo TL</button>
+        <button class="icon-btn" id="uploadBtn" onclick="openUploadModal()" title="Cargar datos">📤</button>
+        <button class="icon-btn" id="themeToggle" title="Cambiar tema">🌙</button>
+      </div>
+    </div>
+    <select class="agent-selector" id="agentSelector"></select>
+  </header>
+
+  <div class="card card-rainbow" id="heroCard"></div>
+
+  <div class="card card-rainbow">
+    <div class="card-title">💰 Resumen de Bonos</div>
+    <div class="bonus-grid" id="bonusGrid"></div>
+  </div>
+
+   <div class="card card-rainbow">
+    <div class="card-title">📊 Mis Métricas del Mes</div>
+    <div class="metrics-grid" id="metricsGrid"></div>
+  </div>
+
+  <div class="card card-rainbow">
+    <div class="card-title">💡 Tips Personalizados</div>
+    <div class="tips-list" id="tipsList"></div>
+  </div>
+
+  <div class="card card-rainbow">
+    <div class="card-title">📈 Mi Evolución</div>
+    <div class="card-subtitle">Últimos 6 meses de performance</div>
+    <div class="evo-insights" id="evoInsights"></div>
+    <div class="evo-metric-toggle" id="evoToggle"></div>
+    <div class="evo-chart-wrapper">
+      <svg class="evo-chart-svg" id="evoChart" viewBox="0 0 400 200" preserveAspectRatio="none"></svg>
+      <div class="evo-tooltip" id="evoTooltip"></div>
+    </div>
+    <div class="evo-insight-card" id="evoInsightCard"></div>
+  </div>
+<!-- ===== TOGGLE VIEW (solo Modo TL) ===== -->
+  <div class="view-toggle" id="viewToggle">
+    <button class="view-toggle-btn active" data-view="agent" onclick="switchView('agent')">
+      👤 Vista Agente
+    </button>
+    <button class="view-toggle-btn" data-view="team" onclick="switchView('team')">
+      👥 Vista Equipo
+    </button>
+  </div>
+
+  <!-- ===== TEAM VIEW CONTAINER ===== -->
+  <div class="team-view" id="teamView">
+    <div class="team-filter" id="teamFilter"></div>
+    <div class="team-tabs">
+      <button class="team-tab active" data-tab="health" onclick="switchTeamTab('health')">
+        🏥 Team Health
+      </button>
+      <button class="team-tab" data-tab="metrics" onclick="switchTeamTab('metrics')">
+        📊 Métricas
+      </button>
+      <button class="team-tab" data-tab="scorecard" onclick="switchTeamTab('scorecard')">
+        🏆 Scorecard
+      </button>
+      <button class="team-tab" data-tab="topperformers" onclick="switchTeamTab('topperformers')">
+        👑 Top Performers
+      </button>
+    </div>
+
+    <div id="teamHealthTab">
+      <div class="card card-rainbow">
+        <div class="card-title">🏥 Overview del Equipo</div>
+        <div class="team-kpi-row" id="teamKpiRow"></div>
+      </div>
+      <div class="card card-rainbow">
+        <div class="card-title">🏆 Distribución por Tier</div>
+        <div class="tier-dist-grid" id="tierDistGrid"></div>
+      </div>
+      <div class="card card-rainbow">
+        <div class="card-title">🎯 Focus Areas</div>
+        <div class="card-subtitle">Métricas donde más agentes están fuera de meta</div>
+        <div class="focus-list" id="focusList"></div>
+      </div>
+    </div>
+
+    <div id="teamMetricsTab" style="display:none;">
+      <div class="card card-rainbow">
+        <div class="card-title">📊 Métricas del Equipo</div>
+        <div class="card-subtitle">Heat map: verde = en meta, amarillo = cerca, rojo = fuera</div>
+        <div class="team-metrics-heatmap" id="teamMetricsHeatmap"></div>
+      </div>
+    </div>
+
+    <div id="teamScorecardTab" style="display:none;">
+     <div class="card card-rainbow">
+  <div class="card-title">🏆 Scorecard del Equipo</div>
+  <div class="card-subtitle">Vista tipo Excel Master con todas las métricas y tiers</div>
+  <div class="team-scroll-wrapper">
+    <table class="team-scorecard-table" id="teamScorecardTable"></table>
+  </div>
+</div>
+</div>
+<div id="teamTopPerformersTab" style="display:none;">
+  <div class="card card-rainbow">
+    <div class="card-title">👑 Top Performers del Mes</div>
+    <div class="card-subtitle">Reconocimiento de tus estrellas 🌟</div>
+    <div id="topPerformersContent"></div>
+  </div>
+</div>
+</div>
+</div>
+  <footer class="footer">
+    <strong>Performance Tracker Lite</strong> v4.6.1<br>
+    Powered by Cognizant CR · Contact Center<br>
+    <em>Período: Junio 2026</em> · Vista Pública + Modo TL con password
+  </footer>
+<!-- TL PASSWORD MODAL -->
+<div class="modal-overlay" id="tlPasswordModal">
+  <div class="modal-card">
+    <div class="modal-title">🔐 Modo Team Lead</div>
+    <div class="modal-subtitle">Solo TLs y Supervisors. Ingresá el código para ver montos de bonos y detalles completos.</div>
+    <div style="margin-bottom: 14px;">
+      <input type="password" id="tlPasswordInput" placeholder="Código de acceso"
+        style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--card-bg-soft); color: var(--text); font-size: 14px; font-family: inherit;"
+        onkeydown="if(event.key==='Enter') checkTLPassword()">
+    </div>
+    <div class="modal-status" id="tlPasswordStatus"></div>
+    <div class="modal-actions">
+      <div></div>
+      <div style="display:flex; gap:8px;">
+        <button class="modal-btn" onclick="closeTLPasswordModal()">Cancelar</button>
+        <button class="modal-btn primary" onclick="checkTLPassword()">Activar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD MODAL -->
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal-card">
+    <div class="modal-title">📤 Cargar Master Scorecard</div>
+    <div class="modal-subtitle">Subí tu Excel para ver a tu equipo real con data en vivo.</div>
+    <div class="modal-steps">
+      <div class="modal-step">
+        <div class="modal-step-num">1</div>
+        <div>Abrí tu file <strong>Scorecard_Master_2026_MR-COMM-ACPNY.xlsm</strong></div>
+      </div>
+      <div class="modal-step">
+        <div class="modal-step-num">2</div>
+        <div>Asegurate de tener las hojas <strong>📤 IMPORT ACPNY / SHARY / GEO</strong> con la data del mes.</div>
+      </div>
+      <div class="modal-step">
+        <div class="modal-step-num">3</div>
+        <div>Subí el archivo completo (.xlsx o .xlsm) acá abajo 👇</div>
+      </div>
+    </div>
+    <label class="dropzone" id="dropzone">
+      <div class="dropzone-icon">📁</div>
+      <div class="dropzone-text">Click acá o arrastrá tu archivo</div>
+      <div class="dropzone-hint">Formatos: .xlsx, .xlsm, .csv · Max 10MB</div>
+      <input type="file" id="fileInput" accept=".xlsx,.xlsm,.xls,.csv">
+    </label>
+    <div class="modal-status" id="modalStatus"></div>
+    <div class="modal-actions">
+      <button class="modal-btn danger" onclick="clearData()">🗑️ Limpiar datos</button>
+      <button class="modal-btn" onclick="downloadDataJSON()" id="downloadDataBtn" style="display:none;">📥 Publicar data.json</button>
+      <div style="display:flex; gap:8px;">
+        <button class="modal-btn" onclick="closeUploadModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ONE-ON-ONE MODAL -->
+<div class="modal-overlay" id="oneOneModal">
+  <div class="modal-card oneone-modal">
+    <div class="oneone-header">
+      <div class="oneone-header-info">
+        <div class="modal-title" style="margin-bottom:2px;">📝 Sesión 1:1</div>
+        <div class="oneone-agent-name" id="oneOneAgentName">—</div>
+        <div class="oneone-agent-meta" id="oneOneAgentMeta"></div>
+      </div>
+    </div>
+
+    <div class="oneone-section">
+      <div class="oneone-section-title">📅 Fecha del 1:1</div>
+      <input type="date" class="oneone-input" id="oneOneDate">
+    </div>
+
+    <div class="oneone-section">
+      <div class="oneone-section-title">📊 Métricas actuales</div>
+      <div class="oneone-metrics-mini" id="oneOneMetricsMini"></div>
+    </div>
+
+    <div class="oneone-section">
+      <div class="oneone-section-title">🎯 Fortalezas</div>
+      <textarea class="oneone-textarea" id="oneOneStrengths"
+        placeholder="Qué está haciendo bien el agente..."></textarea>
+    </div>
+
+    <div class="oneone-section">
+      <div class="oneone-section-title">⚠️ Áreas de oportunidad</div>
+      <textarea class="oneone-textarea" id="oneOneOpportunities"
+        placeholder="Qué necesita mejorar..."></textarea>
+    </div>
+
+    <div class="oneone-section">
+      <div class="oneone-section-title">✅ Action Items</div>
+      <div class="oneone-actions-list" id="oneOneActionsList"></div>
+      <button class="oneone-add-action" onclick="addOneOneAction()">＋ Agregar action item</button>
+    </div>
+
+    <div class="oneone-section">
+      <div class="oneone-section-title">📝 Notas del TL</div>
+      <textarea class="oneone-textarea" id="oneOneNotes"
+        placeholder="Notas libres del TL..."></textarea>
+    </div>
+
+    <div class="oneone-section">
+      <div class="oneone-section-title">💬 Comentarios del agente</div>
+      <textarea class="oneone-textarea" id="oneOneAgentComments"
+        placeholder="Qué compartió el agente..."></textarea>
+    </div>
+
+    <div class="oneone-section">
+      <div class="oneone-section-title">🗓️ Próximo 1:1</div>
+      <input type="date" class="oneone-input" id="oneOneNextDate">
+    </div>
+
+    <div class="oneone-history" id="oneOneHistory">
+      <div class="oneone-section-title">🕒 Últimos 1:1s</div>
+      <div id="oneOneHistoryList"></div>
+    </div>
+
+    <div class="modal-status" id="oneOneStatus"></div>
+
+    <div class="modal-actions">
+      <button class="modal-btn danger" onclick="deleteCurrentOneOne()" id="oneOneDeleteBtn" style="display:none;">🗑️ Eliminar</button>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="modal-btn" onclick="closeOneOneModal()">Cerrar</button>
+        <button class="modal-btn" onclick="copyOneOneToClipboard()">📋 Copiar</button>
+       <button class="modal-btn" onclick="downloadOneOne()">📥 Descargar</button>
+        <button class="modal-btn primary" onclick="saveOneOne()">💾 Guardar</button>
+      </div>
+    </div>
+
+    <div class="oneone-footer-note">
+      💜 Guardado solo en esta máquina (localStorage). No se comparte.
+    </div>
+  </div>
+</div>
+<script>
+// ========== DATA DEMO (fallback cuando no hay Excel cargado) ==========
+const MONTHS_ORDER = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+const AGENTS = {
+  ingrid: {
+    name: "Arguedas Nuñez, Ingrid",
+    firstName: "Ingrid",
+    team: "Team Shary", lob: "Comm", tenure: "Tenure",
+    month: "Junio 2026",
+    finalScore: 99.64, stars: 4, tier: "Golden",
+    qualifiesForBonus: true, bonusReason: "Bono aprobado: Tier Golden",
+    behaviorActive: false, amonestacionType: "None",
+    category: "Agent",
+    tierIcon: "🥇",
+    fixedBonus: { eligible: true, amount: 12, reason: "Todos los agentes reciben +$12 de eficiencia siempre." },
+    performanceBonus: { eligible: true, amount: 85, reason: "Tier Golden — Performance Bonus de $85." },
+    totalUSD: 97, totalCRC: 48209,
+    badges: ["🏆 Top Performer", "🔥 Strong Streak"],
+    metrics: [
+      { name: "CSAT", value: 98.81, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "ADH", value: 96.85, unit: "%", goal: 95.5, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 744, unit: "s", goal: 690, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 98.00, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 100, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 0, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "QA", value: 95.83, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "PKT", value: 100, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: {
+      Score:  [98.57, 99.01, 99.32, 99.02, 99.40, 99.64],
+      QA:     [95.00, 98.75, 97.38, 98.43, 98.00, 95.83],
+      CSAT:   [96.15, 100.00, 97.22, 91.28, 97.50, 98.81],
+      AHT:    [741, 840, 797, 767, 784, 744],
+      ADH:    [98.33, 95.00, 96.10, 96.85, 96.85, 96.85]
+    },
+    availableMetrics: ["Score", "QA", "CSAT", "AHT", "ADH"]
+  },
+  falonth: {
+    name: "Madrigal Carvajal, Falonth",
+    firstName: "Falonth",
+    team: "Team Shary", lob: "Comm", tenure: "New Hire",
+    month: "Junio 2026",
+    finalScore: 95.23, stars: 3, tier: "Silver",
+    qualifiesForBonus: false,
+    bonusReason: "Sin bono: QA < 95% (Performance gate)",
+    behaviorActive: true, amonestacionType: "Behavior (Tardía)",
+    category: "Agent NH",
+    tierIcon: "🥇",
+    fixedBonus: { eligible: true, amount: 12, reason: "Recibís $12 de eficiencia aún estando descalificada." },
+    performanceBonus: { eligible: false, amount: 0, baseAmount: 85, reason: "Descalificada: QA 91.67% < 95% + Amonestación Behavior (Tardía)." },
+    totalUSD: 12, totalCRC: 5964,
+    badges: ["🌱 New Hire", "🎯 En desarrollo"],
+    metrics: [
+      { name: "CSAT", value: 100, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "ADH", value: 94.56, unit: "%", goal: 95.5, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 1015, unit: "s", goal: 690, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 98.00, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 96, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 1.0, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "QA", value: 91.67, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "PKT", value: 88, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: {
+      Score:  [null, null, null, 93.24, 94.49, 95.23],
+      QA:     [null, null, null, 79.13, 93.17, 91.67],
+      CSAT:   [null, null, null, 93.52, 96.32, 100.00],
+      AHT:    [null, null, null, 895, 958, 1015],
+      ADH:    [null, null, null, 91.92, 91.81, 94.56]
+    },
+    availableMetrics: ["Score", "QA", "CSAT", "AHT", "ADH"]
+  },
+  kalex: {
+    name: "Jimenez, Kalex Abraham",
+    firstName: "Kalex",
+    team: "Team Shary", lob: "Comm", tenure: "Tenure",
+    month: "Junio 2026",
+    finalScore: 99.66, stars: 5, tier: "Platinum",
+    qualifiesForBonus: true, bonusReason: "Bono aprobado: Tier Platinum",
+    behaviorActive: false, amonestacionType: "None",
+    category: "Agent",
+    tierIcon: "🏆",
+    fixedBonus: { eligible: true, amount: 12, reason: "Todos los agentes reciben +$12 de eficiencia siempre." },
+    performanceBonus: { eligible: true, amount: 100, reason: "¡Excepcional! Tier Platinum — Performance Bonus máximo de $100." },
+    totalUSD: 112, totalCRC: 55664,
+    badges: ["🏆 Top Performer", "⭐ Platinum Tier", "🔥 Strong Streak"],
+    metrics: [
+      { name: "CSAT", value: 92.19, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "ADH", value: 98.41, unit: "%", goal: 95.5, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 641, unit: "s", goal: 690, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 100, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 100, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 0.92, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "QA", value: 99.17, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "PKT", value: 100, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: {
+      Score:  [98.65, 98.65, 100.00, 100.00, 100.00, 99.66],
+      QA:     [97.75, 98.75, 97.88, 96.88, 97.75, 99.17],
+      CSAT:   [97.73, 97.06, 100.00, 100.00, 96.15, 92.19],
+      AHT:    [964, 848, 685, 613, 641, 641],
+      ADH:    [97.59, 97.79, 98.45, 98.84, 98.59, 98.41]
+    },
+    availableMetrics: ["Score", "QA", "CSAT", "AHT", "ADH"]
+  },
+  maria: {
+    name: "Quiros Ulloa, Maria Fernanda",
+    firstName: "Maria",
+    team: "Team Ange", lob: "ACPNY", tenure: "Tenure",
+    month: "Junio 2026",
+    finalScore: 100, stars: 5, tier: "Platinum",
+    qualifiesForBonus: true, bonusReason: "Bono aprobado: Tier Platinum",
+    behaviorActive: false, amonestacionType: "None",
+    category: "Agent",
+    tierIcon: "🏆",
+    fixedBonus: { eligible: true, amount: 12, reason: "Todos los agentes reciben +$12 de eficiencia siempre." },
+    performanceBonus: { eligible: true, amount: 100, reason: "¡Desempeño excepcional! Score perfecto — Performance Bonus máximo de $100." },
+    totalUSD: 112, totalCRC: 55664,
+    badges: ["🏆 Top Performer", "⭐ Platinum Tier", "🌟 Score Perfecto"],
+    metrics: [
+      { name: "ADH", value: 98.73, unit: "%", goal: 96, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 325, unit: "s", goal: 400, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 98.13, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 95.97, unit: "%", goal: 93, goalOp: ">=", format: "pct", cap: 91.5 },
+      { name: "CE", value: 88, unit: "%", goal: 75, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 0, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 100, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: {
+      Score:  [96.00, 97.50, 98.20, 99.00, 99.60, 100.00],
+      QA:     [92.00, 94.00, 94.50, 95.00, 95.50, 95.97],
+      CE:     [80.00, 82.00, 84.00, 85.00, 86.50, 88.00],
+      AHT:    [340, 335, 330, 328, 326, 325],
+      ADH:    [97.50, 98.00, 98.20, 98.50, 98.65, 98.73]
+    },
+    availableMetrics: ["Score", "QA", "CE", "AHT", "ADH"]
+  }
+ ,
+  // ============ TEAM TAMI - TAMPA NYSHIP ============
+  tami_brown: {
+    name: "Brown, Keieshia Anetria", firstName: "Keieshia",
+    associateId: "611279",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 98.67, stars: 5, tier: "Platinum",
+    qualifiesForBonus: true, bonusReason: "Bonus approved: Platinum Tier",
+    behaviorActive: false, category: "Agent", tierIcon: "🏆",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: true, amount: 100, reason: "Exceptional! Platinum Tier — Max Performance Bonus of $100." },
+    totalUSD: 112, totalCRC: 55664,
+    badges: ["🏆 Top Performer", "⭐ Platinum Tier"],
+    metrics: [
+      { name: "CSAT", value: 94.85, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 94.13, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 97.78, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 1003, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 97.64, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 97.67, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 0, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 87, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 98.67] },
+    availableMetrics: ["Score"]
+  },
+  tami_grewe: {
+    name: "Grewe, Heather", firstName: "Heather", associateId: "960910",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 83.52, stars: 3, tier: "Bronze",
+    qualifiesForBonus: false, bonusReason: "Below QA cap threshold",
+    behaviorActive: false, category: "Agent", tierIcon: "🥉",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: false, amount: 0, baseAmount: 70, reason: "Bronze Tier — Below eligibility threshold." },
+    totalUSD: 12, totalCRC: 5964,
+    badges: ["🎯 Focus area"],
+    metrics: [
+      { name: "CSAT", value: 98.44, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 97.75, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 97.48, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 1318, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 91.28, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 98.1, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 5.71, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 93, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 83.52] },
+    availableMetrics: ["Score"]
+  },
+  tami_jordan: {
+    name: "Jordan, Rosa M.", firstName: "Rosa", associateId: "617086",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 85.29, stars: 4, tier: "Golden",
+    qualifiesForBonus: true, bonusReason: "Bonus approved: Golden Tier",
+    behaviorActive: false, category: "Agent", tierIcon: "🥇",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: true, amount: 85, reason: "Golden Tier — Performance Bonus of $85." },
+    totalUSD: 97, totalCRC: 48209,
+    badges: ["🥇 Golden Tier"],
+    metrics: [
+      { name: "CSAT", value: 97.37, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 96.38, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 96.16, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 1048, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 99.99, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 98.78, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 1.3, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 93, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 85.29] },
+    availableMetrics: ["Score"]
+  },
+  tami_kellybrown: {
+    name: "Kelly-Brown, Ruth Marie", firstName: "Ruth", associateId: "566703",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 67.41, stars: 2, tier: "Standard",
+    qualifiesForBonus: false, bonusReason: "Below performance threshold",
+    behaviorActive: false, category: "Agent", tierIcon: "⭐",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: false, amount: 0, baseAmount: 0, reason: "Standard Tier — Not eligible for performance bonus." },
+    totalUSD: 12, totalCRC: 5964,
+    badges: ["🚨 Action plan required"],
+    metrics: [
+      { name: "CSAT", value: 88.89, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 0, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 84.17, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 1036, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 97.39, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 96.88, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 0, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 93, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 67.41] },
+    availableMetrics: ["Score"]
+  },
+  tami_madgett: {
+    name: "Madgett, Capri S.", firstName: "Capri", associateId: "586078",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 86, stars: 4, tier: "Golden",
+    qualifiesForBonus: true, bonusReason: "Bonus approved: Golden Tier",
+    behaviorActive: false, category: "Agent", tierIcon: "🥇",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: true, amount: 85, reason: "Golden Tier — Performance Bonus of $85." },
+    totalUSD: 97, totalCRC: 48209,
+    badges: ["🥇 Golden Tier", "🔥 Consistent"],
+    metrics: [
+      { name: "CSAT", value: 96.88, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 97.25, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 97.65, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 855, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 100, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 99.02, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 2.53, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 100, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 86] },
+    availableMetrics: ["Score"]
+  },
+  tami_mullins: {
+    name: "Mullins, Melvenia D", firstName: "Melvenia", associateId: "614161",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 85.49, stars: 4, tier: "Golden",
+    qualifiesForBonus: true, bonusReason: "Bonus approved: Golden Tier",
+    behaviorActive: false, category: "Agent", tierIcon: "🥇",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: true, amount: 85, reason: "Golden Tier — Performance Bonus of $85." },
+    totalUSD: 97, totalCRC: 48209,
+    badges: ["🥇 Golden Tier"],
+    metrics: [
+      { name: "CSAT", value: 98.33, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 97, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 94.08, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 898, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 100, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 99.02, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 4.35, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 87, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 85.49] },
+    availableMetrics: ["Score"]
+  },
+  tami_obianagha: {
+    name: "Obianagha, Cynthia", firstName: "Cynthia", associateId: "788155",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 80.99, stars: 3, tier: "Bronze",
+    qualifiesForBonus: false, bonusReason: "Below QA cap threshold",
+    behaviorActive: false, category: "Agent", tierIcon: "🥉",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: false, amount: 0, baseAmount: 70, reason: "Bronze Tier — Below eligibility threshold." },
+    totalUSD: 12, totalCRC: 5964,
+    badges: ["🎯 Focus area"],
+    metrics: [
+      { name: "CSAT", value: 97.22, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 81, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 96.42, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 706, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 94.6, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 99.08, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 30.26, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 93, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 80.99] },
+    availableMetrics: ["Score"]
+  },
+  tami_porter: {
+    name: "Porter, Alexus", firstName: "Alexus", associateId: "967981",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 85.32, stars: 4, tier: "Golden",
+    qualifiesForBonus: true, bonusReason: "Bonus approved: Golden Tier",
+    behaviorActive: false, category: "Agent", tierIcon: "🥇",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: true, amount: 85, reason: "Golden Tier — Performance Bonus of $85." },
+    totalUSD: 97, totalCRC: 48209,
+    badges: ["🥇 Golden Tier"],
+    metrics: [
+      { name: "CSAT", value: 90, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 95.5, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 97.94, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 804, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 99.98, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 98.65, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 15.38, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 93, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 85.32] },
+    availableMetrics: ["Score"]
+  },
+  tami_rosa: {
+    name: "Rosa, Shantal C", firstName: "Shantal", associateId: "958496",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 84.25, stars: 3, tier: "Bronze",
+    qualifiesForBonus: false, bonusReason: "Attendance below threshold",
+    behaviorActive: false, category: "Agent", tierIcon: "🥉",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: false, amount: 0, baseAmount: 70, reason: "Bronze Tier — Below eligibility threshold." },
+    totalUSD: 12, totalCRC: 5964,
+    badges: ["🎯 Focus area"],
+    metrics: [
+      { name: "CSAT", value: 100, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 97.25, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 91.31, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 982, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 91.27, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 94.34, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 8.89, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 100, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 84.25] },
+    availableMetrics: ["Score"]
+  },
+  tami_smith: {
+    name: "Smith, Roquiah", firstName: "Roquiah", associateId: "963410",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 83.83, stars: 3, tier: "Bronze",
+    qualifiesForBonus: false, bonusReason: "Below QA cap threshold",
+    behaviorActive: false, category: "Agent", tierIcon: "🥉",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: false, amount: 0, baseAmount: 70, reason: "Bronze Tier — Below eligibility threshold." },
+    totalUSD: 12, totalCRC: 5964,
+    badges: ["🎯 Focus area"],
+    metrics: [
+      { name: "CSAT", value: 82.61, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 94.5, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 98.04, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 813, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 99.71, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 99.08, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 6.25, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 100, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 83.83] },
+    availableMetrics: ["Score"]
+  },
+  tami_wilkerson: {
+    name: "Wilkerson, Steven", firstName: "Steven", associateId: "791344",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 86, stars: 4, tier: "Golden",
+    qualifiesForBonus: true, bonusReason: "Bonus approved: Golden Tier",
+    behaviorActive: false, category: "Agent", tierIcon: "🥇",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: true, amount: 85, reason: "Golden Tier — Performance Bonus of $85." },
+    totalUSD: 97, totalCRC: 48209,
+    badges: ["🥇 Golden Tier"],
+    metrics: [
+      { name: "CSAT", value: 98.08, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 96.29, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 99.02, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 808, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 100, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 100, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 11.32, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 93, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 86] },
+    availableMetrics: ["Score"]
+  },
+  tami_zovko: {
+    name: "Zovko, Barbara Ann", firstName: "Barbara", associateId: "661137",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 86, stars: 4, tier: "Golden",
+    qualifiesForBonus: true, bonusReason: "Bonus approved: Golden Tier",
+    behaviorActive: false, category: "Agent", tierIcon: "🥇",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: true, amount: 85, reason: "Golden Tier — Performance Bonus of $85." },
+    totalUSD: 97, totalCRC: 48209,
+    badges: ["🥇 Golden Tier"],
+    metrics: [
+      { name: "CSAT", value: 98.68, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 96.25, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 98.2, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 868, unit: "s", goal: 900, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 99.73, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "Opened", value: 98.77, unit: "%", goal: 95, goalOp: ">=", format: "pct" },
+      { name: "SC+NR", value: 2.94, unit: "%", goal: 1, goalOp: "<=", format: "pct" },
+      { name: "PKT", value: 93, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 86] },
+    availableMetrics: ["Score"]
+  },
+    tami_singleton: {
+    name: "Singleton, Susan Renay", firstName: "Susan", associateId: "389422",
+    team: "Team Tami", lob: "NYSHIP", tenure: "Tenure", site: "Tampa",
+    month: "June 2026",
+    finalScore: 98.82, stars: 5, tier: "Platinum",
+    qualifiesForBonus: true, bonusReason: "Bonus approved: Platinum Tier (SME)",
+    behaviorActive: false, category: "SME", tierIcon: "🏆",
+    fixedBonus: { eligible: true, amount: 12, reason: "All agents receive +$12 efficiency bonus." },
+    performanceBonus: { eligible: true, amount: 200, reason: "Exceptional! SME Platinum — Max Performance Bonus of $200." },
+    totalUSD: 212, totalCRC: 105364,
+    badges: ["🌟 SME", "🏆 Platinum", "💡 Innovation Leader"],
+    metrics: [
+      { name: "CSAT", value: 98.33, unit: "%", goal: 94.3, goalOp: ">=", format: "pct" },
+      { name: "QA", value: 95.5, unit: "%", goal: 95.5, goalOp: ">=", format: "pct", cap: 95 },
+      { name: "ADH", value: 96.11, unit: "%", goal: 96.15, goalOp: ">=", format: "pct" },
+      { name: "AHT", value: 737, unit: "s", goal: 650, goalOp: "<=", format: "num" },
+      { name: "ATT", value: 100, unit: "%", goal: 98, goalOp: ">=", format: "pct" },
+      { name: "PKT", value: 100, unit: "%", goal: 90, goalOp: ">=", format: "pct" }
+    ],
+    history: { Score: [null, null, null, null, null, 98.82] },
+    availableMetrics: ["Score"]
+  }
+};
+// Metric goals for chart meta line and status
+const METRIC_GOALS = {
+  Score: { goal: 94, goalOp: ">=" },
+  QA:    { goal: 95, goalOp: ">=" },
+  CSAT:  { goal: 94.3, goalOp: ">=" },
+  CE:    { goal: 75, goalOp: ">=" },
+  AHT:   { goal: 690, goalOp: "<=" },
+  ADH:   { goal: 95.5, goalOp: ">=" }
+};
+// ========== I18N ==========
+function isEN(agent) { return agent && agent.site === "Tampa"; }
+const I18N = {
+  greeting:      { es: "Hola",              en: "Hello" },
+  bonusEligible: { es: "Bono Elegible",     en: "Bonus Eligible" },
+  noBonus:       { es: "Sin Bono",          en: "No Bonus" },
+  scoreFinal:    { es: "Score Final",       en: "Final Score" },
+  metricsTitle:  { es: "📊 Mis Métricas del Mes", en: "📊 My Monthly Metrics" },
+  tipsTitle:     { es: "💡 Tips Personalizados", en: "💡 Personalized Tips" },
+  evoTitle:      { es: "📈 Mi Evolución",   en: "📈 My Evolution" },
+  evoSubtitle:   { es: "Últimos 6 meses de performance", en: "Last 6 months of performance" },
+  goal:          { es: "Meta:",             en: "Goal:" },
+  inGoal:        { es: "En meta",           en: "On target" },
+  close:         { es: "Cerca",             en: "Close" },
+  outGoal:       { es: "Fuera",             en: "Off target" },
+  bestMonth:     { es: "Mejor mes",         en: "Best month" },
+  avg:           { es: "Promedio",          en: "Average" },
+  trend:         { es: "Tendencia",         en: "Trend" },
+  improving:     { es: "Mejorando",         en: "Improving" },
+  stable:        { es: "Estable",           en: "Stable" },
+  decreasing:    { es: "Bajando",           en: "Decreasing" },
+  increasing:    { es: "Subiendo",          en: "Rising" }
+};
+function t(key, agent) {
+  const lang = isEN(agent) ? "en" : "es";
+  return (I18N[key] && I18N[key][lang]) || I18N[key].es;
+}
+// Métrica status con idioma dinámico
+function getMetricStatusLang(metric, agent) {
+  const s = getMetricStatus(metric);
+  if (!agent) return s;
+  const lang = isEN(agent) ? "en" : "es";
+  const labels = {
+    success: I18N.inGoal[lang],
+    warning: I18N.close[lang],
+    danger:  I18N.outGoal[lang]
+  };
+  return { ...s, label: labels[s.class] };
+}
+// ========== METRIC HELPERS ==========
+function getMetricStatus(metric) {
+  const { value, goal, goalOp } = metric;
+  let passes;
+  if (goalOp === ">=") passes = value >= goal;
+  else if (goalOp === "<=") passes = value <= goal;
+  else passes = value === goal;
+  let close;
+  if (goalOp === ">=") close = value >= goal * 0.95 && value < goal;
+  else if (goalOp === "<=") close = value <= goal * 1.05 && value > goal;
+  if (passes) return { class: "success", label: "En meta", color: "var(--success)" };
+  if (close) return { class: "warning", label: "Cerca", color: "var(--warning)" };
+  return { class: "danger", label: "Fuera", color: "var(--danger)" };
+}
+
+function getMetricProgress(metric) {
+  const { value, goal, goalOp } = metric;
+  if (goalOp === ">=") return Math.min(100, (value / goal) * 100);
+  return Math.min(100, (goal / Math.max(value, 1)) * 100);
+}
+
+function formatMetricValue(metric) {
+  if (metric.format === "pct") return metric.value.toFixed(2) + "%";
+  return metric.value + metric.unit;
+}
+
+// ========== TIPS ==========
+function generateTips(agent) {
+  const tips = [];
+  const failing = agent.metrics.filter(m => getMetricStatus(m).class === "danger");
+  const close = agent.metrics.filter(m => getMetricStatus(m).class === "warning");
+  if (failing.length === 0 && close.length === 0) {
+    tips.push({ icon: "🌟", title: "¡Sigue así!", text: "Todas tus métricas están en meta. Mantén el ritmo y comparte tus buenas prácticas con el equipo." });
+    tips.push({ icon: "🎯", title: "Zona de crecimiento", text: "Considera pedirle a tu TL retos adicionales o proyectos especiales para seguir creciendo." });
+  } else {
+    failing.slice(0, 2).forEach(m => tips.push(getTipForMetric(m)));
+    if (close.length > 0 && tips.length < 3) tips.push(getTipForMetric(close[0]));
+  }
+  if (agent.behaviorActive) {
+    tips.push({ icon: "⚠️", title: "Amonestación de Behavior activa", text: "Conversá con tu TL sobre el plan para superar esta amonestación en el próximo mes." });
+  }
+  return tips.slice(0, 3);
+}
+
+function getTipForMetric(metric) {
+  const map = {
+    "QA": { icon: "🎯", title: "Mejora tu QA", text: `Tu QA está en ${metric.value.toFixed(2)}% (meta ${metric.goal}%). Revisá con tu TL las últimas evals y pedí calls de calibración.` },
+    "AHT": { icon: "⏱️", title: "Optimiza tu AHT", text: `Tu AHT está en ${metric.value}s (meta ≤${metric.goal}s). Practicá scripts y usá shortcuts de tools para reducir hold/ACW time.` },
+    "ADH": { icon: "📅", title: "Cuida tu Adherence", text: `Adherence en ${metric.value.toFixed(2)}% (meta ${metric.goal}%). Revisá tu calendario y coordiná bien tus breaks/lunch.` },
+    "ATT": { icon: "📆", title: "Attendance", text: `Tu attendance está en ${metric.value.toFixed(2)}% (meta ${metric.goal}%). Cualquier PTO extra impacta directamente.` },
+    "PKT": { icon: "📚", title: "Refuerza tu PKT", text: `PKT en ${metric.value}% (meta ${metric.goal}%). Repasá los módulos de training pendientes esta semana.` },
+    "CSAT": { icon: "😊", title: "Sube tu CSAT", text: `CSAT en ${metric.value.toFixed(2)}% (meta ${metric.goal}%). Empatía + cierre proactivo son clave para mejorar la encuesta.` },
+    "CE": { icon: "🔧", title: "Escalation Management", text: `CE en ${metric.value}% (meta ${metric.goal}%). Revisá el proceso de escalation con tu TL.` },
+    "SC+NR": { icon: "📞", title: "Short Calls & NR", text: `SC+NR en ${metric.value.toFixed(2)}% (meta ≤${metric.goal}%). Asegurate de que cada llamada tenga cierre completo.` },
+    "Opened": { icon: "📂", title: "Casos abiertos", text: `Opened within month en ${metric.value}% (meta ${metric.goal}%). Cerrá los casos pendientes en los tiempos SLA.` }
+  };
+  return map[metric.name] || { icon: "💡", title: metric.name, text: `Valor: ${metric.value}${metric.unit}` };
+}
+
+// ========== EVOLUTION HELPERS ==========
+let currentEvoMetric = "Score";
+
+function getValidHistory(agent, metricKey) {
+  const raw = agent.history[metricKey] || [];
+  return raw.map((v, i) => ({ month: MONTHS_ORDER[i], value: v })).filter(d => d.value !== null && d.value !== undefined);
+}
+
+function calculateInsights(agent, metricKey) {
+  const data = getValidHistory(agent, metricKey);
+  if (data.length === 0) return null;
+  const values = data.map(d => d.value);
+  const best = data.reduce((a, b) => {
+    if (metricKey === "AHT") return a.value < b.value ? a : b;
+    return a.value > b.value ? a : b;
+  });
+  const avg = values.reduce((s, v) => s + v, 0) / values.length;
+  const first = values[0];
+  const last = values[values.length - 1];
+  const delta = last - first;
+  let trend;
+  if (metricKey === "AHT") {
+    if (delta < -20) trend = { label: "Mejorando", icon: "↓", class: "success" };
+    else if (delta > 20) trend = { label: "Subiendo", icon: "↑", class: "danger" };
+    else trend = { label: "Estable", icon: "→", class: "info" };
+  } else {
+    if (delta > 1.5) trend = { label: "Mejorando", icon: "↑", class: "success" };
+    else if (delta < -1.5) trend = { label: "Bajando", icon: "↓", class: "danger" };
+    else trend = { label: "Estable", icon: "→", class: "info" };
+  }
+  return { best, avg, first, last, delta, trend, monthsCount: data.length };
+}
+
+function formatValue(val, metricKey) {
+  if (val === null || val === undefined) return "—";
+  if (metricKey === "AHT") return Math.round(val) + "s";
+  return val.toFixed(val % 1 === 0 ? 0 : 2) + "%";
+}
+
+function renderEvoInsights(agent, metricKey) {
+  const ins = calculateInsights(agent, metricKey);
+  const container = document.getElementById("evoInsights");
+  if (!ins) { container.innerHTML = "<div style='grid-column:1/-1;text-align:center;font-size:12px;color:var(--text-muted);padding:20px;'>Sin datos históricos disponibles</div>"; return; }
+  container.innerHTML = `
+    <div class="evo-insight">
+      <div class="evo-insight-icon">🏆</div>
+      <div class="evo-insight-label">Mejor mes</div>
+      <div class="evo-insight-value success">${ins.best.month} · ${formatValue(ins.best.value, metricKey)}</div>
+    </div>
+    <div class="evo-insight">
+      <div class="evo-insight-icon">📊</div>
+      <div class="evo-insight-label">Promedio</div>
+      <div class="evo-insight-value">${formatValue(ins.avg, metricKey)}</div>
+    </div>
+    <div class="evo-insight">
+      <div class="evo-insight-icon">📈</div>
+      <div class="evo-insight-label">Tendencia</div>
+      <div class="evo-insight-value ${ins.trend.class}">${ins.trend.label} ${ins.trend.icon}</div>
+    </div>
+  `;
+}
+
+function renderEvoToggle(agent) {
+  const container = document.getElementById("evoToggle");
+  container.innerHTML = agent.availableMetrics.map(m => `
+    <button class="evo-pill ${m === currentEvoMetric ? 'active' : ''}" data-metric="${m}">${m}</button>
+  `).join("");
+  container.querySelectorAll(".evo-pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentEvoMetric = btn.dataset.metric;
+      container.querySelectorAll(".evo-pill").forEach(b => b.classList.toggle("active", b.dataset.metric === currentEvoMetric));
+      renderEvoChart(agent, currentEvoMetric);
+      renderEvoInsights(agent, currentEvoMetric);
+      renderEvoInsightCard(agent, currentEvoMetric);
+    });
+  });
+}
+
+function renderEvoChart(agent, metricKey) {
+  const svg = document.getElementById("evoChart");
+  const tooltip = document.getElementById("evoTooltip");
+  const data = agent.history[metricKey] || [];
+  const W = 400, H = 200;
+  const padL = 35, padR = 15, padT = 15, padB = 30;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+  const validValues = data.filter(v => v !== null && v !== undefined);
+  if (validValues.length === 0) { svg.innerHTML = ""; return; }
+  let minY, maxY;
+  if (metricKey === "AHT") {
+    minY = Math.max(0, Math.min(...validValues) - 100);
+    maxY = Math.max(...validValues) + 100;
+  } else {
+    minY = Math.max(70, Math.min(...validValues) - 3);
+    maxY = Math.min(100, Math.max(...validValues) + 2);
+    if (maxY - minY < 5) maxY = minY + 5;
+  }
+  const xStep = chartW / (MONTHS_ORDER.length - 1);
+  const yScale = v => padT + chartH - ((v - minY) / (maxY - minY)) * chartH;
+  const goal = METRIC_GOALS[metricKey];
+  const goalY = (goal && goal.goal >= minY && goal.goal <= maxY) ? yScale(goal.goal) : null;
+  const points = data.map((v, i) => v === null ? null : { x: padL + i * xStep, y: yScale(v), value: v, month: MONTHS_ORDER[i], idx: i }).filter(p => p !== null);
+  const linePath = points.map((p, i) => (i === 0 ? "M" : "L") + p.x + " " + p.y).join(" ");
+  const areaPath = linePath + ` L ${points[points.length-1].x} ${padT + chartH} L ${points[0].x} ${padT + chartH} Z`;
+  const lastMetric = { value: points[points.length-1].value, goal: goal ? goal.goal : 0, goalOp: goal ? goal.goalOp : ">=" };
+  const lastStatus = getMetricStatus(lastMetric);
+  const lineColor = lastStatus.color;
+  const yTicks = [minY, (minY + maxY) / 2, maxY];
+  const yLabelsHTML = yTicks.map(v => {
+    const y = yScale(v);
+    const label = metricKey === "AHT" ? Math.round(v) + "s" : v.toFixed(0) + "%";
+    return `
+      <line class="evo-grid-line" x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}"></line>
+      <text class="evo-axis-label" x="${padL - 6}" y="${y + 3}" text-anchor="end">${label}</text>
+    `;
+  }).join("");
+  const monthLabelsHTML = MONTHS_ORDER.map((m, i) => {
+    const x = padL + i * xStep;
+    return `<text class="evo-month-label" x="${x}" y="${H - 10}" text-anchor="middle">${m}</text>`;
+  }).join("");
+  const metaLineHTML = (goalY !== null && goal) ? `
+    <line class="evo-meta-line" x1="${padL}" y1="${goalY}" x2="${W - padR}" y2="${goalY}"></line>
+    <text class="evo-axis-label" x="${W - padR - 2}" y="${goalY - 4}" text-anchor="end" style="fill: var(--chart-meta);">Meta ${metricKey === "AHT" ? goal.goal + "s" : goal.goal + "%"}</text>
+  ` : "";
+  const pointsHTML = points.map((p, i) => {
+    const isLast = i === points.length - 1;
+    return `<circle class="evo-point ${isLast ? 'current' : ''}"
+              cx="${p.x}" cy="${p.y}" r="${isLast ? 5.5 : 4}"
+              style="fill: ${lineColor};"
+              data-month="${p.month}" data-value="${p.value}" data-idx="${p.idx}"></circle>`;
+  }).join("");
+  const gradientId = `evoGrad-${metricKey}`;
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="${gradientId}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${lineColor}" stop-opacity="0.4"/>
+        <stop offset="100%" stop-color="${lineColor}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${yLabelsHTML}
+    ${metaLineHTML}
+    <path class="evo-area" d="${areaPath}" fill="url(#${gradientId})"></path>
+    <path class="evo-line" d="${linePath}" style="stroke: ${lineColor};"></path>
+    ${pointsHTML}
+    ${monthLabelsHTML}
+  `;
+  const chartWrapper = svg.parentElement;
+  svg.querySelectorAll(".evo-point").forEach(circle => {
+    const show = () => {
+      const month = circle.dataset.month;
+      const value = parseFloat(circle.dataset.value);
+      const cx = parseFloat(circle.getAttribute("cx"));
+      const cy = parseFloat(circle.getAttribute("cy"));
+      const svgRect = svg.getBoundingClientRect();
+      const wrapperRect = chartWrapper.getBoundingClientRect();
+      const xPct = cx / W;
+      const yPct = cy / H;
+      const px = svgRect.left - wrapperRect.left + xPct * svgRect.width;
+      const py = svgRect.top - wrapperRect.top + yPct * svgRect.height;
+      tooltip.textContent = `${month} · ${formatValue(value, metricKey)}`;
+      tooltip.style.left = px + "px";
+      tooltip.style.top = py + "px";
+      tooltip.classList.add("visible");
+    };
+    const hide = () => tooltip.classList.remove("visible");
+    circle.addEventListener("mouseenter", show);
+    circle.addEventListener("mouseleave", hide);
+    circle.addEventListener("touchstart", show);
+    circle.addEventListener("touchend", () => setTimeout(hide, 1500));
+  });
+}
+
+function renderEvoInsightCard(agent, metricKey) {
+  const ins = calculateInsights(agent, metricKey);
+  const container = document.getElementById("evoInsightCard");
+  if (!ins) { container.innerHTML = ""; return; }
+  let icon, title, text, cls = "";
+  const deltaAbs = Math.abs(ins.delta).toFixed(1);
+  if (ins.trend.label === "Mejorando") {
+    icon = "🎉";
+    title = "¡Vas subiendo!";
+    text = metricKey === "AHT"
+      ? `Tu ${metricKey} bajó ${deltaAbs}s en ${ins.monthsCount} meses. Eso es más eficiencia por call.`
+      : `Tu ${metricKey} creció ${deltaAbs} puntos en ${ins.monthsCount} meses. Seguí con esa energía 💪`;
+  } else if (ins.trend.label === "Estable") {
+    icon = "💪";
+    title = "Consistencia total";
+    text = `Llevas ${ins.monthsCount} meses manteniendo tu ${metricKey} estable en un promedio de ${formatValue(ins.avg, metricKey)}.`;
+  } else if (ins.trend.label === "Bajando" || ins.trend.label === "Subiendo") {
+    icon = "🎯";
+    title = "Momento de enfoque";
+    text = metricKey === "AHT"
+      ? `Tu ${metricKey} subió ${deltaAbs}s. Trabajá con tu TL en identificar bloqueos y optimizar tools.`
+      : `Tu ${metricKey} bajó ${deltaAbs} puntos. Es buen momento de un 1:1 con tu TL para revisar el plan.`;
+    cls = ins.trend.label === "Bajando" ? "danger" : "warning";
+  }
+  container.className = `evo-insight-card ${cls}`;
+  container.innerHTML = `
+    <div class="evo-insight-card-icon">${icon}</div>
+    <div class="evo-insight-card-content">
+      <div class="evo-insight-card-title">${title}</div>
+      <div class="evo-insight-card-text">${text}</div>
+    </div>
+  `;
+}
+// ========== RENDER FUNCTIONS ==========
+function renderAgentSelector() {
+  const sel = document.getElementById("agentSelector");
+  sel.innerHTML = "";
+
+  // Group agents by team
+  const groups = { Ange: [], Shary: [], Geo: [], Tami: [], Other: [] };
+  Object.entries(AGENTS).forEach(([key, agent]) => {
+    const team = String(agent.team || "").replace(/^Team\s+/i, "").trim();
+        if (team === "Ange") groups.Ange.push([key, agent]);
+      else if (team === "Shary") groups.Shary.push([key, agent]);
+      else if (team === "Geo") groups.Geo.push([key, agent]);
+      else if (team === "Tami") groups.Tami.push([key, agent]);
+      else groups.Other.push([key, agent]); 
+  });
+  const groupLabels = {
+    Ange: "🟣 Team Ange (ACPNY)",
+    Shary: "🟢 Team Shary (Comm)",
+    Geo: "🟠 Team Geo (Medicare + EH Comm)",
+    Tami: "🔵 Team Tami (Tampa)",
+    Other: "👤 Otros"
+  };
+
+  Object.entries(groups).forEach(([teamKey, agents]) => {
+    if (agents.length === 0) return;
+    agents.sort((a, b) => (a[1].name || "").localeCompare(b[1].name || ""));
+    const optgroup = document.createElement("optgroup");
+    optgroup.label = groupLabels[teamKey] + ` (${agents.length})`;
+    agents.forEach(([key, agent]) => {
+      const opt = document.createElement("option");
+      opt.value = key;
+      opt.textContent = `${agent.name} · ${agent.category || "Agent"}`;
+      optgroup.appendChild(opt);
+    });
+    sel.appendChild(optgroup);
+  });
+
+  sel.onchange = (e) => renderAgent(e.target.value);
+}
+
+function renderHero(agent) {
+  const isTampa = (agent.site === "Tampa");
+  const badgeClass = agent.qualifiesForBonus ? "badge-success" : "badge-danger";
+  const badgeIcon = agent.qualifiesForBonus ? "✅" : "❌";
+  const badgeText = isEN(agent) 
+    ? (agent.qualifiesForBonus ? "Bonus Eligible" : "No Bonus")
+    : (agent.qualifiesForBonus ? "Bono Elegible" : "Sin Bono");
+  const badgesHTML = (agent.badges || []).map(b => {
+    let cls = "badge-info";
+    if (b.includes("Top") || b.includes("Platinum") || b.includes("Perfecto")) cls = "badge-purple";
+    else if (b.includes("Streak")) cls = "badge-warning";
+    else if (b.includes("New Hire")) cls = "badge-info";
+    else if (b.includes("desarrollo")) cls = "badge-warning";
+    return `<span class="badge ${cls}">${b}</span>`;
+  }).join("");
+  const starsHTML = Array.from({length: 5}, (_, i) =>
+    i < (agent.stars || 0) ? `<span class="star-filled">★</span>` : `<span class="star-empty">★</span>`
+  ).join("");
+  const circumference = 2 * Math.PI * 50;
+  const scoreVal = agent.finalScore || 0;
+  const offset = circumference - (scoreVal / 100) * circumference;
+  document.getElementById("heroCard").innerHTML = `
+    <div class="hero-info">
+      <h1>👋 ${isEN(agent) ? "Hello" : "Hola"}, ${agent.firstName || agent.name}</h1>
+      <div class="hero-meta">${agent.name} · ${agent.category || "Agent"} · ${agent.lob || ""} · ${agent.team || ""} · ${agent.month || ""}</div>
+      <div class="hero-badges">
+        ${isTampa ? "" : `<span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>`}
+        ${badgesHTML}
+      </div>
+    </div>
+    <div class="hero-score-wrapper">
+      <div class="donut-container">
+        <svg class="donut-svg" viewBox="0 0 120 120">
+          <circle class="donut-bg-circle" cx="60" cy="60" r="50"></circle>
+          <circle class="donut-progress" cx="60" cy="60" r="50"
+            stroke="url(#donutGradient)"
+            style="stroke-dashoffset: ${offset}; stroke-dasharray: ${circumference};"></circle>
+          <defs>
+            <linearGradient id="donutGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#22c55e"/>
+              <stop offset="50%" stop-color="#3b82f6"/>
+              <stop offset="100%" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="donut-text">
+          <div class="donut-value">${scoreVal.toFixed(2)}%</div>
+                 <div class="donut-label">${isEN(agent) ? "Final Score" : "Score Final"}</div>
+        </div>
+      </div>
+      <div class="stars-container">
+        <div class="stars">${starsHTML}</div>
+        <div class="tier-label">🏅 ${agent.tier || "Unsatisfactory"}</div>
+        <div class="tier-sub">${agent.stars || 0}/5 · ${agent.tenure || ""}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderStatusCard(agent) {
+  const tier = agent.tier || "Golden";
+  const tierClass = tier.toLowerCase();
+  const tierIcon = tier === "Platinum" ? "🏆" : tier === "Golden" ? "🥇" : tier === "Bronze" ? "🥉" : "⚠️";
+  const qualif = agent.qualifiesForBonus;
+  const statusLabel = qualif ? "En Meta ✅" : "Requiere Atención ⚠️";
+  const statusReason = (agent.performanceBonus && agent.performanceBonus.reason) || agent.bonusReason || "";
+  let tipIcon, tipTitle, tipText;
+  if (tier === "Platinum") {
+    tipIcon = "🌟"; tipTitle = "¡Excepcional!";
+    tipText = "Estás en el tier máximo. Seguí siendo referencia para el equipo y compartí buenas prácticas.";
+  } else if (tier === "Golden") {
+    tipIcon = "💪"; tipTitle = "¡Sólido desempeño!";
+    tipText = qualif ? "Estás cumpliendo tus metas del mes. Un pequeño empujón te lleva al tier Platinum." : "Estás cerca del cumplimiento — revisá con tu TL las áreas de foco.";
+  } else if (tier === "Bronze") {
+    tipIcon = "🎯"; tipTitle = "Zona de mejora";
+    tipText = "Trabajá con tu TL para identificar la métrica más importante a mejorar este mes.";
+  } else {
+    tipIcon = "🚨"; tipTitle = "Requiere plan de acción";
+    tipText = "Es momento clave para un 1:1 con tu TL y definir un plan concreto de mejora.";
+  }
+  document.getElementById("bonusGrid").innerHTML = `
+    <div class="status-card-content" style="grid-column: 1 / -1;">
+      <div class="status-tier-row ${tierClass}">
+        <div class="status-tier-info">
+          <div class="status-tier-label">Tier del Mes</div>
+          <div class="status-tier-value">${tierIcon} ${tier}</div>
+        </div>
+        <div class="status-tier-icon">${qualif ? "✅" : "⚠️"}</div>
+      </div>
+      <div class="status-tier-row ${qualif ? '' : 'unsat'}">
+        <div class="status-tier-info">
+          <div class="status-tier-label">Estado</div>
+          <div class="status-tier-value" style="font-size: 16px;">${statusLabel}</div>
+        </div>
+      </div>
+      ${statusReason && !qualif ? `<div class="status-note" style="color: var(--danger); text-align: left; padding: 8px 14px; background: var(--danger-bg); border-radius: 8px;">📌 ${statusReason}</div>` : ""}
+      <div class="status-tip">
+        <div class="status-tip-icon">${tipIcon}</div>
+        <div class="status-tip-content">
+          <div class="status-tip-title">${tipTitle}</div>
+          <div class="status-tip-text">${tipText}</div>
+        </div>
+      </div>
+      <div class="status-note">💡 Para ver detalles de bono y montos, contactá a tu TL.</div>
+    </div>
+  `;
+  const existingTotal = document.getElementById("bonusTotal");
+  if (existingTotal) existingTotal.remove();
+}
+
+ function renderBonus(agent) {
+  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
+  const isTampa = (agent.site === "Tampa");
+  const bonusCard = document.querySelector("#bonusGrid").parentElement;
+  const cardTitle = bonusCard.querySelector(".card-title");
+  // Tampa agents don't have bonus scheme — hide entire card
+  if (isTampa) {
+    bonusCard.style.display = "none";
+    return;
+  } else {
+    bonusCard.style.display = "";
+  }
+  if (!isTLMode) {
+    renderStatusCard(agent);
+    if (cardTitle) cardTitle.innerHTML = isTampa ? "🎯 Monthly Status" : "🎯 Estado del Mes";
+    return;
+  }
+  if (cardTitle) cardTitle.innerHTML = "💰 Resumen de Bonos";
+  return _originalRenderBonus(agent);
+}
+
+function _originalRenderBonus(agent) {
+  const fixed = agent.fixedBonus || { amount: 12, reason: "$12 de eficiencia base." };
+  const perf = agent.performanceBonus || { eligible: false, amount: 0, reason: "" };
+  const FX_RATE = 497;
+  const baseUSD = perf.eligible ? perf.amount : 0;
+  const effUSD = fixed.amount;
+  const totalUSD = baseUSD + effUSD;
+  const totalCRC = totalUSD * FX_RATE;
+  const potentialBase = perf.baseAmount || perf.amount || 0;
+  const strikeBase = (!perf.eligible && potentialBase > 0)
+    ? `<div class="bonus-total-row strike"><span>Bono Base potencial:</span><span>$${potentialBase}</span></div>`
+    : "";
+  document.getElementById("bonusGrid").innerHTML = `
+    <div class="bonus-item">
+      <div class="bonus-item-header">
+        <div class="bonus-item-title">💵 Bono Fijo (Eficiencia)</div>
+        <span class="badge badge-success">✅ Elegible</span>
+      </div>
+      <div class="bonus-item-amount">$${fixed.amount}</div>
+      <div class="bonus-item-reason">${fixed.reason}</div>
+    </div>
+    <div class="bonus-item">
+      <div class="bonus-item-header">
+        <div class="bonus-item-title">🎯 Performance Bonus</div>
+        <span class="badge ${perf.eligible ? 'badge-success' : 'badge-danger'}">${perf.eligible ? '✅ Elegible' : '❌ No'}</span>
+      </div>
+      <div class="bonus-item-amount" style="${perf.eligible ? '' : 'color: var(--text-muted);'}">${perf.eligible ? '$' + perf.amount : '$0'}</div>
+      <div class="bonus-item-reason">${perf.reason}</div>
+    </div>
+  `;
+  const bonusCard = document.getElementById("bonusGrid").parentElement;
+  let totalDiv = document.getElementById("bonusTotal");
+  if (!totalDiv) {
+    totalDiv = document.createElement("div");
+    totalDiv.id = "bonusTotal";
+    totalDiv.className = "bonus-total";
+    bonusCard.appendChild(totalDiv);
+  }
+  totalDiv.innerHTML = `
+    <div class="bonus-total-title">💰 Total Estimado</div>
+    ${strikeBase}
+    <div class="bonus-total-row"><span>Bono Base:</span><span>${perf.eligible ? '$' + baseUSD : '$0 (descalif.)'}</span></div>
+    <div class="bonus-total-row"><span>Eficiencia:</span><span>+$${effUSD}</span></div>
+    <div class="bonus-total-row big"><span>Total:</span><span class="amount">$${totalUSD}</span></div>
+    <div class="bonus-total-row" style="color: var(--text-muted); font-size: 11px;"><span>Equivalente CRC:</span><span>₡${totalCRC.toLocaleString('es-CR')}</span></div>
+    <div class="bonus-total-note">Con tipo de cambio ₡${FX_RATE}/USD (BCCR)</div>
+  `;
+}
+
+function renderMetrics(agent) {
+  const grid = document.getElementById("metricsGrid");
+  const metrics = agent.metrics || [];
+  if (metrics.length === 0) {
+    grid.innerHTML = "<div style='grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted);font-size:12px;'>Sin métricas disponibles para este agente</div>";
+    return;
+  }
+  grid.innerHTML = metrics.map(m => {
+    const status = getMetricStatus(m);
+    const progress = getMetricProgress(m);
+    const valDisplay = formatMetricValue(m);
+    const goalDisplay = m.format === "pct" ? `${m.goalOp} ${m.goal}%` : `${m.goalOp} ${m.goal}${m.unit}`;
+    return `
+      <div class="metric-card">
+        <div class="metric-name">${m.name}</div>
+        <div class="metric-value ${status.class}">${valDisplay}</div>
+        <div class="metric-goal">Meta: ${goalDisplay}</div>
+        <div class="metric-progress">
+          <div class="metric-progress-bar" style="width: ${progress}%; background: ${status.color};"></div>
+        </div>
+        <span class="metric-status" style="background: var(--${status.class}-bg); color: var(--${status.class});">${status.label}</span>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderTips(agent) {
+  const tips = generateTips(agent);
+  document.getElementById("tipsList").innerHTML = tips.map(t => `
+    <div class="tip-item">
+      <div class="tip-icon">${t.icon}</div>
+      <div class="tip-content">
+        <div class="tip-title">${t.title}</div>
+        <div class="tip-text">${t.text}</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderAgent(key) {
+  const agent = AGENTS[key];
+  if (!agent) return;
+  if (!agent.availableMetrics || !agent.availableMetrics.includes(currentEvoMetric)) currentEvoMetric = "Score";
+  // Update card titles based on agent language
+  const en = isEN(agent);
+  document.querySelectorAll(".card .card-title").forEach(el => {
+    const txt = el.textContent.trim();
+    if (txt.includes("Mis Métricas") || txt.includes("My Monthly Metrics"))
+      el.textContent = en ? "📊 My Monthly Metrics" : "📊 Mis Métricas del Mes";
+    else if (txt.includes("Tips Personalizados") || txt.includes("Personalized Tips"))
+      el.textContent = en ? "💡 Personalized Tips" : "💡 Tips Personalizados";
+    else if (txt.includes("Mi Evolución") || txt.includes("My Evolution"))
+      el.textContent = en ? "📈 My Evolution" : "📈 Mi Evolución";
+  });
+  document.querySelectorAll(".card .card-subtitle").forEach(el => {
+    const txt = el.textContent.trim();
+    if (txt.includes("Últimos 6 meses") || txt.includes("Last 6 months"))
+      el.textContent = en ? "Last 6 months of performance" : "Últimos 6 meses de performance";
+  });
+  renderHero(agent);
+  renderBonus(agent);
+  renderEvoToggle(agent);
+  renderEvoInsights(agent, currentEvoMetric);
+  renderEvoChart(agent, currentEvoMetric);
+  renderEvoInsightCard(agent, currentEvoMetric);
+  renderMetrics(agent);
+  renderTips(agent);
+  localStorage.setItem("ptl_selectedAgent", key);
+  setTimeout(() => {
+    const donut = document.querySelector(".donut-progress");
+    if (donut) {
+      const orig = donut.style.strokeDashoffset;
+      donut.style.strokeDashoffset = 314;
+      requestAnimationFrame(() => { donut.style.strokeDashoffset = orig; });
+    }
+  }, 50);
+}
+
+// ========== THEME ==========
+function initTheme() {
+  const saved = localStorage.getItem("ptl_theme") || "light";
+  document.documentElement.setAttribute("data-theme", saved);
+  document.getElementById("themeToggle").textContent = saved === "dark" ? "☀️" : "🌙";
+}
+document.getElementById("themeToggle").addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  document.getElementById("themeToggle").textContent = next === "dark" ? "☀️" : "🌙";
+  localStorage.setItem("ptl_theme", next);
+  const agentKey = document.getElementById("agentSelector").value;
+  if (AGENTS[agentKey]) renderEvoChart(AGENTS[agentKey], currentEvoMetric);
+});
+
+// ========== DEMO BANNER ==========
+function checkBanner() {
+  const banner = document.getElementById("demoBanner");
+  const hasData = localStorage.getItem("ptl_uploadedData");
+  const dismissed = localStorage.getItem("ptl_bannerDismissed");
+  if (hasData || dismissed) banner.classList.add("hidden");
+  else banner.classList.remove("hidden");
+}
+function dismissBanner() {
+  localStorage.setItem("ptl_bannerDismissed", "1");
+  document.getElementById("demoBanner").classList.add("hidden");
+}
+
+// ========== UPLOAD MODAL ==========
+function openUploadModal() {
+  document.getElementById("uploadModal").classList.add("visible");
+  document.getElementById("modalStatus").className = "modal-status";
+  document.getElementById("modalStatus").innerHTML = "";
+   updateDownloadBtn();
+}
+function closeUploadModal() {
+  document.getElementById("uploadModal").classList.remove("visible");
+}
+function showStatus(type, message) {
+  const el = document.getElementById("modalStatus");
+  const icon = type === "loading" ? '<div class="spinner"></div>' : (type === "success" ? "✅" : "❌");
+  el.className = "modal-status visible " + type;
+  el.innerHTML = `${icon} <span>${message}</span>`;
+}
+document.getElementById("uploadModal").addEventListener("click", (e) => {
+  if (e.target.id === "uploadModal") closeUploadModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeUploadModal();
+    closeTLPasswordModal();
+  }
+});
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("fileInput");
+["dragover", "dragenter"].forEach(evt =>
+  dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.add("dragover"); })
+);
+["dragleave", "drop"].forEach(evt =>
+  dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.remove("dragover"); })
+);
+dropzone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener("change", (e) => {
+  if (e.target.files.length > 0) handleFile(e.target.files[0]);
+});
+
+// ========== EXCEL PARSER (V4.7 - FIXED: skip title rows in Roster/IMPORT) ==========
+async function handleFile(file) {
+  showStatus("loading", `Leyendo ${file.name}...`);
+  try {
+    const buffer = await file.arrayBuffer();
+    const wb = XLSX.read(buffer, { type: "array" });
+    console.log("[Parser] Hojas encontradas:", wb.SheetNames);
+
+    // ========== HELPER: find header row and parse table ==========
+    // Finds the row where first cell === "Advocate Name" and returns objects
+    // keyed by that row's values.
+    function parseTableWithHeaderSearch(sheet) {
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null });
+      let headerIdx = -1;
+      for (let i = 0; i < rows.length; i++) {
+        const first = String((rows[i] && rows[i][0]) || "").trim();
+        if (first === "Advocate Name") { headerIdx = i; break; }
+      }
+      if (headerIdx === -1) return { headerIdx: -1, rows: [], headers: [] };
+      const headers = rows[headerIdx].map(h => h ? String(h).trim() : "");
+      const dataRows = [];
+      for (let r = headerIdx + 1; r < rows.length; r++) {
+        const row = rows[r];
+        if (!row || !row[0]) continue;
+        const nameCell = String(row[0]).trim();
+        if (/team average|🏆|🌟|SME —|SME—/i.test(nameCell)) continue;
+        const obj = {};
+        headers.forEach((h, idx) => { if (h) obj[h] = row[idx]; });
+        dataRows.push(obj);
+      }
+      return { headerIdx, rows: dataRows, headers };
+    }
+
+    // ========== STEP 1: Read Config for current month ==========
+    let currentMonth = "Junio 2026";
+    const configSheetName = wb.SheetNames.find(n => /config/i.test(n));
+    if (configSheetName) {
+      const configRows = XLSX.utils.sheet_to_json(wb.Sheets[configSheetName], { header: 1, defval: null });
+      for (const row of configRows) {
+        if (!row || row.length < 2) continue;
+        const label = String(row[0] || "").toLowerCase();
+        if (label.includes("mes") || label.includes("período") || label.includes("periodo")) {
+          const val = row[1];
+          if (val && typeof val === "string" && val.trim()) {
+            currentMonth = val.trim();
+            break;
+          }
+        }
+      }
+    }
+    console.log("[Parser] Mes actual:", currentMonth);
+
+    // ========== STEP 2: Read Roster into map by AssociateID ==========
+    const rosterMap = {};
+    const rosterSheetName = wb.SheetNames.find(n => /roster/i.test(n));
+    if (rosterSheetName) {
+      const { rows: rosterRows } = parseTableWithHeaderSearch(wb.Sheets[rosterSheetName]);
+      rosterRows.forEach(row => {
+        const id = String(row["Associate ID"] || row["AssociateID"] || "").trim();
+        if (!id) return;
+        // Status: accept if empty or contains "active" (case-insensitive)
+        const statusRaw = String(row["Status"] || "").trim().toLowerCase();
+        if (statusRaw && !statusRaw.includes("active")) return;
+        rosterMap[id] = {
+          name: row["Advocate Name"] || "",
+          associateId: id,
+          team: row["TL/Team"] || row["Team"] || "",
+          lob: row["LOB"] || "",
+          category: row["Category"] || "Tenured",
+          status: statusRaw || "active",
+          isNewHire: (row["NH"] === "Yes" || row["NH"] === true),
+          tenureDate: row["Tenure Date"] || ""
+        };
+      });
+    }
+    console.log("[Parser] Roster cargado:", Object.keys(rosterMap).length, "agentes");
+
+    // ========== STEP 3: Find IMPORT sheets ==========
+    const importSheets = wb.SheetNames.filter(n =>
+      /IMPORT.*(ACPNY|SHARY|GEO|Ange|Medicare)/i.test(n)
+    );
+    if (importSheets.length === 0) {
+      showStatus("error", "No encontre hojas IMPORT. Revisa que se llamen IMPORT ACPNY/SHARY/GEO.");
+      return;
+    }
+    console.log("[Parser] IMPORT sheets:", importSheets);
+
+   // ========== STEP 4: Parse IMPORT sheets ==========
+    // FIX v4.7.5: filtrar solo filas del mes en curso
+    const MONTH_ES_TO_EN = {
+      "enero": "january", "febrero": "february", "marzo": "march",
+      "abril": "april", "mayo": "may", "junio": "june",
+      "julio": "july", "agosto": "august", "septiembre": "september",
+      "octubre": "october", "noviembre": "november", "diciembre": "december"
+    };
+    function normalizeMonth(str) {
+      if (!str) return "";
+      let s = String(str).toLowerCase().trim();
+     s = s.replace(/\s+\d{4}$/, "").trim();
+      return MONTH_ES_TO_EN[s] || s;
+    }
+    function extractMonthKey(scoreMonthValue) {
+      if (!scoreMonthValue) return "";
+      const s = String(scoreMonthValue).toLowerCase().trim();
+      const parts = s.split(/\s+/);
+      return normalizeMonth(parts[0] || "");
+    }
+    const currentMonthKey = extractMonthKey(currentMonth);
+    console.log("[Parser] Filtro mes actual (normalizado):", currentMonthKey);
+
+    const parsedAgents = {};
+    importSheets.forEach(sheetName => {
+      const { rows } = parseTableWithHeaderSearch(wb.Sheets[sheetName]);
+      rows.forEach(row => {
+        const importStatus = String(row["ImportStatus"] || "READY").trim();
+        if (/excluded/i.test(importStatus)) return;
+
+        // FIX v4.7.5: solo procesar filas del mes en curso
+        const rowMonthKey = extractMonthKey(row["ScoreMonth"]);
+        if (currentMonthKey && rowMonthKey && rowMonthKey !== currentMonthKey) return;
+
+        const id = String(row["AssociateID"] || row["Associate ID"] || "").trim();
+        if (!id) {
+          console.warn("[Parser] Fila sin AssociateID en", sheetName, ":", row["Advocate Name"]);
+          return;
+        }
+        const name = row["Advocate Name"] || row["Name"] || "";
+        const lob = row["LOB"] || "";
+        const isACPNY = /ACPNY/i.test(lob);
+        const isMedicare = /Medicare/i.test(lob);
+        parsedAgents[id] = parsedAgents[id] || {
+          associateId: id,
+          name: name,
+          firstName: name.split(",")[1]?.trim().split(" ")[0] || name.split(" ")[0],
+          team: row["Team"] || "N/A",
+          lob: lob,
+          category: row["Category"] || "Agent",
+          tenure: (row["IsNewHire"] === "Yes" || row["IsNewHire"] === true) ? "New Hire" : "Tenure",
+          month: currentMonth,
+          badges: [],
+          metrics: [],
+          history: { Score: [] },
+          availableMetrics: ["Score"]
+        };
+        const a = parsedAgents[id];
+        const metrics = [];
+        if (row["ACSS_CSAT"] && row["ACSS_CSAT"] !== 0 && !isACPNY) {
+          metrics.push({ name: "CSAT", value: pct(row["ACSS_CSAT"]), unit: "%", goal: isMedicare ? 95 : 94.3, goalOp: ">=", format: "pct" });
+        }
+        if (row["Adherence"]) metrics.push({ name: "ADH", value: pct(row["Adherence"]), unit: "%", goal: isACPNY ? 96 : 95.5, goalOp: ">=", format: "pct" });
+        if (row["AHT"]) metrics.push({ name: "AHT", value: Math.round(row["AHT"]), unit: "s", goal: isACPNY ? 400 : 690, goalOp: "<=", format: "num" });
+        if (row["Attendance"]) metrics.push({ name: "ATT", value: pct(row["Attendance"]), unit: "%", goal: isACPNY ? 95 : 98, goalOp: ">=", format: "pct" });
+        if (row["Opened_Within_Month"] && !isACPNY) metrics.push({ name: "Opened", value: pct(row["Opened_Within_Month"]), unit: "%", goal: 95, goalOp: ">=", format: "pct" });
+        if (row["SC_NR"] !== undefined && row["SC_NR"] !== null) metrics.push({ name: "SC+NR", value: pct(row["SC_NR"]), unit: "%", goal: isACPNY ? 1 : (isMedicare ? 2 : 3), goalOp: "<=", format: "pct" });
+        if (row["QA"]) metrics.push({ name: "QA", value: pct(row["QA"]), unit: "%", goal: isACPNY ? 93 : 95.5, goalOp: ">=", format: "pct", cap: isACPNY ? 91.5 : 95 });
+        if (row["CE"] && isACPNY) metrics.push({ name: "CE", value: pct(row["CE"]), unit: "%", goal: 75, goalOp: ">=", format: "pct" });
+        if (row["PKT"]) metrics.push({ name: "PKT", value: pct(row["PKT"]), unit: "%", goal: 90, goalOp: ">=", format: "pct" });
+        a.metrics = metrics;
+      });
+    });
+    console.log("[Parser] Agentes parseados desde IMPORT:", Object.keys(parsedAgents).length);
+
+    // ========== STEP 5: Parse SC sheets (multi-section) for tier/score ==========
+    const scSheets = wb.SheetNames.filter(n =>
+      /^(📊 )?SC\s*(ACPNY|EH|Medicare|Shary|Geo|Ange)/i.test(n)
+    );
+    scSheets.forEach(sheetName => {
+      const sheet = wb.Sheets[sheetName];
+      const rawRows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: null });
+      const sectionStarts = [];
+      rawRows.forEach((row, idx) => {
+        if (row && String(row[0] || "").trim() === "Advocate Name") {
+          sectionStarts.push(idx);
+        }
+      });
+      sectionStarts.forEach((startIdx, sectionIdx) => {
+        const headerRow = rawRows[startIdx];
+        const endIdx = sectionStarts[sectionIdx + 1] || rawRows.length;
+        const colMap = {};
+        headerRow.forEach((cell, i) => {
+          if (cell) colMap[String(cell).trim()] = i;
+        });
+        for (let r = startIdx + 1; r < endIdx; r++) {
+          const row = rawRows[r];
+          if (!row || !row[0]) continue;
+          const nameCell = String(row[0]).trim();
+          if (/team average|🏆|🌟|SME —|SME—/i.test(nameCell)) continue;
+          const rosterEntry = Object.values(rosterMap).find(re => re.name === nameCell);
+          if (!rosterEntry) continue;
+          const id = rosterEntry.associateId;
+          if (!parsedAgents[id]) continue;
+          const a = parsedAgents[id];
+          const finalPctIdx = colMap["Final %"] !== undefined ? colMap["Final %"] : colMap["Score %"];
+          const scoreIdx = colMap["Score"];
+          const tierIdx = colMap["Tier"];
+          const qualifiesIdx = colMap["Qualifies For Bonus"] !== undefined ? colMap["Qualifies For Bonus"] : colMap["QualifiesForBonus"];
+          const bonusReasonIdx = colMap["BonusReason"] !== undefined ? colMap["BonusReason"] : colMap["Bono Status"];
+          const behaviorIdx = colMap["BehaviorActive"];
+          if (finalPctIdx !== undefined && row[finalPctIdx] !== null) a.finalScore = pct(row[finalPctIdx]);
+          if (scoreIdx !== undefined && row[scoreIdx] !== null && row[scoreIdx] <= 5) a.stars = Math.round(row[scoreIdx]);
+          if (tierIdx !== undefined && row[tierIdx]) {
+            const tierRaw = String(row[tierIdx]);
+            a.tier = tierRaw.replace(/[^A-Za-z]/g, "").trim() || "Golden";
+            a.tierIcon = tierRaw.includes("Platinum") ? "🏆" :
+                         tierRaw.includes("Golden") ? "🥇" :
+                         tierRaw.includes("Bronze") ? "🥉" :
+                         tierRaw.includes("Critical") ? "🚨" : "⚠️";
+          }
+          if (qualifiesIdx !== undefined) {
+            const q = row[qualifiesIdx];
+            a.qualifiesForBonus = String(q).toLowerCase() === "yes" || q === true;
+          }
+          if (bonusReasonIdx !== undefined) a.bonusReason = String(row[bonusReasonIdx] || "");
+          if (behaviorIdx !== undefined) {
+            const b = row[behaviorIdx];
+            a.behaviorActive = b === true || b === 1 || String(b) === "1";
+          }
+          computeBonus(a);
+        }
+      });
+    });
+    console.log("[Parser] SC sheets procesadas");
+
+    // ========== STEP 6: Enrich with Roster metadata ==========
+    Object.values(parsedAgents).forEach(a => {
+      const rosterEntry = rosterMap[a.associateId];
+      if (rosterEntry) {
+        a.team = "Team " + rosterEntry.team;
+        a.tenure = rosterEntry.isNewHire ? "New Hire" : "Tenure";
+        a.category = rosterEntry.category === "SME"
+          ? "SME"
+          : (rosterEntry.isNewHire ? "Agent NH" : "Agent");
+        a.name = rosterEntry.name;
+        a.firstName = a.name.split(",")[1]?.trim().split(" ")[0] || a.name.split(" ")[0];
+      } else {
+        console.warn("[Parser] Agente sin roster:", a.name, a.associateId);
+      }
+      if (a.finalScore === undefined) a.finalScore = 0;
+      if (a.stars === undefined) a.stars = 0;
+      if (!a.tier) a.tier = "Unsatisfactory";
+      if (!a.tierIcon) a.tierIcon = "⚠️";
+      if (a.qualifiesForBonus === undefined) a.qualifiesForBonus = false;
+      if (!a.fixedBonus) computeBonus(a);
+      if (a.badges.length === 0) {
+        if (a.stars >= 5) a.badges.push("⭐ " + a.tier + " Tier");
+        else if (a.stars >= 4) a.badges.push("🎯 " + a.tier);
+        if (a.tenure === "New Hire") a.badges.push("🌱 New Hire");
+      }
+    });
+
+    // ========== STEP 7: Save & replace AGENTS ==========
+    localStorage.setItem("ptl_uploadedData", JSON.stringify(parsedAgents));
+    Object.keys(AGENTS).forEach(k => delete AGENTS[k]);
+    Object.assign(AGENTS, parsedAgents);
+    renderAgentSelector();
+    const firstKey = Object.keys(parsedAgents)[0];
+    if (firstKey) {
+      document.getElementById("agentSelector").value = firstKey;
+      renderAgent(firstKey);
+    }
+    const footerPeriod = document.querySelector(".footer em");
+    if (footerPeriod && firstKey) {
+      footerPeriod.textContent = "Período: " + parsedAgents[firstKey].month;
+    }
+    document.getElementById("demoBanner").classList.add("hidden");
+    showStatus("success", `Listo! Cargue ${Object.keys(parsedAgents).length} agentes de ${currentMonth}. Cerrando...`);
+    setTimeout(closeUploadModal, 1500);
+  } catch (err) {
+    console.error(err);
+    showStatus("error", "Error leyendo el archivo: " + err.message);
+  }
+}
+
+function pct(val) {
+  if (val === null || val === undefined) return 0;
+  return val <= 1 ? val * 100 : val;
+}
+
+function computeBonus(a) {
+  const table = {
+    "Agent":      { Platinum: 100, Golden: 85, Bronze: 70, Unsatisfactory: 0 },
+    "Agent NH":   { Platinum: 100, Golden: 85, Bronze: 70, Unsatisfactory: 0 },
+    "SME":        { Platinum: 200, Golden: 140, Bronze: 0, Unsatisfactory: 0 },
+    "TL":         { Platinum: 300, Golden: 200, Bronze: 0, Unsatisfactory: 0 },
+    "Supervisor": { Platinum: 400, Golden: 400, Bronze: 400, Unsatisfactory: 400 }
+  };
+  const cat = a.category || "Agent";
+  const tier = a.tier || "Unsatisfactory";
+  const baseAmount = (table[cat] || table["Agent"])[tier] || 0;
+  const qualifies = a.qualifiesForBonus === true;
+  a.fixedBonus = { eligible: true, amount: 12, reason: "Todos reciben +$12 de eficiencia siempre." };
+  a.performanceBonus = qualifies
+    ? { eligible: true, amount: baseAmount, reason: `Tier ${tier} - Performance Bonus de $${baseAmount}.` }
+    : { eligible: false, amount: 0, baseAmount: baseAmount, reason: a.bonusReason || "Descalificado" };
+  a.totalUSD = (qualifies ? baseAmount : 0) + 12;
+  a.totalCRC = a.totalUSD * 497;
+}
+
+function clearData() {
+  if (!confirm("¿Seguro que querés borrar la data cargada y volver a demo?")) return;
+  localStorage.removeItem("ptl_uploadedData");
+  localStorage.removeItem("ptl_bannerDismissed");
+  location.reload();
+}
+
+function loadStoredData() {
+  const stored = localStorage.getItem("ptl_uploadedData");
+  if (!stored) return false;
+  try {
+    const data = JSON.parse(stored);
+    // Preserve Team Tami demo agents (they're not in the CR data source)
+    const tamiAgents = {};
+    Object.keys(AGENTS).forEach(k => {
+      if (k.startsWith("tami_")) tamiAgents[k] = AGENTS[k];
+      delete AGENTS[k];
+    });
+    Object.assign(AGENTS, data, tamiAgents);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+// ========== PUBLISHED DATA (Opción A - shared via repo) ==========
+async function loadPublishedData() {
+  try {
+    const res = await fetch("data.json?v=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) return false;
+    const data = await res.json();
+    if (!data || typeof data !== "object" || Object.keys(data).length === 0) return false;
+    // Preserve Team Tami demo agents (they're not in the CR data source)
+    const tamiAgents = {};
+    Object.keys(AGENTS).forEach(k => {
+      if (k.startsWith("tami_")) tamiAgents[k] = AGENTS[k];
+      delete AGENTS[k];
+    });
+    Object.assign(AGENTS, data, tamiAgents);
+    console.log("[Data] Loaded published data.json:", Object.keys(data).length, "agentes CR + Tampa demo");
+    return true;
+  } catch (e) {
+    console.log("[Data] No published data.json found:", e.message);
+    return false;
+  }
+}
+
+function downloadDataJSON() {
+  const dataStr = JSON.stringify(AGENTS, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "data.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showStatus("success", "data.json descargado. Súbelo al repo (mismo folder que index.html) y commit para publicar al equipo.");
+}
+
+// Show/hide download button based on TL mode + having data loaded
+function updateDownloadBtn() {
+  const btn = document.getElementById("downloadDataBtn");
+  if (!btn) return;
+  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
+  const hasData = Object.keys(AGENTS).length > 4; // more than demo agents
+  btn.style.display = (isTLMode && hasData) ? "" : "none";
+}
+// ========== TL MODE ==========
+const TL_PASSWORD = "EHCC2026";
+function openTLPasswordModal() {
+  document.getElementById("tlPasswordModal").classList.add("visible");
+  const input = document.getElementById("tlPasswordInput");
+  input.value = "";
+  setTimeout(() => input.focus(), 100);
+  const status = document.getElementById("tlPasswordStatus");
+  status.className = "modal-status";
+  status.innerHTML = "";
+}
+function closeTLPasswordModal() {
+  document.getElementById("tlPasswordModal").classList.remove("visible");
+}
+function checkTLPassword() {
+  const input = document.getElementById("tlPasswordInput").value;
+  const status = document.getElementById("tlPasswordStatus");
+  if (input === TL_PASSWORD) {
+    localStorage.setItem("ptl_tlMode", "true");
+    status.className = "modal-status visible success";
+    status.innerHTML = "✅ <span>Acceso concedido. Activando Modo TL...</span>";
+    setTimeout(() => {
+      closeTLPasswordModal();
+      updateTLModeUI();
+      const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0];
+      renderAgent(savedAgent);
+    }, 800);
+  } else {
+    status.className = "modal-status visible error";
+    status.innerHTML = "❌ <span>Código incorrecto. Volvé a intentarlo.</span>";
+    document.getElementById("tlPasswordInput").value = "";
+  }
+}
+function toggleTLMode() {
+  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
+  if (isTLMode) exitTLMode();
+  else openTLPasswordModal();
+}
+function exitTLMode() {
+  if (!confirm("¿Salir del Modo TL? Vas a volver a la vista pública sin montos.")) return;
+  localStorage.removeItem("ptl_tlMode");
+  updateTLModeUI();
+  const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0];
+  renderAgent(savedAgent);
+}
+function updateTLModeUI() {
+  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
+  const btn = document.getElementById("tlModeBtn");
+  const banner = document.getElementById("tlModeBanner");
+  if (isTLMode) {
+    if (btn) {
+      btn.classList.add("active");
+      btn.innerHTML = "Modo TL";
+      btn.title = "Salir del Modo TL";
+    }
+    if (banner) banner.classList.add("visible");
+  } else {
+    if (btn) {
+      btn.classList.remove("active");
+      btn.innerHTML = "🔒 Modo TL";
+      btn.title = "Activar Modo Team Lead";
+    }
+    if (banner) banner.classList.remove("visible");
+  }
+  updateDownloadBtn();
+}
+document.getElementById("tlPasswordModal").addEventListener("click", (e) => {
+  if (e.target.id === "tlPasswordModal") closeTLPasswordModal();
+});
+
+// ========== INIT ==========
+(async function initApp() {
+  // Fallback chain: localStorage (own upload) > data.json (published) > demo AGENTS
+  const hasLocal = loadStoredData();
+  if (!hasLocal) {
+    const hasPublished = await loadPublishedData();
+    if (hasPublished) {
+      // Hide demo banner because we have real published data
+      const banner = document.getElementById("demoBanner");
+      if (banner) banner.classList.add("hidden");
+    }
+  }
+  renderAgentSelector();
+  initTheme();
+  checkBanner();
+  updateTLModeUI();
+  updateDownloadBtn();
+
+  const savedAgent = localStorage.getItem("ptl_selectedAgent") || Object.keys(AGENTS)[0] || "ingrid";
+  const actualAgent = AGENTS[savedAgent] ? savedAgent : Object.keys(AGENTS)[0];
+  if (actualAgent) {
+    document.getElementById("agentSelector").value = actualAgent;
+    renderAgent(actualAgent);
+  }
+
+  // Update footer with current month if data loaded
+  const footerPeriod = document.querySelector(".footer em");
+  if (footerPeriod && actualAgent && AGENTS[actualAgent]) {
+    footerPeriod.textContent = "Período: " + (AGENTS[actualAgent].month || "Junio 2026");
+  }
+})();
+// ========== TEAM VIEW ==========
+let currentView = "agent";
+let currentTeamTab = "health";
+let currentTeamFilter = "all";
+
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll(".view-toggle-btn").forEach(b =>
+    b.classList.toggle("active", b.dataset.view === view)
+  );
+  const agentCardIds = ["heroCard", "bonusGrid", "metricsGrid", "tipsList", "evoInsights"];
+  const showAgent = view === "agent";
+  agentCardIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const card = el.closest(".card");
+      if (card) card.style.display = showAgent ? "" : "none";
+    }
+  });
+  const selector = document.getElementById("agentSelector");
+  if (selector) selector.style.display = showAgent ? "" : "none";
+  const teamView = document.getElementById("teamView");
+  if (teamView) teamView.classList.toggle("visible", !showAgent);
+  if (!showAgent) renderTeamView();
+}
+
+function switchTeamTab(tab) {
+  currentTeamTab = tab;
+  document.querySelectorAll(".team-tab").forEach(t =>
+    t.classList.toggle("active", t.dataset.tab === tab)
+  );
+  document.getElementById("teamHealthTab").style.display = tab === "health" ? "" : "none";
+  document.getElementById("teamMetricsTab").style.display = tab === "metrics" ? "" : "none";
+  document.getElementById("teamScorecardTab").style.display = tab === "scorecard" ? "" : "none";
+  document.getElementById("teamTopPerformersTab").style.display = tab === "topperformers" ? "" : "none";
+  renderTeamView();
+}
+
+function getFilteredTeamAgents() {
+  const all = Object.values(AGENTS);
+  if (currentTeamFilter === "all") return all;
+  return all.filter(a => {
+    const team = String(a.team || "").replace(/^Team\s+/i, "").trim();
+    return team === currentTeamFilter;
+  });
+}
+function isTampaView() {
+  return currentTeamFilter === "Tami";
+}
+
+function renderTeamFilter() {
+  const teams = new Set();
+  Object.values(AGENTS).forEach(a => {
+    const t = String(a.team || "").replace(/^Team\s+/i, "").trim();
+    if (t) teams.add(t);
+  });
+const teamOrder = ["Ange", "Shary", "Geo", "Tami"];
+const sortedTeams = teamOrder.filter(t => teams.has(t));
+const teamIcons = { Ange: "🟣", Shary: "🟢", Geo: "🟠", Tami: "🔵" };
+  const teamList = ["all", ...sortedTeams];
+  const container = document.getElementById("teamFilter");
+  container.innerHTML = teamList.map(t => {
+    const label = t === "all" ? "🌐 Todos" : `${teamIcons[t] || "👥"} Team ${t}`;
+    return `<button class="team-filter-pill ${t === currentTeamFilter ? 'active' : ''}"
+              onclick="setTeamFilter('${t}')">${label}</button>`;
+  }).join("");
+}
+
+function setTeamFilter(t) {
+  currentTeamFilter = t;
+  renderTeamFilter();
+  renderTeamView();
+}
+
+function renderTeamView() {
+  renderTeamFilter();
+  const en = isTampaView();
+  // Update tabs labels
+  const tabs = document.querySelectorAll(".team-tab");
+  tabs.forEach(t => {
+    if (t.dataset.tab === "health") t.innerHTML = en ? "🏥 Team Health" : "🏥 Team Health";
+    else if (t.dataset.tab === "metrics") t.innerHTML = en ? "📊 Metrics" : "📊 Métricas";
+    else if (t.dataset.tab === "scorecard") t.innerHTML = en ? "🏆 Scorecard" : "🏆 Scorecard";
+  });
+  // Update card titles inside team view
+  const teamViewEl = document.getElementById("teamView");
+  if (teamViewEl) {
+    teamViewEl.querySelectorAll(".card-title").forEach(el => {
+      const txt = el.textContent.trim();
+      if (txt.includes("Overview del Equipo") || txt.includes("Team Overview"))
+        el.textContent = en ? "🏥 Team Overview" : "🏥 Overview del Equipo";
+      else if (txt.includes("Distribución por Tier") || txt.includes("Tier Distribution"))
+        el.textContent = en ? "🏆 Tier Distribution" : "🏆 Distribución por Tier";
+      else if (txt.includes("Focus Areas"))
+        el.textContent = "🎯 Focus Areas";
+      else if (txt.includes("Métricas del Equipo") || txt.includes("Team Metrics"))
+        el.textContent = en ? "📊 Team Metrics" : "📊 Métricas del Equipo";
+      else if (txt.includes("Scorecard del Equipo") || txt.includes("Team Scorecard"))
+        el.textContent = en ? "🏆 Team Scorecard" : "🏆 Scorecard del Equipo";
+    });
+    teamViewEl.querySelectorAll(".card-subtitle").forEach(el => {
+      const txt = el.textContent.trim();
+      if (txt.includes("Métricas donde más agentes") || txt.includes("Metrics where most agents"))
+        el.textContent = en ? "Metrics where most agents are off target" : "Métricas donde más agentes están fuera de meta";
+      else if (txt.includes("Heat map"))
+        el.textContent = en ? "Heat map: green = on target, yellow = close, red = off" : "Heat map: verde = en meta, amarillo = cerca, rojo = fuera";
+      else if (txt.includes("Vista tipo Excel Master") || txt.includes("Excel Master view"))
+        el.textContent = en ? "Excel Master style view with all metrics and tiers" : "Vista tipo Excel Master con todas las métricas y tiers";
+    });
+  }
+    if (currentTeamTab === "health") renderTeamHealth();
+  else if (currentTeamTab === "metrics") renderTeamMetrics();
+  else if (currentTeamTab === "scorecard") renderTeamScorecard();
+  else if (currentTeamTab === "topperformers") renderTopPerformers();
+}
+
+function renderTeamHealth() {
+  const agents = getFilteredTeamAgents();
+  const total = agents.length;
+  const en = isTampaView();
+  if (total === 0) {
+    document.getElementById("teamKpiRow").innerHTML = `<div style='grid-column:1/-1;text-align:center;color:var(--text-muted);padding:20px;'>${en ? "No agents in this team" : "Sin agentes en este equipo"}</div>`;
+    document.getElementById("tierDistGrid").innerHTML = "";
+    document.getElementById("focusList").innerHTML = "";
+    return;
+  }
+  const avgScore = agents.reduce((s, a) => s + (a.finalScore || 0), 0) / total;
+  const eligibleCount = agents.filter(a => a.qualifiesForBonus).length;
+  const eligiblePct = (eligibleCount / total * 100).toFixed(0);
+  const platinumCount = agents.filter(a => a.tier === "Platinum").length;
+  const goldenCount = agents.filter(a => a.tier === "Golden").length;
+  const bronzeCount = agents.filter(a => a.tier === "Bronze").length;
+  const unsatCount = agents.filter(a => a.tier === "Unsatisfactory" || a.tier === "Critical" || a.tier === "Standard").length;
+  // Bonus KPI card only for non-Tampa views
+  const bonusKpi = en ? "" : `
+    <div class="team-kpi-card">
+      <div class="team-kpi-icon">💰</div>
+      <div class="team-kpi-label">Bono Elegible</div>
+      <div class="team-kpi-value">${eligiblePct}%</div>
+      <div class="team-kpi-sub">${eligibleCount} de ${total}</div>
+    </div>
+  `;
+  document.getElementById("teamKpiRow").innerHTML = `
+    <div class="team-kpi-card">
+      <div class="team-kpi-icon">👥</div>
+      <div class="team-kpi-label">${en ? "Agents" : "Agentes"}</div>
+      <div class="team-kpi-value">${total}</div>
+    </div>
+    <div class="team-kpi-card">
+      <div class="team-kpi-icon">📊</div>
+      <div class="team-kpi-label">${en ? "Average Score" : "Score Promedio"}</div>
+      <div class="team-kpi-value">${avgScore.toFixed(2)}%</div>
+    </div>
+    ${bonusKpi}
+    <div class="team-kpi-card">
+      <div class="team-kpi-icon">🏆</div>
+      <div class="team-kpi-label">${en ? "Top Tier" : "Top Tier"}</div>
+      <div class="team-kpi-value">${platinumCount + goldenCount}</div>
+      <div class="team-kpi-sub">Platinum + Golden</div>
+    </div>
+  `;
+  document.getElementById("tierDistGrid").innerHTML = `
+    <div class="tier-count-card platinum">
+      <div class="tier-count-icon">🏆</div>
+      <div class="tier-count-number">${platinumCount}</div>
+      <div class="tier-count-label">Platinum</div>
+    </div>
+    <div class="tier-count-card golden">
+      <div class="tier-count-icon">🥇</div>
+      <div class="tier-count-number">${goldenCount}</div>
+      <div class="tier-count-label">Golden</div>
+    </div>
+    <div class="tier-count-card bronze">
+      <div class="tier-count-icon">🥉</div>
+      <div class="tier-count-number">${bronzeCount}</div>
+      <div class="tier-count-label">Bronze</div>
+    </div>
+    <div class="tier-count-card unsat">
+      <div class="tier-count-icon">⚠️</div>
+      <div class="tier-count-number">${unsatCount}</div>
+      <div class="tier-count-label">${en ? "Standard" : "Unsat"}</div>
+    </div>
+  `;
+  const failCount = {};
+  agents.forEach(a => {
+    (a.metrics || []).forEach(m => {
+      const s = getMetricStatus(m);
+      if (s.class === "danger" || s.class === "warning") {
+        failCount[m.name] = failCount[m.name] || { danger: 0, warning: 0 };
+        failCount[m.name][s.class]++;
+      }
+    });
+  });
+  const focusList = Object.entries(failCount)
+    .map(([name, counts]) => ({ name, total: counts.danger + counts.warning, ...counts }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 5);
+  document.getElementById("focusList").innerHTML = focusList.length === 0
+    ? `<div style='color:var(--text-muted);text-align:center;padding:20px;font-size:12px;'>${en ? "The whole team is on target! 🎉" : "¡Todo el equipo está en meta! 🎉"}</div>`
+    : focusList.map(f => `
+        <div class="focus-item ${f.danger === 0 ? 'warning' : ''}">
+          <div>
+            <div class="focus-item-name">${f.name}</div>
+            <div class="focus-item-count">${f.danger} ${en ? "off" : "fuera"} · ${f.warning} ${en ? "close" : "cerca"}</div>
+          </div>
+          <div class="focus-item-badge">${f.total} ${en ? "of" : "de"} ${total}</div>
+        </div>
+      `).join("");
+}
+ let currentMetricSubtab = null;
+function renderTeamMetrics() {
+  const agents = getFilteredTeamAgents();
+  const container = document.getElementById("teamMetricsHeatmap");
+  const en = isTampaView();
+  if (agents.length === 0) {
+    container.innerHTML = `<div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>${en ? "No agents in this team" : "Sin agentes en este equipo"}</div>`;
+    return;
+  }
+  // Get all unique metrics available in this team
+  const metricSet = new Set();
+  const metricSample = {};
+  agents.forEach(a => {
+    (a.metrics || []).forEach(m => {
+      metricSet.add(m.name);
+      if (!metricSample[m.name]) metricSample[m.name] = m;
+    });
+  });
+  const metricList = Array.from(metricSet);
+  if (metricList.length === 0) {
+    container.innerHTML = `<div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>${en ? "No metrics available" : "Sin métricas disponibles"}</div>`;
+    return;
+  }
+  // Reset if current is not in list (fix bug when switching teams)
+  if (!currentMetricSubtab || !metricList.includes(currentMetricSubtab)) {
+    currentMetricSubtab = metricList[0];
+  }
+  const subtabsHTML = metricList.map(m => `
+    <button class="metric-subtab ${m === currentMetricSubtab ? 'active' : ''}"
+            onclick="setMetricSubtab('${m}')">${m}</button>
+  `).join("");
+  const selectedSample = metricSample[currentMetricSubtab];
+  if (!selectedSample) {
+    container.innerHTML = `<div class="metric-subtabs">${subtabsHTML}</div><div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>${en ? "No data for this metric" : "Sin datos para esta métrica"}</div>`;
+    return;
+  }
+  const goalFmt = selectedSample.format === "pct"
+    ? `${selectedSample.goalOp} ${selectedSample.goal}%`
+    : `${selectedSample.goalOp} ${selectedSample.goal}${selectedSample.unit || ""}`;
+  const agentValues = agents
+    .map(a => {
+      const m = (a.metrics || []).find(x => x.name === currentMetricSubtab);
+      if (!m) return null;
+      const status = getMetricStatusLang(m, en ? { site: "Tampa" } : null);
+      return { agent: a, metric: m, status };
+    })
+    .filter(x => x !== null);
+  if (agentValues.length === 0) {
+    container.innerHTML = `<div class="metric-subtabs">${subtabsHTML}</div><div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>${en ? "No data for this metric" : "Sin datos para esta métrica"}</div>`;
+    return;
+  }
+  const isLowerBetter = selectedSample.goalOp === "<=";
+  agentValues.sort((a, b) => {
+    if (isLowerBetter) return a.metric.value - b.metric.value;
+    return b.metric.value - a.metric.value;
+  });
+  const avg = agentValues.reduce((s, x) => s + x.metric.value, 0) / agentValues.length;
+  const avgFmt = selectedSample.format === "pct"
+    ? avg.toFixed(2) + "%"
+    : Math.round(avg) + (selectedSample.unit || "");
+  const avgStatus = getMetricStatus({ value: avg, goal: selectedSample.goal, goalOp: selectedSample.goalOp });
+  const successCount = agentValues.filter(x => x.status.class === "success").length;
+  const warningCount = agentValues.filter(x => x.status.class === "warning").length;
+  const dangerCount = agentValues.filter(x => x.status.class === "danger").length;
+  const rowsHTML = agentValues.map((x, idx) => {
+    const rank = idx + 1;
+    const rankMedal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `#${rank}`;
+    const valFmt = x.metric.format === "pct"
+      ? x.metric.value.toFixed(2) + "%"
+      : Math.round(x.metric.value) + (x.metric.unit || "");
+    const team = String(x.agent.team || "").replace(/^Team\s+/i, "");
+    return `
+      <div class="metric-agent-row ${x.status.class}">
+        <div class="metric-agent-rank">${rankMedal}</div>
+        <div>
+          <div class="metric-agent-name">${x.agent.name}</div>
+          <div class="metric-agent-name-sub">${team} · ${x.agent.category || "Agent"}</div>
+        </div>
+        <div class="metric-agent-value ${x.status.class}">${valFmt}</div>
+        <div class="metric-agent-status ${x.status.class}">${x.status.label}</div>
+      </div>
+    `;
+  }).join("");
+  container.innerHTML = `
+    <div class="metric-subtabs">${subtabsHTML}</div>
+    <div class="metric-header-card">
+      <div class="metric-header-title">📊 ${currentMetricSubtab}</div>
+      <div class="metric-header-goal">${en ? "Goal" : "Meta"}: ${goalFmt}</div>
+      <div class="metric-header-stats">
+        <span class="metric-header-stat avg">📊 ${en ? "Average" : "Promedio"}: <span class="${avgStatus.class}">${avgFmt}</span></span>
+        <span class="metric-header-stat success">✓ ${successCount} ${en ? "on target" : "en meta"}</span>
+        <span class="metric-header-stat warning">⚠ ${warningCount} ${en ? "close" : "cerca"}</span>
+        <span class="metric-header-stat danger">✗ ${dangerCount} ${en ? "off target" : "fuera"}</span>
+      </div>
+    </div>
+    <div class="metric-agent-list">${rowsHTML}</div>
+  `;
+}
+
+function setMetricSubtab(metricName) {
+  currentMetricSubtab = metricName;
+  renderTeamMetrics();
+}
+function renderTeamScorecard() {
+  const agents = getFilteredTeamAgents();
+  const table = document.getElementById("teamScorecardTable");
+  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
+  if (agents.length === 0) {
+    table.innerHTML = "<tr><td style='text-align:center;color:var(--text-muted);padding:20px;'>Sin agentes en este equipo</td></tr>";
+    return;
+  }
+  const metricNames = [];
+  agents.forEach(a => (a.metrics || []).forEach(m => {
+    if (!metricNames.includes(m.name)) metricNames.push(m.name);
+  }));
+  const sorted = [...agents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+    const header = `
+    <tr>
+      <th class="name-cell" style="text-align:left;">Agente</th>
+      <th>Score</th>
+      <th>Tier</th>
+      ${metricNames.map(n => `<th>${n}</th>`).join("")}
+      <th>Final %</th>
+      ${isTLMode ? `<th>1:1</th>` : ""}
+    </tr>
+  `;
+  const rows = sorted.map(a => {
+    const metricCells = metricNames.map(mn => {
+      const m = (a.metrics || []).find(x => x.name === mn);
+      if (!m) return `<td style="color:var(--text-muted);">—</td>`;
+      const s = getMetricStatus(m);
+      const val = m.format === "pct" ? m.value.toFixed(1) + "%" : Math.round(m.value) + (m.unit || "");
+      return `<td class="metric-cell ${s.class}">${val}</td>`;
+    }).join("");
+    const tierClass = (a.tier || "").toLowerCase();
+    const tierIcon = a.tier === "Platinum" ? "🏆" :
+                     a.tier === "Golden" ? "🥇" :
+                     a.tier === "Bronze" ? "🥉" :
+                     a.tier === "Critical" ? "🚨" : "⚠️";
+    const agentKey = Object.keys(AGENTS).find(k => AGENTS[k] === a) || a.associateId;
+    const oneOneCell = isTLMode
+      ? `<td><button class="oneone-btn" onclick="openOneOneModal('${agentKey}')" title="Abrir sesión 1:1">📝 1:1</button></td>`
+      : "";
+    const starRating = a.stars || 0;
+    const finalPct = (a.finalScore || 0).toFixed(2) + "%";
+    const finalPctColor = starRating >= 5 ? "var(--purple)" :
+                          starRating >= 4 ? "#eab308" :
+                          starRating >= 3 ? "#f97316" :
+                          "var(--danger)";
+    return `
+      <tr>
+      <td class="name-cell">${shortName(a.name)}</td>
+        <td style="font-weight:700; white-space:nowrap;">
+          <span style="font-size:14px;">⭐</span>
+          <span style="color:var(--text); font-size:12px; font-weight:800; margin-left:4px;">${starRating}/5</span>
+        </td>
+        <td><span class="tier-badge-mini ${tierClass}">${tierIcon} ${a.tier || "?"}</span></td>
+        ${metricCells}
+        <td style="font-weight:800; font-size:12px; color:${finalPctColor};">${finalPct}</td>
+        ${oneOneCell}
+      </tr>
+    `;
+  }).join("");
+  table.innerHTML = header + rows;
+}
+// ============ TOP PERFORMERS ============
+function getWeekOfMonth() {
+  const d = new Date();
+  const day = d.getDate();
+  return Math.min(Math.ceil(day / 7), 4);
+}
+
+const TIER_QUOTES = {
+  "Platinum": [
+    "La excelencia aquí no solo destaca: ilumina el camino de todo el equipo. ✨",
+    "Cada llamada es una obra maestra. Este equipo redefine lo que significa dar lo mejor. 🏆",
+    "Constancia + pasión = magia. Ustedes son la prueba viviente de que la excelencia es un estilo de vida. 💜",
+    "Ser Platinum no es un premio, es una promesa. Y ustedes la cumplen todos los días. 🌟"
+  ],
+  "Golden": [
+    "El oro se forja bajo presión, y ustedes brillan cuando más se necesita. ⚡",
+    "Cada logro cuenta, y ustedes están dejando huella con cada llamada. 🥇",
+    "La consistencia es el arte de los grandes. ¡Sigan así! 🎯",
+    "El próximo paso está al alcance. Ustedes tienen todo para llegar a Platinum. 🚀"
+  ],
+  "Bronze": [
+    "Cada gran historia empieza con un primer paso. Y ustedes ya lo dieron. 👣",
+    "El progreso no siempre se ve, pero siempre se siente. Sigan construyendo. 🏗️",
+    "El bronce es el reflejo de la determinación. Ustedes están en el camino correcto. 🥉",
+    "Un pequeño ajuste puede ser la diferencia entre bronze y golden. ¡Vamos por más! 💪"
+  ]
+};
+
+const TIER_STYLES = {
+  "Platinum": { icon: "🏆", label: "Platinum Tier", color: "#8b5cf6", bg: "#ede9fe", subtitle: "Excelencia con disciplina de entrega impecable." },
+  "Golden":   { icon: "🥇", label: "Golden Tier",   color: "#eab308", bg: "#fef9c3", subtitle: "Consistencia y resultados sólidos." },
+  "Bronze":   { icon: "🥉", label: "Bronze Tier",   color: "#f97316", bg: "#ffedd5", subtitle: "Crecimiento constante y gran potencial." }
+};
+// Nombre corto: "Apellido1, Nombre1" (más limpio en tablas)
+function shortName(fullName) {
+  if (!fullName) return "";
+  const parts = String(fullName).split(",");
+  if (parts.length < 2) return fullName;
+  const surnames = parts[0].trim().split(/\s+/);
+  const givenNames = parts[1].trim().split(/\s+/);
+  const firstSurname = surnames[0] || "";
+  const firstGiven = givenNames[0] || "";
+  return `${firstSurname}, ${firstGiven}`;
+}
+
+function renderTopStars(count) {
+  const filled = "⭐".repeat(count || 0);
+  const empty = "☆".repeat(5 - (count || 0));
+  return `<span style="letter-spacing:2px;">${filled}${empty}</span>`;
+}
+
+function renderTopPerformers() {
+  const container = document.getElementById("topPerformersContent");
+  if (!container) return;
+
+  // Filter: only Agent + Agent NH (excluir SME, TL, Supervisor)
+  const allAgents = getFilteredTeamAgents().filter(a => {
+    const cat = String(a.category || "Agent").toLowerCase();
+    return cat === "agent" || cat === "agent nh";
+  });
+
+  if (allAgents.length === 0) {
+    container.innerHTML = "<div style='text-align:center;padding:40px;color:var(--text-muted);'>Sin agentes disponibles</div>";
+    return;
+  }
+
+  const sorted = [...allAgents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+  const top3 = sorted.slice(0, 3);
+  const monthLabel = allAgents[0].month || "";
+  const week = getWeekOfMonth();
+
+  // === PODIUM top 3 (order: #2 left, #1 center, #3 right) ===
+  const podiumOrder = [top3[1], top3[0], top3[2]].filter(Boolean);
+  const podiumMeta = [
+    { rank: 2, color: "#94a3b8", medal: "🥈", bg: "linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%)" },
+    { rank: 1, color: "#f59e0b", medal: "👑", bg: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)" },
+    { rank: 3, color: "#c2410c", medal: "🥉", bg: "linear-gradient(135deg, #fdba74 0%, #c2410c 100%)" }
+  ];
+
+  const podiumHTML = `
+    <div class="tp-hero">
+      <div class="tp-hero-title">
+        <span class="tp-hero-crown">👑</span>
+        <h2>Champions of ${monthLabel}</h2>
+        <p>Top ${sorted.length} agents · Recognizing excellence 🌟</p>
+      </div>
+      <div class="tp-podium-v2">
+        ${podiumOrder.map((a, i) => {
+          if (!a) return "";
+          const m = podiumMeta[i];
+          const team = String(a.team || "").replace(/^Team\s+/i, "");
+          return `
+            <div class="tp-podium-card-v2 tp-rank-${m.rank}" style="animation-delay:${i * 0.15}s;">
+              <div class="tp-podium-medal" style="background:${m.bg};">${m.medal}</div>
+              <div class="tp-podium-rank" style="color:${m.color};">#${m.rank}</div>
+              <div class="tp-podium-name-v2">${a.name}</div>
+              <div class="tp-podium-badges">
+                <span class="tp-badge-pill">${a.lob || ""}</span>
+                <span class="tp-badge-pill team">${team}</span>
+              </div>
+              <div class="tp-podium-stars">${renderTopStars(a.stars)}</div>
+              <div class="tp-podium-score-v2" style="color:${m.color};">${(a.finalScore || 0).toFixed(2)}%</div>
+              <div class="tp-podium-score-label">FINAL SCORE</div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+
+  // === TIER TABS ===
+  const tiers = ["Platinum", "Golden", "Bronze"];
+  const tierCounts = {};
+  tiers.forEach(t => { tierCounts[t] = sorted.filter(a => a.tier === t).length; });
+
+  const tabsHTML = `
+    <div class="tp-tier-tabs">
+      ${tiers.map((t, i) => {
+        const style = TIER_STYLES[t];
+        return `
+          <button class="tp-tier-tab ${i === 0 ? 'active' : ''}" 
+                  data-tier="${t}" 
+                  onclick="setTopPerformersTier('${t}')"
+                  style="--tier-color:${style.color};">
+            <span class="tp-tier-tab-icon">${style.icon}</span>
+            <span class="tp-tier-tab-label">${style.label}</span>
+            <span class="tp-tier-tab-count">${tierCounts[t]}</span>
+          </button>
+        `;
+      }).join("")}
+    </div>
+    <div id="tpTierContent"></div>
+  `;
+
+  container.innerHTML = podiumHTML + tabsHTML;
+  renderTopPerformersTier("Platinum", sorted, week);
+}
+
+let currentTPTier = "Platinum";
+function setTopPerformersTier(tier) {
+  currentTPTier = tier;
+  document.querySelectorAll(".tp-tier-tab").forEach(t =>
+    t.classList.toggle("active", t.dataset.tier === tier)
+  );
+  const agents = getFilteredTeamAgents().filter(a => {
+    const cat = String(a.category || "Agent").toLowerCase();
+    return cat === "agent" || cat === "agent nh";
+  });
+  const sorted = [...agents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+  const week = getWeekOfMonth();
+  renderTopPerformersTier(tier, sorted, week);
+}
+
+function renderTopPerformersTier(tier, sorted, week) {
+  const box = document.getElementById("tpTierContent");
+  if (!box) return;
+  const tierAgents = sorted.filter(a => a.tier === tier);
+  const style = TIER_STYLES[tier];
+  const quote = TIER_QUOTES[tier][week - 1] || TIER_QUOTES[tier][0];
+
+  if (tierAgents.length === 0) {
+    box.innerHTML = `
+      <div class="tp-empty-tier">
+        <div style="font-size:48px;">${style.icon}</div>
+        <p>No hay agentes en ${style.label} este mes</p>
+      </div>
+    `;
+    return;
+  }
+
+  box.innerHTML = `
+    <div class="tp-tier-hero" style="background:linear-gradient(135deg, ${style.color}22 0%, transparent 100%); border-left:4px solid ${style.color};">
+      <div class="tp-tier-hero-content">
+        <div class="tp-tier-hero-icon" style="background:${style.color}; color:#fff;">${style.icon}</div>
+        <div>
+          <h3 style="color:${style.color};">${style.label}</h3>
+          <p>${style.subtitle}</p>
+        </div>
+      </div>
+      <div class="tp-tier-quote" style="border-left:3px solid ${style.color};">
+        <span class="tp-quote-mark">"</span>
+        ${quote}
+      </div>
+    </div>
+    <div class="tp-agents-grid-v2">
+      ${tierAgents.map((a, i) => {
+        const team = String(a.team || "").replace(/^Team\s+/i, "");
+        return `
+          <div class="tp-agent-card-v2" style="animation-delay:${Math.min(i * 0.05, 0.6)}s;">
+            <div class="tp-agent-rank-badge" style="background:${style.color};">#${i + 1}</div>
+            <div class="tp-agent-body">
+              <div class="tp-agent-name-v2">${a.name}</div>
+              <div class="tp-agent-tags">
+                <span class="tp-tag">${a.lob || ""}</span>
+                <span class="tp-tag team">${team}</span>
+              </div>
+              <div class="tp-agent-stars-v2">${renderTopStars(a.stars)}</div>
+            </div>
+            <div class="tp-agent-metrics">
+              <div class="tp-agent-score-v2" style="color:${style.color};">${(a.finalScore || 0).toFixed(2)}%</div>
+              <div class="tp-progress-bar-v2">
+                <div class="tp-progress-fill-v2" style="width:${Math.min(a.finalScore || 0, 100)}%; background:linear-gradient(90deg, ${style.color}, ${style.color}dd);"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+// View toggle is always visible (public + TL) - metrics tab is public data
+const _origUpdateTLModeUI_teamview = updateTLModeUI;
+updateTLModeUI = function() {
+  _origUpdateTLModeUI_teamview();
+  const toggle = document.getElementById("viewToggle");
+  if (toggle) toggle.classList.add("visible");
+};
+
+// Show toggle immediately on load (regardless of TL mode)
+setTimeout(() => {
+  const toggle = document.getElementById("viewToggle");
+  if (toggle) toggle.classList.add("visible");
+}, 100);
+// ========== ONE-ON-ONE MODAL ==========
+let currentOneOneAgentId = null;
+let currentOneOneRecordId = null;
+
+function getOneOneStorage() {
+  try {
+    const raw = localStorage.getItem("ptl_oneOnOne");
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    console.warn("[1:1] Error leyendo localStorage:", e);
+    return {};
+  }
+}
+
+function saveOneOneStorage(data) {
+  localStorage.setItem("ptl_oneOnOne", JSON.stringify(data));
+}
+
+function escapeHtml(str) {
+  return String(str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function getOneOneAgentKey(agent) {
+  if (!agent) return null;
+
+  // Si AGENTS ya usa associateId como key, usarlo directo
+  if (agent.associateId && AGENTS[agent.associateId]) return agent.associateId;
+
+  // Si no, buscar por associateId dentro del objeto
+  const matchById = Object.keys(AGENTS).find(k =>
+    String(AGENTS[k].associateId || "") === String(agent.associateId || "")
+  );
+  if (matchById) return matchById;
+
+  // Fallback por nombre
+  const matchByName = Object.keys(AGENTS).find(k =>
+    String(AGENTS[k].name || "") === String(agent.name || "")
+  );
+  if (matchByName) return matchByName;
+
+  return null;
+}
+
+function openOneOneModal(agentKey) {
+  const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
+  if (!isTLMode) {
+    alert("🔒 Necesitás activar Modo TL para acceder a las sesiones 1:1.");
+    return;
+  }
+  const agent = AGENTS[agentKey];
+  if (!agent) return;
+
+  currentOneOneAgentId = agentKey;
+  currentOneOneRecordId = null;
+
+  document.getElementById("oneOneAgentName").textContent = agent.name || "—";
+
+  const meta = [];
+  if (agent.team) meta.push(`<span>👥 ${escapeHtml(agent.team)}</span>`);
+  if (agent.lob) meta.push(`<span>🏢 ${escapeHtml(agent.lob)}</span>`);
+  if (agent.category) meta.push(`<span>📌 ${escapeHtml(agent.category)}</span>`);
+  if (agent.tier) meta.push(`<span>🏅 ${escapeHtml(agent.tier)}</span>`);
+  if (agent.finalScore !== undefined) meta.push(`<span>📊 ${(agent.finalScore || 0).toFixed(2)}%</span>`);
+  if (agent.month) meta.push(`<span>🗓️ ${escapeHtml(agent.month)}</span>`);
+
+  document.getElementById("oneOneAgentMeta").innerHTML = meta.join("");
+
+  const today = new Date().toISOString().split("T")[0];
+
+  document.getElementById("oneOneDate").value = today;
+  document.getElementById("oneOneNextDate").value = "";
+  document.getElementById("oneOneStrengths").value = "";
+  document.getElementById("oneOneOpportunities").value = "";
+  document.getElementById("oneOneNotes").value = "";
+  document.getElementById("oneOneAgentComments").value = "";
+
+  renderOneOneMetrics(agent);
+
+  document.getElementById("oneOneActionsList").innerHTML = "";
+  addOneOneAction();
+
+  renderOneOneHistory(agentKey);
+
+  document.getElementById("oneOneDeleteBtn").style.display = "none";
+  document.getElementById("oneOneStatus").className = "modal-status";
+  document.getElementById("oneOneStatus").innerHTML = "";
+
+  document.getElementById("oneOneModal").classList.add("visible");
+}
+
+function closeOneOneModal() {
+  document.getElementById("oneOneModal").classList.remove("visible");
+  currentOneOneAgentId = null;
+  currentOneOneRecordId = null;
+}
+
+function renderOneOneMetrics(agent) {
+  const container = document.getElementById("oneOneMetricsMini");
+  const metrics = agent.metrics || [];
+
+  if (metrics.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column:1/-1;color:var(--text-muted);font-size:11px;text-align:center;">
+        Sin métricas disponibles
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = metrics.map(m => {
+    const status = getMetricStatus(m);
+    const val = m.format === "pct"
+      ? m.value.toFixed(1) + "%"
+      : Math.round(m.value) + (m.unit || "");
+
+    return `
+      <div class="oneone-metric-mini ${status.class}">
+        <div class="oneone-metric-mini-name">${escapeHtml(m.name)}</div>
+        <div class="oneone-metric-mini-value">${escapeHtml(val)}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function addOneOneAction(text = "", done = false) {
+  const list = document.getElementById("oneOneActionsList");
+  const div = document.createElement("div");
+  div.className = "oneone-action-item";
+
+  div.innerHTML = `
+    <input type="checkbox" ${done ? "checked" : ""} onchange="toggleOneOneActionDone(this)">
+    <input type="text"
+      placeholder="Ej: Revisar 3 calls de QA"
+      value="${escapeHtml(text)}"
+      class="${done ? "done" : ""}">
+    <button class="oneone-action-remove" onclick="this.parentElement.remove()" title="Eliminar">✕</button>
+  `;
+
+  list.appendChild(div);
+}
+
+function toggleOneOneActionDone(checkbox) {
+  const textInput = checkbox.parentElement.querySelector('input[type="text"]');
+  if (!textInput) return;
+
+  if (checkbox.checked) textInput.classList.add("done");
+  else textInput.classList.remove("done");
+}
+
+function collectOneOneActions() {
+  const items = document.querySelectorAll("#oneOneActionsList .oneone-action-item");
+  const actions = [];
+
+  items.forEach(item => {
+    const checkbox = item.querySelector('input[type="checkbox"]');
+    const textInput = item.querySelector('input[type="text"]');
+    const text = textInput ? textInput.value.trim() : "";
+
+    if (text) {
+      actions.push({
+        text,
+        done: checkbox ? checkbox.checked : false
+      });
+    }
+  });
+
+  return actions;
+}
+
+function buildOneOneRecord() {
+  if (!currentOneOneAgentId) return null;
+
+  const agent = AGENTS[currentOneOneAgentId];
+  if (!agent) return null;
+
+  return {
+    id: currentOneOneRecordId || ("oo_" + Date.now()),
+    agentId: currentOneOneAgentId,
+    associateId: agent.associateId || currentOneOneAgentId,
+    agentName: agent.name || "",
+    team: agent.team || "",
+    lob: agent.lob || "",
+    category: agent.category || "",
+    tier: agent.tier || "",
+    finalScore: agent.finalScore || 0,
+    month: agent.month || "",
+    status: "draft",
+    date: document.getElementById("oneOneDate").value,
+    nextDate: document.getElementById("oneOneNextDate").value,
+    strengths: document.getElementById("oneOneStrengths").value,
+    opportunities: document.getElementById("oneOneOpportunities").value,
+    notes: document.getElementById("oneOneNotes").value,
+    agentComments: document.getElementById("oneOneAgentComments").value,
+    actions: collectOneOneActions(),
+    savedAt: new Date().toISOString()
+  };
+}
+
+function saveOneOne() {
+  const record = buildOneOneRecord();
+  if (!record) return;
+
+  const store = getOneOneStorage();
+  store[currentOneOneAgentId] = store[currentOneOneAgentId] || [];
+
+  const existingIdx = store[currentOneOneAgentId].findIndex(r => r.id === record.id);
+
+  if (existingIdx >= 0) {
+    store[currentOneOneAgentId][existingIdx] = record;
+  } else {
+    store[currentOneOneAgentId].unshift(record);
+  }
+
+  saveOneOneStorage(store);
+  currentOneOneRecordId = record.id;
+
+  renderOneOneHistory(currentOneOneAgentId);
+  document.getElementById("oneOneDeleteBtn").style.display = "";
+
+  const status = document.getElementById("oneOneStatus");
+  status.className = "modal-status visible success";
+  status.innerHTML = "✅ <span>1:1 guardado correctamente en esta máquina</span>";
+
+  setTimeout(() => {
+    status.className = "modal-status";
+    status.innerHTML = "";
+  }, 2500);
+}
+
+function loadOneOneRecord(agentKey, recordId) {
+  const store = getOneOneStorage();
+  const records = store[agentKey] || [];
+  const record = records.find(r => r.id === recordId);
+
+  if (!record) return;
+
+  currentOneOneAgentId = agentKey;
+  currentOneOneRecordId = recordId;
+
+  document.getElementById("oneOneDate").value = record.date || "";
+  document.getElementById("oneOneNextDate").value = record.nextDate || "";
+  document.getElementById("oneOneStrengths").value = record.strengths || "";
+  document.getElementById("oneOneOpportunities").value = record.opportunities || "";
+  document.getElementById("oneOneNotes").value = record.notes || "";
+  document.getElementById("oneOneAgentComments").value = record.agentComments || "";
+
+  const actionsList = document.getElementById("oneOneActionsList");
+  actionsList.innerHTML = "";
+
+  (record.actions || []).forEach(a => addOneOneAction(a.text, a.done));
+
+  if (!record.actions || record.actions.length === 0) {
+    addOneOneAction();
+  }
+
+  document.getElementById("oneOneDeleteBtn").style.display = "";
+
+  const status = document.getElementById("oneOneStatus");
+  status.className = "modal-status visible success";
+  status.innerHTML = "📂 <span>1:1 cargado para edición</span>";
+
+  setTimeout(() => {
+    status.className = "modal-status";
+    status.innerHTML = "";
+  }, 2000);
+}
+
+function deleteCurrentOneOne() {
+  if (!currentOneOneAgentId || !currentOneOneRecordId) return;
+
+  if (!confirm("¿Eliminar este 1:1? No se puede deshacer.")) return;
+
+  const store = getOneOneStorage();
+  store[currentOneOneAgentId] = (store[currentOneOneAgentId] || [])
+    .filter(r => r.id !== currentOneOneRecordId);
+
+  saveOneOneStorage(store);
+
+  currentOneOneRecordId = null;
+  document.getElementById("oneOneDeleteBtn").style.display = "none";
+
+  document.getElementById("oneOneDate").value = new Date().toISOString().split("T")[0];
+  document.getElementById("oneOneNextDate").value = "";
+  document.getElementById("oneOneStrengths").value = "";
+  document.getElementById("oneOneOpportunities").value = "";
+  document.getElementById("oneOneNotes").value = "";
+  document.getElementById("oneOneAgentComments").value = "";
+  document.getElementById("oneOneActionsList").innerHTML = "";
+  addOneOneAction();
+
+  renderOneOneHistory(currentOneOneAgentId);
+
+  const status = document.getElementById("oneOneStatus");
+  status.className = "modal-status visible success";
+  status.innerHTML = "🗑️ <span>1:1 eliminado</span>";
+
+  setTimeout(() => {
+    status.className = "modal-status";
+    status.innerHTML = "";
+  }, 2000);
+}
+
+function deleteOneOneById(agentKey, recordId, event) {
+  if (event) event.stopPropagation();
+
+  if (!confirm("¿Eliminar este 1:1?")) return;
+
+  const store = getOneOneStorage();
+  store[agentKey] = (store[agentKey] || []).filter(r => r.id !== recordId);
+  saveOneOneStorage(store);
+
+  renderOneOneHistory(agentKey);
+
+  if (currentOneOneRecordId === recordId) {
+    currentOneOneRecordId = null;
+    document.getElementById("oneOneDeleteBtn").style.display = "none";
+  }
+}
+
+function renderOneOneHistory(agentKey) {
+  const container = document.getElementById("oneOneHistoryList");
+  const store = getOneOneStorage();
+
+  const records = (store[agentKey] || [])
+    .slice()
+    .sort((a, b) => {
+      const dateA = a.date || "";
+      const dateB = b.date || "";
+      return dateB.localeCompare(dateA);
+    });
+
+  if (records.length === 0) {
+    container.innerHTML = `<div class="oneone-empty-history">Sin 1:1s previos guardados</div>`;
+    return;
+  }
+
+  container.innerHTML = records.slice(0, 5).map(r => {
+    const previewRaw = r.notes || r.opportunities || r.strengths || r.agentComments || "Sin notas";
+    const preview = previewRaw.substring(0, 100);
+    const doneCount = (r.actions || []).filter(a => a.done).length;
+    const totalActions = (r.actions || []).length;
+
+    return `
+      <div class="oneone-history-item">
+        <div class="oneone-history-header">
+          <span>📅 ${escapeHtml(r.date || "Sin fecha")} ${totalActions > 0 ? `· ✅ ${doneCount}/${totalActions}` : ""}</span>
+          <div class="oneone-history-actions">
+            <button class="oneone-history-btn" onclick="loadOneOneRecord('${agentKey}', '${r.id}')" title="Abrir">📂</button>
+            <button class="oneone-history-btn delete" onclick="deleteOneOneById('${agentKey}', '${r.id}', event)" title="Eliminar">🗑️</button>
+          </div>
+        </div>
+        <div class="oneone-history-preview">${escapeHtml(preview)}${previewRaw.length > 100 ? "..." : ""}</div>
+      </div>
+    `;
+  }).join("");
+}
+function downloadOneOne() {
+  if (!currentOneOneAgentId) return;
+  const agent = AGENTS[currentOneOneAgentId];
+  if (!agent) return;
+
+  const date = document.getElementById("oneOneDate").value;
+  const nextDate = document.getElementById("oneOneNextDate").value;
+  const strengths = document.getElementById("oneOneStrengths").value.trim();
+  const opportunities = document.getElementById("oneOneOpportunities").value.trim();
+  const notes = document.getElementById("oneOneNotes").value.trim();
+  const agentComments = document.getElementById("oneOneAgentComments").value.trim();
+  const actions = collectOneOneActions();
+
+  const metricsHTML = (agent.metrics || []).map(m => {
+    const val = m.format === "pct" ? m.value.toFixed(1) + "%" : Math.round(m.value) + (m.unit || "");
+    const goalFmt = m.format === "pct" ? `${m.goalOp} ${m.goal}%` : `${m.goalOp} ${m.goal}${m.unit || ""}`;
+    return `<tr><td>${escapeHtml(m.name)}</td><td>${escapeHtml(val)}</td><td>${escapeHtml(goalFmt)}</td></tr>`;
+  }).join("");
+
+  const actionsHTML = actions.map(a =>
+    `<li style="margin-bottom:4px;">${a.done ? "☑" : "☐"} ${escapeHtml(a.text)}</li>`
+  ).join("");
+
+  const safeName = (agent.name || "agent").replace(/[^a-zA-Z0-9]+/g, "_");
+  const safeDate = (date || "sin_fecha").replace(/[^0-9\-]/g, "");
+  const fileName = `1on1_${safeName}_${safeDate}.html`;
+
+  const html = `<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<title>1:1 ${escapeHtml(agent.name || "")} · ${escapeHtml(date || "")}</title>
+<style>
+  body { font-family: 'Segoe UI', Arial, sans-serif; padding: 30px; color: #0f172a; max-width: 820px; margin: 0 auto; background: #fff; }
+  h1 { color: #3b82f6; margin: 0 0 4px; font-size: 26px; }
+  h2 { color: #8b5cf6; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-top: 24px; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+  h3 { margin: 0 0 12px; color: #0f172a; font-size: 20px; }
+  .meta { color: #64748b; font-size: 12px; margin-bottom: 16px; padding: 10px 12px; background: #f8fafc; border-radius: 8px; }
+  .meta span { display: inline-block; margin-right: 14px; margin-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+  th, td { border: 1px solid #e2e8f0; padding: 8px 12px; text-align: left; font-size: 13px; }
+  th { background: #f1f5f9; font-weight: 600; }
+  .box { background: #f8fafc; padding: 12px 14px; border-radius: 8px; border-left: 4px solid #3b82f6; margin: 6px 0; white-space: pre-wrap; font-size: 13px; line-height: 1.5; }
+  ul { padding-left: 22px; margin: 8px 0; font-size: 13px; }
+  .footer { margin-top: 40px; text-align: center; color: #94a3b8; font-size: 11px; border-top: 1px solid #e2e8f0; padding-top: 12px; }
+  .print-btn { background: #3b82f6; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; margin-bottom: 20px; font-size: 13px; font-weight: 600; }
+  @media print { body { padding: 15mm; } .noprint { display: none; } }
+</style></head><body>
+<button class="print-btn noprint" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+<h1>📝 Sesión 1:1</h1>
+<h3>${escapeHtml(agent.name || "")}</h3>
+<div class="meta">
+  <span>📅 <strong>Fecha:</strong> ${escapeHtml(date || "-")}</span>
+  <span>👥 ${escapeHtml(agent.team || "-")}</span>
+  <span>🏢 ${escapeHtml(agent.lob || "-")}</span>
+  <span>🏅 ${escapeHtml(agent.tier || "-")}</span>
+  <span>📊 ${(agent.finalScore || 0).toFixed(2)}%</span>
+  <span>🗓️ ${escapeHtml(agent.month || "-")}</span>
+</div>
+${metricsHTML ? `<h2>📊 Métricas del mes</h2>
+<table><tr><th>Métrica</th><th>Valor</th><th>Meta</th></tr>${metricsHTML}</table>` : ""}
+${strengths ? `<h2>🎯 Fortalezas</h2><div class="box">${escapeHtml(strengths)}</div>` : ""}
+${opportunities ? `<h2>⚠️ Áreas de oportunidad</h2><div class="box">${escapeHtml(opportunities)}</div>` : ""}
+${actionsHTML ? `<h2>✅ Action Items</h2><ul>${actionsHTML}</ul>` : ""}
+${notes ? `<h2>📝 Notas del TL</h2><div class="box">${escapeHtml(notes)}</div>` : ""}
+${agentComments ? `<h2>💬 Comentarios del agente</h2><div class="box">${escapeHtml(agentComments)}</div>` : ""}
+${nextDate ? `<h2>🗓️ Próximo 1:1</h2><div class="box">${escapeHtml(nextDate)}</div>` : ""}
+<div class="footer">Generado desde Performance Tracker Lite · Cognizant CR · ${new Date().toLocaleString('es-CR')}</div>
+</body></html>`;
+
+  const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+
+  const status = document.getElementById("oneOneStatus");
+  status.className = "modal-status visible success";
+  status.innerHTML = "📥 <span>1:1 descargado. Abrí el archivo y usá 'Imprimir → Guardar como PDF' si lo querés en PDF.</span>";
+  setTimeout(() => {
+    status.className = "modal-status";
+    status.innerHTML = "";
+  }, 3500);
+}
+function copyOneOneToClipboard() {
+  if (!currentOneOneAgentId) return;
+
+  const agent = AGENTS[currentOneOneAgentId];
+  if (!agent) return;
+
+  const date = document.getElementById("oneOneDate").value;
+  const nextDate = document.getElementById("oneOneNextDate").value;
+  const strengths = document.getElementById("oneOneStrengths").value.trim();
+  const opportunities = document.getElementById("oneOneOpportunities").value.trim();
+  const notes = document.getElementById("oneOneNotes").value.trim();
+  const agentComments = document.getElementById("oneOneAgentComments").value.trim();
+  const actions = collectOneOneActions();
+
+  let text = "";
+  text += `📝 1:1 - ${agent.name || ""}\n`;
+  text += `📅 Fecha: ${date || "Sin fecha"}\n`;
+  text += `👥 Equipo: ${agent.team || "-"}\n`;
+  text += `🏢 LOB: ${agent.lob || "-"}\n`;
+  text += `🏅 Tier: ${agent.tier || "-"}\n`;
+  text += `📊 Score: ${(agent.finalScore || 0).toFixed(2)}%\n\n`;
+
+  if (strengths) {
+    text += `🎯 FORTALEZAS\n${strengths}\n\n`;
+  }
+
+  if (opportunities) {
+    text += `⚠️ ÁREAS DE OPORTUNIDAD\n${opportunities}\n\n`;
+  }
+
+  if (actions.length > 0) {
+    text += `✅ ACTION ITEMS\n`;
+    actions.forEach(a => {
+      text += `${a.done ? "[x]" : "[ ]"} ${a.text}\n`;
+    });
+    text += "\n";
+  }
+
+  if (notes) {
+    text += `📝 NOTAS DEL TL\n${notes}\n\n`;
+  }
+
+  if (agentComments) {
+    text += `💬 COMENTARIOS DEL AGENTE\n${agentComments}\n\n`;
+  }
+
+  if (nextDate) {
+    text += `🗓️ Próximo 1:1: ${nextDate}\n`;
+  }
+
+  navigator.clipboard.writeText(text).then(() => {
+    const status = document.getElementById("oneOneStatus");
+    status.className = "modal-status visible success";
+    status.innerHTML = "📋 <span>Resumen copiado al portapapeles</span>";
+
+    setTimeout(() => {
+      status.className = "modal-status";
+      status.innerHTML = "";
+    }, 2500);
+  }).catch(() => {
+    const status = document.getElementById("oneOneStatus");
+    status.className = "modal-status visible error";
+    status.innerHTML = "❌ <span>No se pudo copiar. Revisá permisos del navegador.</span>";
+  });
+}
+
+const oneOneModalEl = document.getElementById("oneOneModal");
+if (oneOneModalEl) {
+  oneOneModalEl.addEventListener("click", (e) => {
+    if (e.target.id === "oneOneModal") closeOneOneModal();
+  });
+}
+// Re-render chart on window resize
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    const agentKey = document.getElementById("agentSelector").value;
+    if (AGENTS[agentKey]) renderEvoChart(AGENTS[agentKey], currentEvoMetric);
+  }, 200);
+});
+</script>
+</body>
+</html>
 
