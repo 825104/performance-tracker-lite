@@ -1285,7 +1285,14 @@
 .tp-empty-tier p { margin-top: 12px; }
 /* ===== SUPERVISOR DASHBOARD ===== */
 .supervisor-view { display: none; }
-.supervisor-view.visible { display: block; }
+.supervisor-view.visible {
+  display: block;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) { .supervisor-view.visible { padding: 0 12px; } }
 
 .sv-hero-header {
   display: flex; justify-content: space-between; align-items: flex-start;
@@ -1490,6 +1497,7 @@
   content: ''; position: absolute; inset: 0;
   background: var(--team-gradient); opacity: 0;
   transition: opacity 0.3s; pointer-events: none; border-radius: 16px;
+ z-index: 1;
 }
 .sv-team-card:hover {
   transform: translateY(-4px);
@@ -1570,6 +1578,7 @@
   display: flex; justify-content: space-between; align-items: center;
   padding: 8px 10px; background: var(--card-bg-soft);
   border-radius: 8px; font-size: 12px;
+  gap: 12px;
   border-left: 3px solid var(--success);
 }
 .sv-team-metric.warning { border-left-color: var(--warning); }
@@ -1589,6 +1598,9 @@
 .sv-team-metric.danger .sv-team-metric-value { color: var(--danger); }
 
 .sv-team-tl-btn {
+ position: relative;
+z-index: 5;
+background: var(--team-gradient); color: white;
   background: var(--team-gradient); color: white;
   border: none; padding: 10px 16px;
   border-radius: 10px; font-size: 12px; font-weight: 700;
@@ -2043,7 +2055,7 @@
       <div class="sv-quick-buttons">
         <button class="sv-quick-btn" onclick="svGoToTopPerformers()">🏆 Ver Top Performers</button>
         <button class="sv-quick-btn" onclick="svGoToAtRisk()">⚠️ Ver At Risk</button>
-        <button class="sv-quick-btn primary" onclick="showComingSoon('Exportar Resumen')">📥 Exportar Resumen</button>
+       <button class="sv-quick-btn primary" onclick="svExportSummary()">📥 Exportar Resumen</button>
       </div>
     </div>
   </div>
@@ -2167,6 +2179,103 @@
     </div>
   </div>
 </div>
+   function svExportSummary() {
+  const now = new Date();
+  const month = svCurrentMonth || "Julio 2026";
+  const year = now.getFullYear();
+  const dateStr = now.toLocaleDateString("es-CR");
+  const teams = ["Ange", "Shary", "Geo", "Tami"];
+
+  const teamsBlock = teams.map(k => {
+    const cfg = SV_TEAM_CONFIG[k];
+    const stats = svTeamStats(k);
+    if (!stats) return "";
+    const bonus = svTLBonus(k, stats);
+    const tier = svGetTierFromScore(stats.teamAvgStars);
+    const metricsRows = stats.metrics.map(m => {
+      const status = getMetricStatus(m);
+      const val = m.format === "pct" ? m.value.toFixed(2) + "%" : Math.round(m.value) + (m.unit || "");
+      const goalFmt = m.format === "pct" ? `${m.goalOp} ${m.goal}%` : `${m.goalOp} ${m.goal}${m.unit || ""}`;
+      const color = status.class === "success" ? "#22c55e" : status.class === "warning" ? "#f97316" : "#ef4444";
+      return `<tr><td>${m.name}</td><td style="text-align:right;color:${color};font-weight:700;">${val}</td><td style="text-align:right;color:#94a3b8;">${goalFmt}</td></tr>`;
+    }).join("");
+    const bonusLine = bonus.na ? "N/A (Tampa)" : `${tier} · $${bonus.total} (base $${bonus.finalBase} + eff $${bonus.eff})`;
+    return `
+      <div class="team-block" style="border-left:4px solid ${cfg.color1};page-break-inside:avoid;">
+        <h3 style="color:${cfg.color1};margin:0 0 8px;">${cfg.icon} ${cfg.name} <span style="font-size:11px;background:${cfg.color1};color:#fff;padding:2px 8px;border-radius:6px;margin-left:6px;">${cfg.lob}</span></h3>
+        <p style="margin:4px 0;font-size:12px;color:#64748b;"><strong>TL:</strong> ${cfg.tlName} · <strong>Avg Score:</strong> ${stats.avgScore.toFixed(2)}% · <strong>Rating:</strong> ${stats.minStars.toFixed(1)}–${stats.maxStars.toFixed(1)} · <strong>Bono TL:</strong> ${bonusLine}</p>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;margin-top:8px;">
+          <thead><tr style="background:#f1f5f9;"><th style="text-align:left;padding:6px;">Métrica</th><th style="text-align:right;padding:6px;">Valor</th><th style="text-align:right;padding:6px;">Meta</th></tr></thead>
+          <tbody>${metricsRows}</tbody>
+        </table>
+      </div>
+    `;
+  }).join("");
+
+  const allAgents = Object.values(AGENTS).filter(a => {
+    const cat = String(a.category || "").toLowerCase();
+    return cat === "agent" || cat === "agent nh" || cat === "sme";
+  });
+  const top5 = [...allAgents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0)).slice(0, 5);
+  const top5Rows = top5.map((a, i) => `<tr><td>#${i+1}</td><td>${a.name}</td><td>${a.category || "Agent"}</td><td>${a.team || ""}</td><td style="text-align:right;font-weight:700;color:#22c55e;">${(a.finalScore || 0).toFixed(2)}%</td><td>${a.stars || 0}⭐</td></tr>`).join("");
+
+  const total = allAgents.length;
+  const avgScore = allAgents.reduce((s, a) => s + (a.finalScore || 0), 0) / total;
+  const onTrack = allAgents.filter(a => (a.stars || 0) >= 4).length;
+  const atRisk = allAgents.filter(a => (a.stars || 0) <= 2).length;
+
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Supervisor Summary · ${month} ${year}</title>
+<style>
+body{font-family:'Segoe UI',Arial,sans-serif;padding:30px;max-width:920px;margin:0 auto;color:#0f172a;background:#fff;}
+h1{background:linear-gradient(135deg,#8b5cf6,#3b82f6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-size:26px;margin:0 0 4px;}
+.subtitle{color:#64748b;font-size:13px;margin-bottom:20px;}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+.kpi{padding:14px;border-radius:12px;background:#f8fafc;border-top:3px solid #3b82f6;}
+.kpi-label{font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:#94a3b8;font-weight:700;}
+.kpi-value{font-size:22px;font-weight:800;margin-top:4px;}
+.team-block{background:#fff;padding:14px 16px;border-radius:12px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+h2{color:#8b5cf6;border-bottom:2px solid #e2e8f0;padding-bottom:6px;margin:24px 0 12px;font-size:15px;text-transform:uppercase;letter-spacing:0.5px;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th,td{padding:8px;border-bottom:1px solid #e2e8f0;text-align:left;}
+th{background:#f1f5f9;font-weight:700;}
+.print-btn{background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;border:none;padding:12px 24px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;margin-bottom:20px;}
+.footer{margin-top:40px;text-align:center;color:#94a3b8;font-size:11px;border-top:1px solid #e2e8f0;padding-top:12px;}
+@media print{.noprint{display:none;}body{padding:15mm;}}
+</style></head><body>
+<button class="print-btn noprint" onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button>
+<h1>📊 Supervisor Dashboard Summary</h1>
+<div class="subtitle">Cross-team performance overview · ${month} ${year} · Generado: ${dateStr}</div>
+<h2>📈 KPIs Clave</h2>
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-label">Total Agentes</div><div class="kpi-value">${total}</div></div>
+  <div class="kpi"><div class="kpi-label">Promedio</div><div class="kpi-value" style="color:#22c55e;">${avgScore.toFixed(2)}%</div></div>
+  <div class="kpi"><div class="kpi-label">On Track / At Risk</div><div class="kpi-value">${onTrack} / ${atRisk}</div></div>
+  <div class="kpi"><div class="kpi-label">Período</div><div class="kpi-value" style="font-size:15px;">${month}</div></div>
+</div>
+<h2>👥 Snapshot by Team</h2>
+${teamsBlock}
+<h2>🏆 Top 5 Performers</h2>
+<table><thead><tr><th>#</th><th>Agente</th><th>Rol</th><th>Team</th><th style="text-align:right;">Score</th><th>Rating</th></tr></thead><tbody>${top5Rows}</tbody></table>
+<div class="footer">Performance Tracker Lite · Cognizant CR · Contact Center · ${dateStr}</div>
+</body></html>`;
+
+  const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `Supervisor_Summary_${month.replace(/\s/g,"_")}_${year}.html`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+
+  const toast = document.getElementById("svToast");
+  if (toast) {
+    toast.textContent = "📥 Resumen descargado — Abrí el archivo y usá Imprimir → Guardar como PDF";
+    toast.classList.add("visible");
+    setTimeout(() => toast.classList.remove("visible"), 3500);
+  }
+}
     <div class="oneone-section">
       <div class="oneone-section-title">📅 Fecha del 1:1</div>
       <input type="date" class="oneone-input" id="oneOneDate">
