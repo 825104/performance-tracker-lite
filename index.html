@@ -62,9 +62,11 @@
     --chart-grid: #334155;
     --chart-meta: #64748b;
   }
-  .container { max-width: 480px; margin: 0 auto; padding: 12px; }
-  @media (min-width: 768px) { .container { max-width: 720px; padding: 20px; } }
-  @media (min-width: 1024px) { .container { max-width: 960px; padding: 24px; } }
+.container { max-width: 480px; margin: 0 auto; padding: 12px; }
+@media (min-width: 768px) { .container { max-width: 720px; padding: 20px; } }
+@media (min-width: 1024px) { .container { max-width: 1100px; padding: 24px; } }
+@media (min-width: 1280px) { .container { max-width: 1300px; padding: 28px; } }
+@media (min-width: 1600px) { .container { max-width: 1500px; padding: 32px; } }
   .app-header {
     background: var(--card-bg); border-radius: 16px; padding: 16px;
     margin-bottom: 16px; box-shadow: var(--shadow);
@@ -395,7 +397,7 @@
     border-radius: 18px;
     padding: 20px;
     width: 100%;
-    max-width: 480px;
+    max-width: 560px;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
@@ -799,15 +801,28 @@
     display: flex; justify-content: space-between;
     font-size: 10px; color: var(--text-muted);
   }
-  .team-scroll-wrapper {
-    overflow-x: auto; -webkit-overflow-scrolling: touch;
-    border-radius: 12px;
-  }
-  .team-scorecard-table {
-    width: 100%; border-collapse: collapse;
-    background: var(--card-bg-soft); font-size: 11px;
-    min-width: 700px;
-  }
+.team-scroll-wrapper {
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  scrollbar-width: thin;
+}
+.team-scroll-wrapper::-webkit-scrollbar { height: 8px; }
+.team-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: var(--border); border-radius: 4px;
+}
+.team-scorecard-table {
+  width: 100%; border-collapse: collapse;
+  background: var(--card-bg-soft); font-size: 11px;
+  min-width: 900px;
+}
+@media (min-width: 1024px) {
+  .team-scorecard-table { min-width: 100%; font-size: 12px; }
+}
+@media (min-width: 1400px) {
+  .team-scorecard-table { font-size: 13px; }
+  .team-scorecard-table th { padding: 12px 10px; font-size: 11px; }
+  .team-scorecard-table td { padding: 10px 8px; }
+}
   .team-scorecard-table th {
     background: var(--card-bg); padding: 10px 8px;
     text-align: center; font-weight: 700; color: var(--text-soft);
@@ -819,10 +834,18 @@
     padding: 8px; border-bottom: 1px solid var(--border-soft);
     color: var(--text); text-align: center;
   }
-  .team-scorecard-table td.name-cell {
-    font-weight: 600; text-align: left; min-width: 140px;
-    position: sticky; left: 0; background: var(--card-bg-soft);
-  }
+.team-scorecard-table td.name-cell {
+  font-weight: 600; text-align: left; min-width: 160px;
+  position: sticky; left: 0;
+  background: var(--card-bg-soft);
+  z-index: 2;
+  box-shadow: 2px 0 4px -2px rgba(0,0,0,0.05);
+}
+.team-scorecard-table th:first-child {
+  position: sticky; left: 0; z-index: 3;
+  background: var(--card-bg);
+  box-shadow: 2px 0 4px -2px rgba(0,0,0,0.05);
+}
   .team-scorecard-table td.metric-cell {
     font-weight: 700;
   }
@@ -1286,29 +1309,6 @@
 /* ===== SUPERVISOR DASHBOARD ===== */
 .supervisor-view { display: none; }
 .supervisor-view.visible { display: block; }
-/* Container ancho para Supervisor Dashboard */
-body:has(.supervisor-view.visible) .container {
-  max-width: 1600px;
-  padding-left: 32px;
-  padding-right: 32px;
-}
-@media (min-width: 1700px) {
-  body:has(.supervisor-view.visible) .container {
-    max-width: 1720px;
-  }
-}
-@media (max-width: 1024px) {
-  body:has(.supervisor-view.visible) .container {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-@media (max-width: 640px) {
-  body:has(.supervisor-view.visible) .container {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-}
 
 /* Grid de 4 columnas para snapshot cuando hay espacio */
 @media (min-width: 1100px) {
@@ -1398,13 +1398,11 @@ body:has(.supervisor-view.visible) .container {
 .sv-method-note strong { color: var(--text); }
 
 .sv-kpi-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr);
+  display: grid; grid-template-columns: 1fr;
   gap: 12px; margin-top: 4px;
 }
-@media (min-width: 700px) {
-  .sv-kpi-grid { grid-template-columns: repeat(4, 1fr); }
-}
-.sv-kpi-card {
+@media (min-width: 600px) { .sv-kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .sv-kpi-grid { grid-template-columns: repeat(4, 1fr); } }
   background: var(--card-bg-soft); border-radius: 14px;
   padding: 16px 14px; border: 1px solid var(--border-soft);
   border-top: 3px solid var(--info);
@@ -1504,9 +1502,8 @@ body:has(.supervisor-view.visible) .container {
 .sv-teams-grid {
   display: grid; grid-template-columns: 1fr; gap: 14px;
 }
-@media (min-width: 800px) { .sv-teams-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1200px) { .sv-teams-grid { grid-template-columns: repeat(4, 1fr); } }
-
+@media (min-width: 700px) { .sv-teams-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .sv-teams-grid { grid-template-columns: repeat(4, 1fr); } }
 .sv-team-card {
   background: var(--card-bg); border-radius: 16px; padding: 18px;
   border: 1px solid var(--border-soft); position: relative; overflow: hidden;
@@ -1792,7 +1789,7 @@ background: var(--team-gradient); color: white;
 }
 
 /* ===== SPRINT 2 - TL CARD MODAL ===== */
-.tlcard-modal { max-width: 560px; }
+.tlcard-modal { max-width: 640px; }
 .tlcard-modal .modal-card {
   background: linear-gradient(180deg, var(--card-bg) 0%, #faf5ff 100%);
 }
