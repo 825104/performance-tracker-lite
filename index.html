@@ -64,9 +64,9 @@
   }
 .container { max-width: 480px; margin: 0 auto; padding: 12px; }
 @media (min-width: 768px) { .container { max-width: 720px; padding: 20px; } }
-@media (min-width: 1024px) { .container { max-width: 1100px; padding: 24px; } }
-@media (min-width: 1280px) { .container { max-width: 1300px; padding: 28px; } }
-@media (min-width: 1600px) { .container { max-width: 1500px; padding: 32px; } }
+@media (min-width: 1024px) { .container { max-width: 960px; padding: 24px; } }
+@media (min-width: 1280px) { .container { max-width: 1180px; padding: 28px; } }
+@media (min-width: 1600px) { .container { max-width: 1240px; padding: 32px; } }
   .app-header {
     background: var(--card-bg); border-radius: 16px; padding: 16px;
     margin-bottom: 16px; box-shadow: var(--shadow);
@@ -397,7 +397,7 @@
     border-radius: 18px;
     padding: 20px;
     width: 100%;
-    max-width: 560px;
+    max-width: 520px;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
@@ -1309,6 +1309,8 @@
 /* ===== SUPERVISOR DASHBOARD ===== */
 .supervisor-view { display: none; }
 .supervisor-view.visible { display: block; }
+.supervisor-view.visible .card { margin-bottom: 18px; }
+.supervisor-view.visible .card:last-child { margin-bottom: 0; }
 
 /* Grid de 4 columnas para snapshot cuando hay espacio */
 @media (min-width: 1100px) {
@@ -1403,12 +1405,17 @@
 }
 @media (min-width: 600px) { .sv-kpi-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 900px) { .sv-kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+.sv-kpi-card {
   background: var(--card-bg-soft); border-radius: 14px;
-  padding: 16px 14px; border: 1px solid var(--border-soft);
+  padding: 18px 16px; border: 1px solid var(--border-soft);
   border-top: 3px solid var(--info);
   position: relative; overflow: hidden;
   transition: transform 0.2s;
+  min-height: 110px;
+  display: flex; flex-direction: column;
 }
+.sv-kpi-header { margin-bottom: 14px !important; }
+.sv-kpi-value { margin-top: auto; }
 .sv-kpi-card:hover { transform: translateY(-2px); }
 .sv-kpi-card.color-blue    { border-top-color: var(--info); }
 .sv-kpi-card.color-green   { border-top-color: var(--success); }
@@ -1505,10 +1512,10 @@
 @media (min-width: 700px) { .sv-teams-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1100px) { .sv-teams-grid { grid-template-columns: repeat(4, 1fr); } }
 .sv-team-card {
-  background: var(--card-bg); border-radius: 16px; padding: 18px;
+  background: var(--card-bg); border-radius: 16px; padding: 20px 16px;
   border: 1px solid var(--border-soft); position: relative; overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
-  display: flex; flex-direction: column; gap: 12px;
+  display: flex; flex-direction: column; gap: 14px;
 }
 .sv-team-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0;
@@ -1532,13 +1539,15 @@
 
 .sv-team-title-row {
   display: flex; justify-content: space-between; align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
 }
 .sv-team-title {
-  font-size: 16px; font-weight: 800; color: var(--text);
-  display: inline-flex; align-items: center; gap: 6px;
-  white-space: nowrap;
-  flex: 1;
-  min-width: 0;
+  font-size: 15px !important;
+}
+.sv-team-lob {
+  font-size: 8.5px !important;
+  padding: 3px 6px !important;
 }
 .sv-team-title-row {
   display: flex; justify-content: space-between; align-items: center;
@@ -1789,7 +1798,7 @@ background: var(--team-gradient); color: white;
 }
 
 /* ===== SPRINT 2 - TL CARD MODAL ===== */
-.tlcard-modal { max-width: 640px; }
+.tlcard-modal { max-width: 600px; }
 .tlcard-modal .modal-card {
   background: linear-gradient(180deg, var(--card-bg) 0%, #faf5ff 100%);
 }
