@@ -2855,7 +2855,7 @@ async function handleFile(file) {
         if (row["AHT"]) metrics.push({ name: "AHT", value: Math.round(row["AHT"]), unit: "s", goal: isACPNY ? 400 : 690, goalOp: "<=", format: "num" });
         if (row["Attendance"]) metrics.push({ name: "ATT", value: pct(row["Attendance"]), unit: "%", goal: isACPNY ? 95 : 98, goalOp: ">=", format: "pct" });
         if (row["Opened_Within_Month"] && !isACPNY) metrics.push({ name: "Opened", value: pct(row["Opened_Within_Month"]), unit: "%", goal: 95, goalOp: ">=", format: "pct" });
-        if (row["SC_NR"] !== undefined && row["SC_NR"] !== null) metrics.push({ name: "SC+NR", value: pct(row["SC_NR"]), unit: "%", goal: isACPNY ? 1 : (isMedicare ? 2 : 3), goalOp: "<=", format: "pct" });
+        if (row["SC_NR"] !== undefined && row["SC_NR"] !== null) metrics.push({ name: "SC+NR", value: pct(row["SC_NR"]), unit: "%", goal: 1, goalOp: "<=", format: "pct" });
         if (row["QA"]) metrics.push({ name: "QA", value: pct(row["QA"]), unit: "%", goal: isACPNY ? 93 : 95.5, goalOp: ">=", format: "pct", cap: isACPNY ? 91.5 : 95 });
         if (row["CE"] && isACPNY) metrics.push({ name: "CE", value: pct(row["CE"]), unit: "%", goal: 75, goalOp: ">=", format: "pct" });
         if (row["PKT"]) metrics.push({ name: "PKT", value: pct(row["PKT"]), unit: "%", goal: 90, goalOp: ">=", format: "pct" });
