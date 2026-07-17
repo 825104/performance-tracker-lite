@@ -2953,6 +2953,7 @@ async function handleFile(file) {
     });
 
     // ========== STEP 7: Save & replace AGENTS ==========
+    normalizeMetricGoals(parsedAgents);
     localStorage.setItem("ptl_uploadedData", JSON.stringify(parsedAgents));
     Object.keys(AGENTS).forEach(k => delete AGENTS[k]);
     Object.assign(AGENTS, parsedAgents);
@@ -3019,10 +3020,28 @@ function loadStoredData() {
       delete AGENTS[k];
     });
     Object.assign(AGENTS, data, tamiAgents);
+    normalizeMetricGoals(AGENTS);
     return true;
   } catch (e) {
     return false;
   }
+}
+// ========== NORMALIZE METRIC GOALS (fix legacy data) ==========
+// Applies correct goals/caps to metrics regardless of data source
+// (parser, localStorage, or data.json). Prevents stale goal values
+// like SC+NR goal: 3 or 2 from being displayed.
+function normalizeMetricGoals(agentsObj) {
+  Object.values(agentsObj).forEach(a => {
+    if (!a || !Array.isArray(a.metrics)) return;
+    a.metrics.forEach(m => {
+      if (!m || !m.name) return;
+      // SC+NR unified goal: <= 1% for ALL LOBs (ACPNY / Medicare / EH Comm)
+      if (m.name === "SC+NR") {
+        m.goal = 1;
+        m.goalOp = "<=";
+      }
+    });
+  });
 }
 // ========== PUBLISHED DATA (Opción A - shared via repo) ==========
 async function loadPublishedData() {
@@ -3038,6 +3057,7 @@ async function loadPublishedData() {
       delete AGENTS[k];
     });
     Object.assign(AGENTS, data, tamiAgents);
+    normalizeMetricGoals(AGENTS);
     console.log("[Data] Loaded published data.json:", Object.keys(data).length, "agentes CR + Tampa demo");
     return true;
   } catch (e) {
