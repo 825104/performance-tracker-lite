@@ -838,7 +838,44 @@
   .tier-badge-mini.bronze { background: #fed7aa; color: #9a3412; }
   .tier-badge-mini.unsat { background: var(--danger-bg); color: var(--danger); }
   .tier-badge-mini.critical { background: var(--danger); color: white; }
-
+/* ===== SUB-SECCIONES SCORECARD (NH / SME / Tenure) ===== */
+.scorecard-section {
+  margin-bottom: 20px;
+}
+.scorecard-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, var(--card-bg-soft), var(--card-bg));
+  border-radius: 12px 12px 0 0;
+  border-left: 4px solid var(--info);
+  flex-wrap: wrap;
+}
+.scorecard-section-header.tenured { border-left-color: var(--purple); }
+.scorecard-section-header.newhire { border-left-color: var(--success); }
+.scorecard-section-header.sme     { border-left-color: #eab308; }
+.scorecard-section-title {
+  font-size: 13px; font-weight: 800; color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.scorecard-section-stats {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  font-size: 11px; color: var(--text-soft); font-weight: 600;
+}
+.scorecard-section-stat {
+  padding: 4px 10px; border-radius: 20px;
+  background: var(--card-bg);
+}
+.scorecard-section-stat.count { background: var(--info-bg); color: var(--info); }
+.scorecard-section-stat.avg { background: var(--success-bg); color: var(--success); }
+.scorecard-empty-section {
+  padding: 16px; text-align: center; font-size: 12px;
+  color: var(--text-muted); background: var(--card-bg-soft);
+  border-radius: 0 0 12px 12px; font-style: italic;
+}
  /* ===== METRIC SUB-TABS ===== */
   .metric-subtabs {
     display: flex; gap: 4px; margin-bottom: 14px;
@@ -3505,64 +3542,131 @@ function setMetricSubtab(metricName) {
 function renderTeamScorecard() {
   const agents = getFilteredTeamAgents();
   const table = document.getElementById("teamScorecardTable");
+  const wrapper = table.parentElement; // team-scroll-wrapper
   const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
+  const en = isTampaView();
+
   if (agents.length === 0) {
-    table.innerHTML = "<tr><td style='text-align:center;color:var(--text-muted);padding:20px;'>Sin agentes en este equipo</td></tr>";
+    wrapper.innerHTML = `<table class="team-scorecard-table" id="teamScorecardTable"><tr><td style='text-align:center;color:var(--text-muted);padding:20px;'>${en ? "No agents in this team" : "Sin agentes en este equipo"}</td></tr></table>`;
     return;
   }
+
+  // Split agents into 3 groups: Tenured / NH / SME
+  const groups = {
+    tenured: agents.filter(a => {
+      const cat = String(a.category || "Agent").toLowerCase();
+      return cat === "agent" && a.tenure !== "New Hire";
+    }),
+    newhire: agents.filter(a => {
+      const cat = String(a.category || "").toLowerCase();
+      return cat === "agent nh" || a.tenure === "New Hire";
+    }),
+    sme: agents.filter(a => String(a.category || "").toLowerCase() === "sme")
+  };
+
+  const groupMeta = {
+    tenured: { label: en ? "🏆 Tenured Agents" : "🏆 Agentes Tenure", cls: "tenured" },
+    newhire: { label: en ? "🌱 New Hires"       : "🌱 New Hires",     cls: "newhire" },
+    sme:     { label: en ? "⭐ SMEs"             : "⭐ SMEs",           cls: "sme" }
+  };
+
+  // Collect all unique metric names across all groups
   const metricNames = [];
   agents.forEach(a => (a.metrics || []).forEach(m => {
     if (!metricNames.includes(m.name)) metricNames.push(m.name);
   }));
-  const sorted = [...agents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+
+  // Helper to build one section
+  function buildSection(groupKey, groupAgents) {
+    const meta = groupMeta[groupKey];
+    if (groupAgents.length === 0) {
+      return `
+        <div class="scorecard-section">
+          <div class="scorecard-section-header ${meta.cls}">
+            <div class="scorecard-section-title">${meta.label}</div>
+            <div class="scorecard-section-stats">
+              <span class="scorecard-section-stat count">0 ${en ? "agents" : "agentes"}</span>
+            </div>
+          </div>
+          <div class="scorecard-empty-section">${en ? "No agents in this group" : "Sin agentes en este grupo"}</div>
+        </div>
+      `;
+    }
+
+    const sorted = [...groupAgents].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+    const avgScore = sorted.reduce((s, a) => s + (a.finalScore || 0), 0) / sorted.length;
+
     const header = `
-    <tr>
-      <th class="name-cell" style="text-align:left;">Agente</th>
-      <th>Score</th>
-      <th>Tier</th>
-      ${metricNames.map(n => `<th>${n}</th>`).join("")}
-      <th>Final %</th>
-      ${isTLMode ? `<th>1:1</th>` : ""}
-    </tr>
-  `;
-  const rows = sorted.map(a => {
-    const metricCells = metricNames.map(mn => {
-      const m = (a.metrics || []).find(x => x.name === mn);
-      if (!m) return `<td style="color:var(--text-muted);">—</td>`;
-      const s = getMetricStatus(m);
-      const val = m.format === "pct" ? m.value.toFixed(1) + "%" : Math.round(m.value) + (m.unit || "");
-      return `<td class="metric-cell ${s.class}">${val}</td>`;
-    }).join("");
-    const tierClass = (a.tier || "").toLowerCase();
-    const tierIcon = a.tier === "Platinum" ? "🏆" :
-                     a.tier === "Golden" ? "🥇" :
-                     a.tier === "Bronze" ? "🥉" :
-                     a.tier === "Critical" ? "🚨" : "⚠️";
-    const agentKey = Object.keys(AGENTS).find(k => AGENTS[k] === a) || a.associateId;
-    const oneOneCell = isTLMode
-      ? `<td><button class="oneone-btn" onclick="openOneOneModal('${agentKey}')" title="Abrir sesión 1:1">📝 1:1</button></td>`
-      : "";
-    const starRating = a.stars || 0;
-    const finalPct = (a.finalScore || 0).toFixed(2) + "%";
-    const finalPctColor = starRating >= 5 ? "var(--purple)" :
-                          starRating >= 4 ? "#eab308" :
-                          starRating >= 3 ? "#f97316" :
-                          "var(--danger)";
-    return `
       <tr>
-      <td class="name-cell">${shortName(a.name)}</td>
-        <td style="font-weight:700; white-space:nowrap;">
-          <span style="font-size:14px;">⭐</span>
-          <span style="color:var(--text); font-size:12px; font-weight:800; margin-left:4px;">${starRating}/5</span>
-        </td>
-        <td><span class="tier-badge-mini ${tierClass}">${tierIcon} ${a.tier || "?"}</span></td>
-        ${metricCells}
-        <td style="font-weight:800; font-size:12px; color:${finalPctColor};">${finalPct}</td>
-        ${oneOneCell}
+        <th class="name-cell" style="text-align:left;">${en ? "Agent" : "Agente"}</th>
+        <th>Score</th>
+        <th>Tier</th>
+        ${metricNames.map(n => `<th>${n}</th>`).join("")}
+        <th>Final %</th>
+        ${isTLMode ? `<th>1:1</th>` : ""}
       </tr>
     `;
-  }).join("");
-  table.innerHTML = header + rows;
+
+    const rows = sorted.map(a => {
+      const metricCells = metricNames.map(mn => {
+        const m = (a.metrics || []).find(x => x.name === mn);
+        if (!m) return `<td style="color:var(--text-muted);">—</td>`;
+        const s = getMetricStatus(m);
+        const val = m.format === "pct" ? m.value.toFixed(1) + "%" : Math.round(m.value) + (m.unit || "");
+        return `<td class="metric-cell ${s.class}">${val}</td>`;
+      }).join("");
+      const tierClass = (a.tier || "").toLowerCase();
+      const tierIcon = a.tier === "Platinum" ? "🏆" :
+                       a.tier === "Golden" ? "🥇" :
+                       a.tier === "Bronze" ? "🥉" :
+                       a.tier === "Critical" ? "🚨" : "⚠️";
+      const agentKey = Object.keys(AGENTS).find(k => AGENTS[k] === a) || a.associateId;
+      const oneOneCell = isTLMode
+        ? `<td><button class="oneone-btn" onclick="openOneOneModal('${agentKey}')" title="1:1">📝 1:1</button></td>`
+        : "";
+      const starRating = a.stars || 0;
+      const finalPct = (a.finalScore || 0).toFixed(2) + "%";
+      const finalPctColor = starRating >= 5 ? "var(--purple)" :
+                            starRating >= 4 ? "#eab308" :
+                            starRating >= 3 ? "#f97316" :
+                            "var(--danger)";
+      return `
+        <tr>
+          <td class="name-cell">${shortName(a.name)}</td>
+          <td style="font-weight:700; white-space:nowrap;">
+            <span style="font-size:14px;">⭐</span>
+            <span style="color:var(--text); font-size:12px; font-weight:800; margin-left:4px;">${starRating}/5</span>
+          </td>
+          <td><span class="tier-badge-mini ${tierClass}">${tierIcon} ${a.tier || "?"}</span></td>
+          ${metricCells}
+          <td style="font-weight:800; font-size:12px; color:${finalPctColor};">${finalPct}</td>
+          ${oneOneCell}
+        </tr>
+      `;
+    }).join("");
+
+    return `
+      <div class="scorecard-section">
+        <div class="scorecard-section-header ${meta.cls}">
+          <div class="scorecard-section-title">${meta.label}</div>
+          <div class="scorecard-section-stats">
+            <span class="scorecard-section-stat count">${sorted.length} ${en ? (sorted.length === 1 ? "agent" : "agents") : (sorted.length === 1 ? "agente" : "agentes")}</span>
+            <span class="scorecard-section-stat avg">📊 ${en ? "Avg" : "Prom"}: ${avgScore.toFixed(2)}%</span>
+          </div>
+        </div>
+        <table class="team-scorecard-table">
+          ${header}
+          ${rows}
+        </table>
+      </div>
+    `;
+  }
+
+  // Render all 3 sections in order: Tenured → NH → SME
+  wrapper.innerHTML =
+    buildSection("tenured", groups.tenured) +
+    buildSection("newhire", groups.newhire) +
+    buildSection("sme",     groups.sme);
 }
 // ============ TOP PERFORMERS ============
 function getWeekOfMonth() {
