@@ -3541,13 +3541,13 @@ function setMetricSubtab(metricName) {
 }
 function renderTeamScorecard() {
   const agents = getFilteredTeamAgents();
-  const table = document.getElementById("teamScorecardTable");
-  const wrapper = table.parentElement; // team-scroll-wrapper
+  const wrapper = document.querySelector("#teamScorecardTab .team-scroll-wrapper");
+  if (!wrapper) return;
   const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
   const en = isTampaView();
 
-  if (agents.length === 0) {
-    wrapper.innerHTML = `<table class="team-scorecard-table" id="teamScorecardTable"><tr><td style='text-align:center;color:var(--text-muted);padding:20px;'>${en ? "No agents in this team" : "Sin agentes en este equipo"}</td></tr></table>`;
+    if (agents.length === 0) {
+    wrapper.innerHTML = `<div style='text-align:center;color:var(--text-muted);padding:20px;font-size:12px;'>${en ? "No agents in this team" : "Sin agentes en este equipo"}</div>`;
     return;
   }
 
