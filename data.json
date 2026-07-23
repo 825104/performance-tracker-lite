@@ -1,1 +1,3389 @@
-
+{
+  "815556": {
+    "associateId": "815556",
+    "name": "Mena Hernadez, Graciela",
+    "firstName": "Graciela",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 98.53,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 99.22,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 688,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 98,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 97.8,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "815579": {
+    "associateId": "815579",
+    "name": "Gonzalez Viscaino, Wendy Rocio",
+    "firstName": "Wendy",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 95.83,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 99.72999999999999,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 619,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 98.72999999999999,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 100,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "828424": {
+    "associateId": "828424",
+    "name": "Montero Carvajal, Jeffry",
+    "firstName": "Jeffry",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "SME",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 100,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 99.89,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 934,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 1,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 97.39999999999999,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 98.69379014989293,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "bonusReason": "✅ Elegible",
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": false,
+      "amount": 0,
+      "baseAmount": 100,
+      "reason": "✅ Elegible"
+    },
+    "totalUSD": 12,
+    "totalCRC": 5964,
+    "qualifiesForBonus": false
+  },
+  "909921": {
+    "associateId": "909921",
+    "name": "Arguedas Nunez, Ingrid Pamela",
+    "firstName": "Ingrid",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 99.4,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 96.6,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 697,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 99.59,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.13999999999999999,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 97.75,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 99.94978479196556,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "946414": {
+    "associateId": "946414",
+    "name": "Davis Campbell, Rogelio",
+    "firstName": "Rogelio",
+    "team": "Team Geo",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 97.06,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 97.72999999999999,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 830,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 1,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 97,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 92,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 99.1566265060241,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2058648": {
+    "associateId": "2058648",
+    "name": "Carrasco Ramirez, Leonel",
+    "firstName": "Leonel",
+    "team": "Team Geo",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 98.86,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 94.67,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 1089,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 98.98,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 1,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 99,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 88,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 97.82268092927573,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2181185": {
+    "associateId": "2181185",
+    "name": "Gomez Venegas, Crisel",
+    "firstName": "Crisel",
+    "team": "Team Ange",
+    "lob": "ACPNY",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "ADH",
+        "value": 92.23,
+        "unit": "%",
+        "goal": 96,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 440,
+        "unit": "s",
+        "goal": 400,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 100,
+        "unit": "%",
+        "goal": 93,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 91.5
+      },
+      {
+        "name": "CE",
+        "value": 76,
+        "unit": "%",
+        "goal": 75,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 99.15274621212123,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2217700": {
+    "associateId": "2217700",
+    "name": "Gonzalez Cordoba, Shirley",
+    "firstName": "Shirley",
+    "team": "Team Ange",
+    "lob": "ACPNY",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "ADH",
+        "value": 97.45,
+        "unit": "%",
+        "goal": 96,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 394,
+        "unit": "s",
+        "goal": 400,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.75,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 95.87,
+        "unit": "%",
+        "goal": 93,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 91.5
+      },
+      {
+        "name": "CE",
+        "value": 100,
+        "unit": "%",
+        "goal": 75,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "2218030": {
+    "associateId": "2218030",
+    "name": "Hernandez Madrigal, Yefry",
+    "firstName": "Yefry",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 97.5,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 96.07,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 581,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 98.39,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 99.58,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.27999999999999997,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 96.25,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "2236777": {
+    "associateId": "2236777",
+    "name": "Jimenez, Kalex Abraham",
+    "firstName": "Kalex",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 100,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 98.13,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 567,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 98.75,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "2236783": {
+    "associateId": "2236783",
+    "name": "Navarrete Junez, Paola",
+    "firstName": "Paola",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 99.19,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 97.02,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 758,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.3,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 97.8,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 99.55145118733509,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2238982": {
+    "associateId": "2238982",
+    "name": "Jimenez Esquivel, Estefany",
+    "firstName": "Estefany",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 100,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 95.87,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 672,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 98.77,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 96,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 99.98916666666668,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2239480": {
+    "associateId": "2239480",
+    "name": "Chavez Fernandez, Rebeca",
+    "firstName": "Rebeca",
+    "team": "Team Ange",
+    "lob": "ACPNY",
+    "category": "SME",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "ADH",
+        "value": 96.75,
+        "unit": "%",
+        "goal": 96,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 398,
+        "unit": "s",
+        "goal": 400,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.49,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 94.56,
+        "unit": "%",
+        "goal": 93,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 91.5
+      },
+      {
+        "name": "CE",
+        "value": 79.46,
+        "unit": "%",
+        "goal": 75,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "2249153": {
+    "associateId": "2249153",
+    "name": "Alfaro Salas, Luis Diego",
+    "firstName": "Luis",
+    "team": "Team Geo",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 97.98,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 96.61999999999999,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 685,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 99.52,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 99,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 92,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "2266032": {
+    "associateId": "2266032",
+    "name": "Alfaro Madriz, Kasey Daniela",
+    "firstName": "Kasey",
+    "team": "Team Ange",
+    "lob": "ACPNY",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "ADH",
+        "value": 94.35,
+        "unit": "%",
+        "goal": 96,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 401,
+        "unit": "s",
+        "goal": 400,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 99.78,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.51,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 90.91,
+        "unit": "%",
+        "goal": 93,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 91.5
+      },
+      {
+        "name": "CE",
+        "value": 94,
+        "unit": "%",
+        "goal": 75,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 99.02909703228488,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": false,
+    "bonusReason": "Sin bono: QA < 91.5% (Performance gate)",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": false,
+      "amount": 0,
+      "baseAmount": 85,
+      "reason": "Sin bono: QA < 91.5% (Performance gate)"
+    },
+    "totalUSD": 12,
+    "totalCRC": 5964
+  },
+  "2266034": {
+    "associateId": "2266034",
+    "name": "Quiros Ulloa, Maria Fernanda",
+    "firstName": "Maria",
+    "team": "Team Ange",
+    "lob": "ACPNY",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "ADH",
+        "value": 97.66,
+        "unit": "%",
+        "goal": 96,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 359,
+        "unit": "s",
+        "goal": 400,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 99.92,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 100,
+        "unit": "%",
+        "goal": 93,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 91.5
+      },
+      {
+        "name": "CE",
+        "value": 100,
+        "unit": "%",
+        "goal": 75,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "2269704": {
+    "associateId": "2269704",
+    "name": "Bogarin Araya, Cesar Alberto",
+    "firstName": "Cesar",
+    "team": "Team Ange",
+    "lob": "ACPNY",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [],
+    "metrics": [
+      {
+        "name": "ADH",
+        "value": 95.13000000000001,
+        "unit": "%",
+        "goal": 96,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 383,
+        "unit": "s",
+        "goal": 400,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 1.49,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 90.25,
+        "unit": "%",
+        "goal": 93,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 91.5
+      },
+      {
+        "name": "CE",
+        "value": 65,
+        "unit": "%",
+        "goal": 75,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 94.91917149274734,
+    "stars": 2,
+    "tier": "Unsatisfactory",
+    "tierIcon": "⚠️",
+    "qualifiesForBonus": false,
+    "bonusReason": "Sin bono: Final % < 95% (Score < 3)",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": false,
+      "amount": 0,
+      "baseAmount": 0,
+      "reason": "Sin bono: Final % < 95% (Score < 3)"
+    },
+    "totalUSD": 12,
+    "totalCRC": 5964
+  },
+  "2303083": {
+    "associateId": "2303083",
+    "name": "Porras Vargas, Jefferson",
+    "firstName": "Jefferson",
+    "team": "Team Geo",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 100,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 96.00999999999999,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 686,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 1,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 100,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 99.98835153406137,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2306654": {
+    "associateId": "2306654",
+    "name": "Munoz Cortes, Steven Jesus",
+    "firstName": "Steven",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 100,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 93.89999999999999,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 1210,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 95.63000000000001,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.25,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 95.19999999999999,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 97.58199883172516,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2315131": {
+    "associateId": "2315131",
+    "name": "Caravaca Umana, Hillary Sofia",
+    "firstName": "Hillary",
+    "team": "Team Ange",
+    "lob": "ACPNY",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "ADH",
+        "value": 97.47,
+        "unit": "%",
+        "goal": 96,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 311,
+        "unit": "s",
+        "goal": 400,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.18,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 96.28,
+        "unit": "%",
+        "goal": 93,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 91.5
+      },
+      {
+        "name": "CE",
+        "value": 78.67,
+        "unit": "%",
+        "goal": 75,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "2339437": {
+    "associateId": "2339437",
+    "name": "Duran Barboza, Jennifer",
+    "firstName": "Jennifer",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 100,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 96.13000000000001,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 868,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 98,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 99.00999999999999,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.41000000000000003,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 92.5,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 98.03224600091683,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": false,
+    "bonusReason": "Sin bono: QA < 95% (Performance gate)",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": false,
+      "amount": 0,
+      "baseAmount": 85,
+      "reason": "Sin bono: QA < 95% (Performance gate)"
+    },
+    "totalUSD": 12,
+    "totalCRC": 5964
+  },
+  "2344649": {
+    "associateId": "2344649",
+    "name": "Sandoval Angulo, Kimberly Natalia",
+    "firstName": "Kimberly",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 95.24000000000001,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 95.5,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 827,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 98,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 98,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 99.13003829101169,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2344651": {
+    "associateId": "2344651",
+    "name": "Fernandez Monge, Brandon",
+    "firstName": "Brandon",
+    "team": "Team Ange",
+    "lob": "ACPNY",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "ADH",
+        "value": 97.42,
+        "unit": "%",
+        "goal": 96,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 451,
+        "unit": "s",
+        "goal": 400,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 100,
+        "unit": "%",
+        "goal": 93,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 91.5
+      },
+      {
+        "name": "CE",
+        "value": 100,
+        "unit": "%",
+        "goal": 75,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 99.43458980044346,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2353978": {
+    "associateId": "2353978",
+    "name": "Fallas Naranjo, Karol Melissa",
+    "firstName": "Karol",
+    "team": "Team Geo",
+    "lob": "Medicare",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 98.33,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 99.13,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 956,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 98.04,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 1,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 96,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 98.60878661087865,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2361142": {
+    "associateId": "2361142",
+    "name": "Bryan Alborola, Miriam Evelina",
+    "firstName": "Miriam",
+    "team": "Team Geo",
+    "lob": "Medicare",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 96.88,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 98.38,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 609,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 97.56,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 1,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 99,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "2368539": {
+    "associateId": "2368539",
+    "name": "Calvo Jimenez, Edwin Jafet",
+    "firstName": "Edwin",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 86.53999999999999,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 97.19,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 846,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 99.98,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 98.33,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.69,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 65.5,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 88.41957198422283,
+    "stars": 2,
+    "tier": "Unsatisfactory",
+    "tierIcon": "⚠️",
+    "qualifiesForBonus": false,
+    "bonusReason": "Sin bono: Final % < 95% (Score < 3)",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": false,
+      "amount": 0,
+      "baseAmount": 0,
+      "reason": "Sin bono: Final % < 95% (Score < 3)"
+    },
+    "totalUSD": 12,
+    "totalCRC": 5964
+  },
+  "2375079": {
+    "associateId": "2375079",
+    "name": "Carmona, Jose",
+    "firstName": "Jose",
+    "team": "Team Ange",
+    "lob": "ACPNY",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [],
+    "metrics": [
+      {
+        "name": "ADH",
+        "value": 93.5,
+        "unit": "%",
+        "goal": 96,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 528,
+        "unit": "s",
+        "goal": 400,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.47000000000000003,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 90.88000000000001,
+        "unit": "%",
+        "goal": 93,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 91.5
+      },
+      {
+        "name": "CE",
+        "value": 32,
+        "unit": "%",
+        "goal": 75,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 94.86294599217987,
+    "stars": 2,
+    "tier": "Unsatisfactory",
+    "tierIcon": "⚠️",
+    "qualifiesForBonus": false,
+    "bonusReason": "Sin bono: Final % < 95% (Score < 3)",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": false,
+      "amount": 0,
+      "baseAmount": 0,
+      "reason": "Sin bono: Final % < 95% (Score < 3)"
+    },
+    "totalUSD": 12,
+    "totalCRC": 5964
+  },
+  "2388924": {
+    "associateId": "2388924",
+    "name": "Caravaca Artavia, Monserrat",
+    "firstName": "Monserrat",
+    "team": "Team Geo",
+    "lob": "Medicare",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 99.15,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 822,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 99.9,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 92.31,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 1,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 100,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 99.05550134460238,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2436183": {
+    "associateId": "2436183",
+    "name": "Torres Obando, Carolina",
+    "firstName": "Carolina",
+    "team": "Team Geo",
+    "lob": "Medicare",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "⭐ Platinum Tier"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 98.99,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 667,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 97.14,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 1,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 100,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 100,
+    "stars": 5,
+    "tier": "Platinum",
+    "tierIcon": "🏆",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🏆 Platinum",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 100,
+      "reason": "Tier Platinum - Performance Bonus de $100."
+    },
+    "totalUSD": 112,
+    "totalCRC": 55664
+  },
+  "2452055": {
+    "associateId": "2452055",
+    "name": "Badilla Robles, Juan Gabriel",
+    "firstName": "Juan",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 100,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 95.72,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 876,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 98,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 96.63000000000001,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0.54,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 97,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 96,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 98.91502283105022,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": false,
+    "bonusReason": "Sin bono: Amonestación de Behavior activa",
+    "behaviorActive": true,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": false,
+      "amount": 0,
+      "baseAmount": 85,
+      "reason": "Sin bono: Amonestación de Behavior activa"
+    },
+    "totalUSD": 12,
+    "totalCRC": 5964
+  },
+  "2462805": {
+    "associateId": "2462805",
+    "name": "Aguero Cascante, Oscar",
+    "firstName": "Oscar",
+    "team": "Team Ange",
+    "lob": "ACPNY",
+    "category": "Agent",
+    "tenure": "Tenure",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden"
+    ],
+    "metrics": [
+      {
+        "name": "ADH",
+        "value": 99.58,
+        "unit": "%",
+        "goal": 96,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 538,
+        "unit": "s",
+        "goal": 400,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 92.15,
+        "unit": "%",
+        "goal": 93,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 91.5
+      },
+      {
+        "name": "CE",
+        "value": 100,
+        "unit": "%",
+        "goal": 75,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "PKT",
+        "value": 100,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 98.39757964584084,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  },
+  "2487970": {
+    "associateId": "2487970",
+    "name": "Madrigal Carvajal, Falonth Rachel",
+    "firstName": "Falonth",
+    "team": "Team Shary",
+    "lob": "EH Comm",
+    "category": "Agent NH",
+    "tenure": "New Hire",
+    "month": "Julio 2026",
+    "badges": [
+      "🌱 New Hire"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 100,
+        "unit": "%",
+        "goal": 94.3,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 95.84,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 973,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 98,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 98.03,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 0,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 74,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 76,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 90.2229192502393,
+    "stars": 2,
+    "tier": "Unsatisfactory",
+    "tierIcon": "⚠️",
+    "qualifiesForBonus": false,
+    "bonusReason": "Sin bono: Final % < 95% (Score < 3)",
+    "behaviorActive": true,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": false,
+      "amount": 0,
+      "baseAmount": 0,
+      "reason": "Sin bono: Final % < 95% (Score < 3)"
+    },
+    "totalUSD": 12,
+    "totalCRC": 5964
+  },
+  "2491428": {
+    "associateId": "2491428",
+    "name": "Quesada Estrada, Carlos",
+    "firstName": "Carlos",
+    "team": "Team Geo",
+    "lob": "Medicare",
+    "category": "Agent NH",
+    "tenure": "New Hire",
+    "month": "Julio 2026",
+    "badges": [
+      "🎯 Golden",
+      "🌱 New Hire"
+    ],
+    "metrics": [
+      {
+        "name": "CSAT",
+        "value": 95.71,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "ADH",
+        "value": 97.95,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "AHT",
+        "value": 1021,
+        "unit": "s",
+        "goal": 690,
+        "goalOp": "<=",
+        "format": "num"
+      },
+      {
+        "name": "ATT",
+        "value": 100,
+        "unit": "%",
+        "goal": 98,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "Opened",
+        "value": 97.22,
+        "unit": "%",
+        "goal": 95,
+        "goalOp": ">=",
+        "format": "pct"
+      },
+      {
+        "name": "SC+NR",
+        "value": 1,
+        "unit": "%",
+        "goal": 1,
+        "goalOp": "<=",
+        "format": "pct"
+      },
+      {
+        "name": "QA",
+        "value": 98,
+        "unit": "%",
+        "goal": 95.5,
+        "goalOp": ">=",
+        "format": "pct",
+        "cap": 95
+      },
+      {
+        "name": "PKT",
+        "value": 87,
+        "unit": "%",
+        "goal": 90,
+        "goalOp": ">=",
+        "format": "pct"
+      }
+    ],
+    "history": {
+      "Score": []
+    },
+    "availableMetrics": [
+      "Score"
+    ],
+    "finalScore": 98.04570682337578,
+    "stars": 4,
+    "tier": "Golden",
+    "tierIcon": "🥇",
+    "qualifiesForBonus": true,
+    "bonusReason": "Bono aprobado: Tier 🥇 Golden",
+    "behaviorActive": false,
+    "fixedBonus": {
+      "eligible": true,
+      "amount": 12,
+      "reason": "Todos reciben +$12 de eficiencia siempre."
+    },
+    "performanceBonus": {
+      "eligible": true,
+      "amount": 85,
+      "reason": "Tier Golden - Performance Bonus de $85."
+    },
+    "totalUSD": 97,
+    "totalCRC": 48209
+  }
+}
