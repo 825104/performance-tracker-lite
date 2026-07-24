@@ -3262,6 +3262,22 @@ document.getElementById("tlPasswordModal").addEventListener("click", (e) => {
     footerPeriod.textContent = "Período: " + (AGENTS[actualAgent].month || "Junio 2026");
   }
 })();
+  // ========== FASE 1 · TOAST HELPER ==========
+function toast(message, type = "success") {
+  const colors = {
+    success: "linear-gradient(135deg,#22c55e,#16a34a)",
+    error:   "linear-gradient(135deg,#ef4444,#dc2626)",
+    info:    "linear-gradient(135deg,#3b82f6,#2563eb)",
+    warning: "linear-gradient(135deg,#f97316,#ea580c)"
+  };
+  if (typeof Toastify !== "function") { console.log("Toast:", message); return; }
+  Toastify({
+    text: message, duration: 3000, gravity: "top", position: "right",
+    close: true, stopOnFocus: true,
+    style: { background: colors[type] || colors.success, borderRadius: "10px",
+             fontFamily: "'Inter',sans-serif", fontSize: "13px", fontWeight: "600" }
+  }).showToast();
+}
 // ========== TEAM VIEW ==========
 let currentView = "agent";
 let currentTeamTab = "health";
@@ -3977,7 +3993,7 @@ function getOneOneAgentKey(agent) {
 function openOneOneModal(agentKey) {
   const isTLMode = localStorage.getItem("ptl_tlMode") === "true";
   if (!isTLMode) {
-    alert("🔒 Necesitás activar Modo TL para acceder a las sesiones 1:1.");
+    toast("🔒 Necesitás activar Modo TL para acceder a las sesiones 1:1.", "warning");
     return;
   }
   const agent = AGENTS[agentKey];
