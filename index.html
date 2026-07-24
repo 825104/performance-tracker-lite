@@ -6,11 +6,18 @@
 <meta name="theme-color" content="#0f172a">
 <title>Performance Tracker Lite v4.7.1 | Cognizant </title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<!-- FASE 1 · Librerias de UX -->
-.min.css">
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- FASE 1 · Librerias de UX (carga dinamica) -->
+<script>
+(function () {
+  function addCSS(href){var l=document.createElement("link");l.rel="stylesheet";l.href=href;document.head.appendChild(l);}
+  function addJS(src){var s=document.createElement("script");s.src=src;s.async=false;document.head.appendChild(s);}
+  addCSS("https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css");
+  addJS("https://cdn.jsdelivr.net/npm/toastify-js");
+  addJS("https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js");
+  addJS("https://cdn.jsdelivr.net/npm/sweetalert2@11");
+})();
+</script>
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
