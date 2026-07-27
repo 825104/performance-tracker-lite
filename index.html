@@ -5171,7 +5171,15 @@ function nlLoad(){
   const momEl=document.getElementById("nlMom");
   momEl.innerHTML = d.mom ? `<div class="nl-moment">${d.mom}</div>` : "<span style='color:var(--text-muted)'>Sin contenido en esta edición</span>";
 }
-
+function nlOpen(){ document.getElementById("nlOverlay").classList.add("visible"); document.body.style.overflow="hidden"; }
+function nlClose(){ document.getElementById("nlOverlay").classList.remove("visible"); document.body.style.overflow=""; }
+function nlToggleRole(){
+  nlIsLeader=!nlIsLeader;
+  document.getElementById("nlRoleBadge").textContent = nlIsLeader?"🛡️ Vista liderazgo":"👀 Vista agente";
+  document.getElementById("nlEditBtn").style.display = nlIsLeader?"inline-block":"none";
+  var ex=document.getElementById("nlExportBtn"); if(ex) ex.style.display = nlIsLeader?"inline-block":"none";
+  var im=document.getElementById("nlImportBtn"); if(im) im.style.display = nlIsLeader?"inline-block":"none";
+}
 /* ---- Editor de escalations con foto (base64) ---- */
 function nlEscCardHTML(e){
   e = e||{};
