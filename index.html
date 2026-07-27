@@ -1704,6 +1704,8 @@
       <span class="nl-role" id="nlRoleBadge">👀 Vista agente</span>
       <button class="nl-btn" onclick="nlToggleRole()">Cambiar rol</button>
       <button class="nl-btn primary" id="nlEditBtn" onclick="nlOpenEditor()">✏️ Editar</button>
+      <button class="nl-btn" id="nlExportBtn" onclick="nlExportJSON()" style="display:none;">⬇️ Exportar JSON</button>
+      <label class="nl-btn" id="nlImportBtn" style="display:none;cursor:pointer;">⬆️ Importar JSON<input type="file" accept="application/json" style="display:none;" onchange="nlImportJSON(this)"></label>
       <button class="nl-btn" onclick="nlClose()">✕ Cerrar</button>
     </div>
 
@@ -1723,7 +1725,6 @@
       <div class="nl-head"><span class="ic">⬆️</span><div><h2>Positive Escalations</h2><div class="sub">Reconocimientos de members</div></div></div>
       <div class="nl-body">
         <div class="nl-esc-grid" id="nlEscGrid"></div>
-        <div class="nl-tip" id="nlPhotoTip" style="display:none;">📸 Consejo (solo TL): al Editar, usá el botón "📷 Subir foto" de cada escalation. La foto se guarda solo en esta máquina (no se sube al repo).</div>
       </div>
     </div>
 
@@ -4660,11 +4661,12 @@ function nlLoad(){
       <div class="info"><b>${t.name}</b><span>Team ${t.team} · ${t.lob}</span></div>
       <span class="chip ${teamCls[t.team]||"c-ange"}">${t.team}</span></div>`).join("")
     || "<span style='color:var(--text-muted)'>Sin datos</span>";
-  document.getElementById("nlEscGrid").innerHTML = (d.esc||[]).map(e=>`
-    <div class="nl-esc"><div class="top"><span class="lob">${e.lob||""}</span></div>
-      <div class="av" style="background-image:url('${e.photo||""}')">${e.photo?"":"👤"}</div>
-      <div class="b"><div class="nm">${e.name||""}</div><div class="tl">${e.team||""}</div><div class="q">${e.quote||""}</div></div></div>`).join("")
-    || "<span style='color:var(--text-muted)'>Sin escalations</span>";
+document.getElementById("nlEscGrid").innerHTML = (d.esc||[]).map(e=>`
+     <div class="nl-esc"><div class="top"><span class="lob">${e.lob||""}</span></div>
+       <div class="av">${nlInitials(e.name)}</div>
+       <div class="b"><div class="nm">${e.name||""}</div><div class="tl">${e.team||""}</div><div class="q">${e.quote||""}</div></div></div>`).join("")
+     || "<span style='color:var(--text-muted)'>Sin escalations</span>";
+
   document.getElementById("nlLob").textContent = d.lob||"";
   document.getElementById("nlWow").textContent = d.wow||"";
   // Cumpleaños en tarjetas
@@ -4684,18 +4686,16 @@ function nlToggleRole(){
   nlIsLeader=!nlIsLeader;
   document.getElementById("nlRoleBadge").textContent = nlIsLeader?"🛡️ Vista liderazgo":"👀 Vista agente";
   document.getElementById("nlEditBtn").style.display = nlIsLeader?"inline-block":"none";
-  var tip=document.getElementById("nlPhotoTip"); if(tip) tip.style.display = nlIsLeader?"block":"none";
+  var ex=document.getElementById("nlExportBtn"); if(ex) ex.style.display = nlIsLeader?"inline-block":"none";
+  var im=document.getElementById("nlImportBtn"); if(im) im.style.display = nlIsLeader?"inline-block":"none";
 }
 /* ---- Editor de escalations con foto (base64) ---- */
 function nlEscCardHTML(e){
   e = e||{};
-  const bg = e.photo? `style="background-image:url('${e.photo}')"` : "";
-  const emoji = e.photo? "" : "👤";
   return `
   <div class="nl-esc-edit" style="border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px;background:var(--card-bg-soft);">
     <div style="display:flex;gap:10px;align-items:center;">
-      <div class="nlfPhotoPrev" ${bg}
-        style="width:54px;height:54px;border-radius:50%;flex-shrink:0;background:#DCE6F5 center/cover no-repeat;display:grid;place-items:center;font-size:20px;color:#1466C8;">${emoji}</div>
+      <div class="nlfInitials" style="width:44px;height:44px;border-radius:50%;flex-shrink:0;background:#DCE6F5;display:grid;place-items:center;font-size:15px;font-weight:800;color:#1466C8;">${nlInitials(e.name)}</div>
       <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
         <input class="oneone-input" data-f="name" placeholder="Nombre" value="${(e.name||'').replace(/"/g,'&quot;')}">
         <div style="display:flex;gap:6px;">
@@ -4705,15 +4705,11 @@ function nlEscCardHTML(e){
       </div>
     </div>
     <textarea class="oneone-textarea" data-f="quote" placeholder="Quote del member" style="margin-top:6px;">${e.quote||''}</textarea>
-    <input type="hidden" data-f="photo" value="${e.photo||''}">
     <div style="display:flex;gap:6px;margin-top:6px;">
-      <label class="nl-btn" style="cursor:pointer;">📷 Subir foto
-        <input type="file" accept="image/*" style="display:none;" onchange="nlPhotoPick(this)">
-      </label>
-      <button class="nl-btn" onclick="nlPhotoClear(this)">🚫 Quitar foto</button>
       <button class="nl-btn" onclick="this.closest('.nl-esc-edit').remove()">🗑️ Eliminar</button>
     </div>
   </div>`;
+}
 }
 function nlAddEsc(e){
   const wrap=document.getElementById("nlfEscList");
@@ -4721,12 +4717,6 @@ function nlAddEsc(e){
   div.innerHTML=nlEscCardHTML(e);
   wrap.appendChild(div.firstElementChild);
 }
-function nlPhotoPick(input){
-  const file=input.files&&input.files[0]; if(!file) return;
-  const reader=new FileReader();
-  reader.onload=function(ev){
-    const img=new Image();
-    img.onload=function(){
       // Redimensionar a max 220px para que pese poco en localStorage
       const max=220; let w=img.width,h=img.height;
       if(w>h && w>max){ h=Math.round(h*max/w); w=max; }
@@ -4743,11 +4733,6 @@ function nlPhotoPick(input){
   };
   reader.readAsDataURL(file);
 }
-function nlPhotoClear(btn){
-  const card=btn.closest(".nl-esc-edit");
-  card.querySelector('[data-f="photo"]').value="";
-  const prev=card.querySelector(".nlfPhotoPrev");
-  prev.style.backgroundImage=""; prev.textContent="👤";
 }
 function nlCollectEsc(){
   const cards=document.querySelectorAll("#nlfEscList .nl-esc-edit");
@@ -4756,7 +4741,7 @@ function nlCollectEsc(){
     const g=f=>{const el=c.querySelector('[data-f="'+f+'"]');return el?el.value.trim():"";};
     const name=g("name");
     if(!name) return;
-    out.push({name,team:g("team"),lob:g("lob"),quote:g("quote"),photo:c.querySelector('[data-f="photo"]').value});
+    out.push({name,team:g("team"),lob:g("lob"),quote:g("quote")});
   });
   return out;
 }
@@ -4797,8 +4782,51 @@ function nlSaveEditor(){
   nlSaveStore(s); nlRefreshSelect(); document.getElementById("nlWeekSelect").value=label; nlLoad(); nlCloseEditor();
 }
 document.getElementById("nlEditorModal").addEventListener("click",e=>{if(e.target.id==="nlEditorModal")nlCloseEditor();});
-nlSeed(); nlRefreshSelect(); nlLoad();
-document.getElementById("nlEditBtn").style.display="none";
+/* ---- Iniciales para avatar (sin foto) ---- */
+function nlInitials(name){
+  if(!name) return "👤";
+  const p=String(name).replace(/,/g," ").trim().split(/\s+/);
+  const a=(p[0]||"")[0]||""; const b=(p[1]||"")[0]||"";
+  return (a+b).toUpperCase()||"👤";
+}
+/* ---- Sync por JSON (para que todos lo vean) ---- */
+async function nlLoadPublished(){
+  try{
+    const res=await fetch("newsletter.json?v="+Date.now(),{cache:"no-store"});
+    if(!res.ok) return false;
+    const data=await res.json();
+    if(!data||typeof data!=="object"||!Object.keys(data).length) return false;
+    nlSaveStore(data);
+    console.log("[NL] newsletter.json cargado:",Object.keys(data).length,"ediciones");
+    return true;
+  }catch(e){ console.log("[NL] Sin newsletter.json:",e.message); return false; }
+}
+function nlExportJSON(){
+  const blob=new Blob([JSON.stringify(nlStore(),null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download="newsletter.json";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  if(typeof toast==="function") toast("newsletter.json descargado. Subilo al repo (junto a index.html) y commit para publicar.","success");
+}
+function nlImportJSON(input){
+  const file=input.files&&input.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{ const d=JSON.parse(e.target.result);
+      if(!d||typeof d!=="object") throw new Error("formato");
+      nlSaveStore(d); nlRefreshSelect(); nlLoad();
+      if(typeof toast==="function") toast("newsletter.json importado correctamente.","success");
+    }catch(err){ alert("JSON inválido: "+err.message); }
+  };
+  r.readAsText(file);
+}
+/* ---- Init: primero intenta newsletter.json, si no hay usa semilla ---- */
+(async function nlInit(){
+  const pub = await nlLoadPublished();
+  if(!pub) nlSeed();
+  nlRefreshSelect(); nlLoad();
+  document.getElementById("nlEditBtn").style.display="none";
+})();
   
 </script>
 </body>
