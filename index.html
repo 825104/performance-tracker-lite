@@ -4774,7 +4774,7 @@ function lvComputeInsights(agents){
     const cap=(anyQA&&anyQA.cap)||95;
     const below=agents.filter(a=>{const m=(a.metrics||[]).find(x=>x.name==="QA");return m&&m.value<cap;}).length;
     if(qaAvg>=cap) ins.push(["g",`QA de equipo ${qaAvg.toFixed(1)}% — sobre el mínimo (${cap}%). 👏`]);
-    else ins.push(["r",`QA de equipo ${qaAvg.toFixed(1)}% por debajo del mínimo (${cap}%) — impacta bono del TL.`]);
+   else ins.push(["r",`QA de equipo ${qaAvg.toFixed(1)}% por debajo del mínimo (${cap}%) — impacta bono del TL.`]);
     if(below>0) ins.push(["a",`${below} agente(s) bajo el cap de QA (${cap}%) — revisar coaching de calidad.`]);
   }
   // AHT
@@ -4853,7 +4853,7 @@ function lvRenderExec(){
   lead += `${solidCount} de ${activeLobs} cuentas se ubicaron en estado Sólido`;
   lead += (watchCount>0) ? `, mientras que ${watchCount} requieren vigilancia. ` : `. `;
   if(risk.length>0){
-    lead += `El principal riesgo se concentra en ${riskLob}, con QA de equipo por debajo del mínimo e impacto directo en el bono del Team Lead. `;
+    lead += `El principal riesgo se concentra en ${riskLob}, con QA de equipo por debajo del umbral objetivo, requiriendo un plan de reforzamiento de calidad. `;
   }
   // Oportunidad transversal: AHT sobre meta en varias cuentas
   let ahtOver=0;
