@@ -5078,7 +5078,6 @@ function nlRefreshSelect(){
   const s = nlStore(); const sel = document.getElementById("nlWeekSelect");
   sel.innerHTML = Object.keys(s).map(k=>`<option>${k}</option>`).join("");
 }
-function nlLoad(){
 /* --- helper: elige gradiente estable según el nombre --- */
 function nlGrad(name){
   const s=String(name||"");
