@@ -1434,7 +1434,8 @@
 .lv-exec-head .lv-edit{margin-left:auto;}
 .lv-exec-body{padding:16px 18px;}
 .lv-lead{font-size:14px;line-height:1.6;color:var(--text);border-left:4px solid var(--info);padding-left:14px;margin-bottom:14px;white-space:pre-wrap;}
-.lv-lead:empty::before{content:"Escribí el resumen ejecutivo del mes (clic en ✏️ Editar).";color:var(--text-muted);font-style:italic;}
+.lv-lead:empty::before{content:"Generando síntesis ejecutiva…";color:var(--text-muted);font-style:italic;}
+.lv-lead:empty::before{content:"Generando síntesis ejecutiva…";color:var(--text-muted);font-style:italic;}
 .lv-calls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 @media(max-width:820px){.lv-calls{grid-template-columns:1fr;}}
 .lv-call{border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;}
@@ -1776,8 +1777,8 @@
     </div>
 
     <div class="lv-exec">
-      <div class="lv-exec-head">🎯 Executive Snapshot — El "so what" del mes
-        <button class="lv-btn primary lv-edit" onclick="lvOpenEditor()">✏️ Editar</button>
+      <div class="lv-exec-head">📊 Resumen Ejecutivo — Síntesis del Desempeño Mensual
+        <span class="lv-edit" style="margin-left:auto;font-size:11px;opacity:.75;font-weight:600;">⚙️ Generado automáticamente desde el Scorecard</span>
       </div>
       <div class="lv-exec-body">
         <div class="lv-lead" id="lvLead"></div>
@@ -4812,15 +4813,71 @@ function lvTierCounts(agents){
 function lvStore(){ try{return JSON.parse(localStorage.getItem(LV_KEY))||{};}catch(e){return{};} }
 function lvSaveStore(o){ localStorage.setItem(LV_KEY,JSON.stringify(o)); }
 function lvRenderExec(){
-  const d=lvStore();
-  document.getElementById("lvLead").textContent=d.lead||"";
-  const fill=(id,arr)=>{
+  const all=Object.values(AGENTS);
+  const total=all.length;
+  if(!total){
+    document.getElementById("lvLead").textContent="Sin datos cargados para el período.";
+    ["lvWin","lvWatch","lvRisk"].forEach(id=>document.getElementById(id).innerHTML=`<li class="empty">— sin datos —</li>`);
+    return;
+  }
+  // ---- Consolidados ----
+  const scoreAvg=all.reduce((s,a)=>s+(a.finalScore||0),0)/total;
+  const qaAvg=lvMetricAvg(all,"QA");
+  const topTier=all.filter(a=>a.tier==="Platinum"||a.tier==="Golden").length;
+  const topPct=Math.round(topTier/total*100);
+  const action=all.filter(a=>["Unsatisfactory","Critical","Standard"].includes(a.tier)).length;
+
+  // ---- Análisis por LOB ----
+  const win=[], watch=[], risk=[];
+  let solidCount=0, watchCount=0, activeLobs=0;
+  let riskLob=null;
+  LV_TEAMS.forEach(t=>{
+    const ag=lvAgentsByTeam(t.key);
+    if(!ag.length) return;
+    activeLobs++;
+    const ins=lvComputeInsights(ag);
+    const hasRisk=ins.some(x=>x[0]==="r");
+    if(hasRisk){ watchCount++; if(!riskLob) riskLob=t.name; } else { solidCount++; }
+    // Distribuir insights con prefijo del LOB
+    ins.forEach(x=>{
+      const line=`<b>${t.name}:</b> ${x[1]}`;
+      if(x[0]==="g") win.push(line);
+      else if(x[0]==="a") watch.push(line);
+      else risk.push(line);
+    });
+  });
+
+  // ---- Redacción ejecutiva del "so what" ----
+  const qaTxt = qaAvg!==null ? `${qaAvg.toFixed(1)}%` : "N/D";
+  let lead = `El scope de ${total} asociados registró un Score Final promedio de ${scoreAvg.toFixed(1)}% (QA ${qaTxt}), con ${topTier} colaboradores (${topPct}%) en tiers Platinum/Golden. `;
+  lead += `${solidCount} de ${activeLobs} cuentas se ubicaron en estado Sólido`;
+  lead += (watchCount>0) ? `, mientras que ${watchCount} requieren vigilancia. ` : `. `;
+  if(risk.length>0){
+    lead += `El principal riesgo se concentra en ${riskLob}, con QA de equipo por debajo del mínimo e impacto directo en el bono del Team Lead. `;
+  }
+  // Oportunidad transversal: AHT sobre meta en varias cuentas
+  let ahtOver=0;
+  LV_TEAMS.forEach(t=>{
+    const ag=lvAgentsByTeam(t.key); if(!ag.length) return;
+    const a=lvMetricAvg(ag,"AHT"); const any=ag.map(x=>(x.metrics||[]).find(m=>m.name==="AHT")).find(Boolean);
+    const goal=(any&&any.goal)||690;
+    if(a!==null&&a>goal) ahtOver++;
+  });
+  if(ahtOver>=2) lead += `El AHT se mantiene como la principal oportunidad transversal de eficiencia (${ahtOver} cuentas sobre meta). `;
+  if(action>0) lead += `Se identifican ${action} caso(s) que requieren plan de acción individual.`;
+
+  document.getElementById("lvLead").textContent=lead;
+
+  // ---- Pintar las 3 columnas (auto) ----
+  const paint=(id,arr)=>{
     const el=document.getElementById(id);
-    if(arr&&arr.length) el.innerHTML=arr.map(x=>`<li>${x}</li>`).join("");
-    else el.innerHTML=`<li class="empty">— sin datos —</li>`;
+    el.innerHTML = arr.length ? arr.map(x=>`<li>${x}</li>`).join("") : `<li class="empty">— sin hallazgos —</li>`;
   };
-  fill("lvWin",d.win); fill("lvWatch",d.watch); fill("lvRisk",d.risk);
+  paint("lvWin",win);
+  paint("lvWatch",watch);
+  paint("lvRisk",risk);
 }
+
 function lvRenderKpis(){
   const all=Object.values(AGENTS);
   const total=all.length;
