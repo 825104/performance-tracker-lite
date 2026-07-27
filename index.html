@@ -4708,33 +4708,8 @@ function nlEscCardHTML(e){
     <div style="display:flex;gap:6px;margin-top:6px;">
       <button class="nl-btn" onclick="this.closest('.nl-esc-edit').remove()">🗑️ Eliminar</button>
     </div>
-  </div>`;
-}
-}
-function nlAddEsc(e){
-  const wrap=document.getElementById("nlfEscList");
-  const div=document.createElement("div");
-  div.innerHTML=nlEscCardHTML(e);
-  wrap.appendChild(div.firstElementChild);
-}
-      // Redimensionar a max 220px para que pese poco en localStorage
-      const max=220; let w=img.width,h=img.height;
-      if(w>h && w>max){ h=Math.round(h*max/w); w=max; }
-      else if(h>=w && h>max){ w=Math.round(w*max/h); h=max; }
-      const c=document.createElement("canvas"); c.width=w; c.height=h;
-      c.getContext("2d").drawImage(img,0,0,w,h);
-      const b64=c.toDataURL("image/jpeg",0.85);
-      const card=input.closest(".nl-esc-edit");
-      card.querySelector('[data-f="photo"]').value=b64;
-      const prev=card.querySelector(".nlfPhotoPrev");
-      prev.style.backgroundImage="url('"+b64+"')"; prev.textContent="";
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-}
-function nlCollectEsc(){
+</div>`; } function nlAddEsc(e){ const wrap=document.getElementById("nlfEscList"); const div=document.createElement("div"); div.innerHTML=nlEscCardHTML(e); wrap.appendChild(div.firstElementChild); } function nlCollectEsc(){
+
   const cards=document.querySelectorAll("#nlfEscList .nl-esc-edit");
   const out=[];
   cards.forEach(c=>{
