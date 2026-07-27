@@ -1694,7 +1694,7 @@
     </div>
   </div>
 </div>
- <!-- ===== WEEKLY NEWSLETTER ===== -->
+<!-- ===== WEEKLY NEWSLETTER ===== -->
 <div id="nlOverlay">
   <div class="nl-wrap">
     <div class="nl-topbar">
@@ -1723,7 +1723,7 @@
       <div class="nl-head"><span class="ic">⬆️</span><div><h2>Positive Escalations</h2><div class="sub">Reconocimientos de members</div></div></div>
       <div class="nl-body">
         <div class="nl-esc-grid" id="nlEscGrid"></div>
-        <div class="nl-tip">📸 Colocá la foto del agente en una carpeta /fotos/ (ej. karol.jpg) y aparecerá en su tarjeta. Si no hay foto, se muestra 👤.</div>
+        <div class="nl-tip" id="nlPhotoTip" style="display:none;">📸 Consejo (solo TL): al Editar, usá el botón "📷 Subir foto" de cada escalation. La foto se guarda solo en esta máquina (no se sube al repo).</div>
       </div>
     </div>
 
@@ -1739,7 +1739,7 @@
 
     <div class="nl-block">
       <div class="nl-head"><span class="ic">🎂</span><div><h2>Cumpleaños del Mes</h2></div></div>
-      <div class="nl-body" id="nlBday"></div>
+      <div class="nl-body"><div id="nlBday"></div></div>
     </div>
 
     <div class="nl-block">
@@ -1755,16 +1755,23 @@
 </div>
 
 <div class="modal-overlay" id="nlEditorModal">
-  <div class="modal-card" style="max-width:640px;">
+  <div class="modal-card" style="max-width:660px;">
     <div class="modal-title">✏️ Editar Newsletter</div>
-    <div class="modal-subtitle">Los cambios se guardan solo en esta máquina (localStorage).</div>
+    <div class="modal-subtitle">Los cambios (y las fotos) se guardan solo en esta máquina (localStorage).</div>
     <div style="display:flex;flex-direction:column;gap:12px;">
       <label>Edición (etiqueta)<input class="oneone-input" id="nlfEdition" placeholder="Ej: Julio 2026"></label>
+
       <label>🏆 Top Performers — uno por línea: Equipo | Nombre | LOB<textarea class="oneone-textarea" id="nlfTop"></textarea></label>
-      <label>⬆️ Positive Escalations — uno por línea: Nombre | Team | LOB | quote | foto.jpg<textarea class="oneone-textarea" id="nlfEsc"></textarea></label>
+
+      <div>
+        <div style="font-weight:600;font-size:13px;margin-bottom:6px;">⬆️ Positive Escalations</div>
+        <div id="nlfEscList"></div>
+        <button class="nl-btn" onclick="nlAddEsc()">＋ Agregar escalation</button>
+      </div>
+
       <label>📈 LOB Highlights<textarea class="oneone-textarea" id="nlfLob"></textarea></label>
       <label>🎧 Wow Call of the Week<textarea class="oneone-textarea" id="nlfWow"></textarea></label>
-      <label>🎂 Cumpleaños del Mes<textarea class="oneone-textarea" id="nlfBday"></textarea></label>
+      <label>🎂 Cumpleaños del Mes — uno por línea: Nombre | Fecha<textarea class="oneone-textarea" id="nlfBday" placeholder="Ej: Geordi Murillo | 12 de julio"></textarea></label>
       <label>🌎 Cognizant CR / AFZ — uno por línea: Etiqueta | Descripción<textarea class="oneone-textarea" id="nlfCr"></textarea></label>
       <label>💙 Team Moments<textarea class="oneone-textarea" id="nlfMom"></textarea></label>
     </div>
@@ -1776,8 +1783,7 @@
       </div>
     </div>
   </div>
-</div>
- 
+</div> 
 <script>
 // ========== DATA DEMO (fallback cuando no hay Excel cargado) ==========
 const MONTHS_ORDER = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
@@ -4621,14 +4627,18 @@ function nlSeed(){
       {team:"Tami",  name:"Keieshia Brown",        lob:"Tampa NYSHIP"}
     ],
     esc:[
-      {name:"Karol Fallas",     team:"Team Geo",  lob:"Medicare", quote:"Such appreciation when the member feels the +ve impact you created — special! 👏", photo:"fotos/karol.jpg"},
-      {name:"Carolina Torres",  team:"Team Geo",  lob:"Medicare", quote:"An outstanding ambassador of the EmblemHealth brand. 🌟",                          photo:"fotos/carolina.jpg"},
-      {name:"Andres Fernandez", team:"Team Ange", lob:"ACPNY",    quote:"Andy was superb… you need more people like him who genuinely care! 💙",             photo:"fotos/andres.jpg"}
+      {name:"Karol Fallas",     team:"Team Geo",  lob:"Medicare", quote:"Such appreciation when the member feels the +ve impact you created — special! 👏", photo:""},
+      {name:"Carolina Torres",  team:"Team Geo",  lob:"Medicare", quote:"An outstanding ambassador of the EmblemHealth brand. 🌟",                          photo:""},
+      {name:"Andres Fernandez", team:"Team Ange", lob:"ACPNY",    quote:"Andy was superb… you need more people like him who genuinely care! 💙",             photo:""}
     ],
     lob:"• ACPNY (Ange): superó meta de CE y mejor adherencia del mes. 🎯\n• EH Comm (Shary): QA sobre meta varias semanas seguidas. 💪\n• Medicare (Geo): ¡dos positive escalations! Karol y Carolina. 👏\n• Tampa (Tami): Keieshia lideró el scope. 🏅",
     wow:"🌟 Un caso complejo de Mt. Sinai del equipo de Geo terminó con la member profundamente agradecida. \"Son esas pequeñas cosas que lo hacen a uno sentir satisfacción after the storm.\" 💙",
-    bday:"🎉 Este mes celebramos a nuestros cumpleañeros. ¡Feliz cumpleaños a todos los que cumplen en julio! 🥳",
+    bday:[
+      {name:"Geordi Murillo", date:"Julio"}
+    ],
     cr:[
+      {label:"Voluntariado", desc:"🎨 ¡Pintamos el gimnasio del Liceo de Heredia! Gracias a todo el equipo que participó en este voluntariado. 💙"},
+      {label:"Colecta", desc:"🥫 Estamos recogiendo víveres para el Hogar de Alajuela, que recientemente sufrió daños materiales. ¡Sumate con tu aporte!"},
       {label:"World Cup", desc:"🏆 Seguimos con el World Cup Challenge — retos, trivias y momentos interactivos. Participación voluntaria coordinada con tu líder."},
       {label:"AFZ",       desc:"🎤 Humans Talks en América Free Zone — charlas inspiradoras abiertas a colaboradores."}
     ],
@@ -4652,12 +4662,17 @@ function nlLoad(){
     || "<span style='color:var(--text-muted)'>Sin datos</span>";
   document.getElementById("nlEscGrid").innerHTML = (d.esc||[]).map(e=>`
     <div class="nl-esc"><div class="top"><span class="lob">${e.lob||""}</span></div>
-      <div class="av" style="background-image:url('${e.photo||""}')">👤</div>
-      <div class="b"><div class="nm">${e.name}</div><div class="tl">${e.team||""}</div><div class="q">${e.quote||""}</div></div></div>`).join("")
+      <div class="av" style="background-image:url('${e.photo||""}')">${e.photo?"":"👤"}</div>
+      <div class="b"><div class="nm">${e.name||""}</div><div class="tl">${e.team||""}</div><div class="q">${e.quote||""}</div></div></div>`).join("")
     || "<span style='color:var(--text-muted)'>Sin escalations</span>";
   document.getElementById("nlLob").textContent = d.lob||"";
   document.getElementById("nlWow").textContent = d.wow||"";
-  document.getElementById("nlBday").textContent = d.bday||"";
+  // Cumpleaños en tarjetas
+  document.getElementById("nlBday").innerHTML = (d.bday&&d.bday.length)
+    ? `<div class="nl-tp-grid">`+d.bday.map(b=>`
+        <div class="nl-tp"><span class="medal">🎂</span>
+          <div class="info"><b>${b.name||""}</b><span>${b.date||""}</span></div></div>`).join("")+`</div>`
+    : "<span style='color:var(--text-muted)'>Sin cumpleaños cargados este mes</span>";
   document.getElementById("nlCr").innerHTML = (d.cr||[]).map(ev=>`
     <div class="nl-event"><div class="cal">${ev.label||""}</div><div class="t"><p>${ev.desc||""}</p></div></div>`).join("")
     || "<span style='color:var(--text-muted)'>Sin eventos</span>";
@@ -4669,15 +4684,92 @@ function nlToggleRole(){
   nlIsLeader=!nlIsLeader;
   document.getElementById("nlRoleBadge").textContent = nlIsLeader?"🛡️ Vista liderazgo":"👀 Vista agente";
   document.getElementById("nlEditBtn").style.display = nlIsLeader?"inline-block":"none";
+  var tip=document.getElementById("nlPhotoTip"); if(tip) tip.style.display = nlIsLeader?"block":"none";
+}
+/* ---- Editor de escalations con foto (base64) ---- */
+function nlEscCardHTML(e){
+  e = e||{};
+  const bg = e.photo? `style="background-image:url('${e.photo}')"` : "";
+  const emoji = e.photo? "" : "👤";
+  return `
+  <div class="nl-esc-edit" style="border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px;background:var(--card-bg-soft);">
+    <div style="display:flex;gap:10px;align-items:center;">
+      <div class="nlfPhotoPrev" ${bg}
+        style="width:54px;height:54px;border-radius:50%;flex-shrink:0;background:#DCE6F5 center/cover no-repeat;display:grid;place-items:center;font-size:20px;color:#1466C8;">${emoji}</div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+        <input class="oneone-input" data-f="name" placeholder="Nombre" value="${(e.name||'').replace(/"/g,'&quot;')}">
+        <div style="display:flex;gap:6px;">
+          <input class="oneone-input" data-f="team" placeholder="Team (Ange/Shary/Geo/Tami)" value="${(e.team||'').replace(/"/g,'&quot;')}">
+          <input class="oneone-input" data-f="lob" placeholder="LOB" value="${(e.lob||'').replace(/"/g,'&quot;')}">
+        </div>
+      </div>
+    </div>
+    <textarea class="oneone-textarea" data-f="quote" placeholder="Quote del member" style="margin-top:6px;">${e.quote||''}</textarea>
+    <input type="hidden" data-f="photo" value="${e.photo||''}">
+    <div style="display:flex;gap:6px;margin-top:6px;">
+      <label class="nl-btn" style="cursor:pointer;">📷 Subir foto
+        <input type="file" accept="image/*" style="display:none;" onchange="nlPhotoPick(this)">
+      </label>
+      <button class="nl-btn" onclick="nlPhotoClear(this)">🚫 Quitar foto</button>
+      <button class="nl-btn" onclick="this.closest('.nl-esc-edit').remove()">🗑️ Eliminar</button>
+    </div>
+  </div>`;
+}
+function nlAddEsc(e){
+  const wrap=document.getElementById("nlfEscList");
+  const div=document.createElement("div");
+  div.innerHTML=nlEscCardHTML(e);
+  wrap.appendChild(div.firstElementChild);
+}
+function nlPhotoPick(input){
+  const file=input.files&&input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const img=new Image();
+    img.onload=function(){
+      // Redimensionar a max 220px para que pese poco en localStorage
+      const max=220; let w=img.width,h=img.height;
+      if(w>h && w>max){ h=Math.round(h*max/w); w=max; }
+      else if(h>=w && h>max){ w=Math.round(w*max/h); h=max; }
+      const c=document.createElement("canvas"); c.width=w; c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      const b64=c.toDataURL("image/jpeg",0.85);
+      const card=input.closest(".nl-esc-edit");
+      card.querySelector('[data-f="photo"]').value=b64;
+      const prev=card.querySelector(".nlfPhotoPrev");
+      prev.style.backgroundImage="url('"+b64+"')"; prev.textContent="";
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function nlPhotoClear(btn){
+  const card=btn.closest(".nl-esc-edit");
+  card.querySelector('[data-f="photo"]').value="";
+  const prev=card.querySelector(".nlfPhotoPrev");
+  prev.style.backgroundImage=""; prev.textContent="👤";
+}
+function nlCollectEsc(){
+  const cards=document.querySelectorAll("#nlfEscList .nl-esc-edit");
+  const out=[];
+  cards.forEach(c=>{
+    const g=f=>{const el=c.querySelector('[data-f="'+f+'"]');return el?el.value.trim():"";};
+    const name=g("name");
+    if(!name) return;
+    out.push({name,team:g("team"),lob:g("lob"),quote:g("quote"),photo:c.querySelector('[data-f="photo"]').value});
+  });
+  return out;
 }
 function nlOpenEditor(){
   const s=nlStore(); const k=document.getElementById("nlWeekSelect").value; const d=s[k]||{};
   document.getElementById("nlfEdition").value=d.edition||k||"";
   document.getElementById("nlfTop").value=(d.top||[]).map(t=>`${t.team} | ${t.name} | ${t.lob}`).join("\n");
-  document.getElementById("nlfEsc").value=(d.esc||[]).map(e=>`${e.name} | ${e.team} | ${e.lob} | ${e.quote} | ${e.photo||""}`).join("\n");
+  const wrap=document.getElementById("nlfEscList"); wrap.innerHTML="";
+  (d.esc||[]).forEach(e=>nlAddEsc(e));
+  if(!(d.esc&&d.esc.length)) nlAddEsc();
   document.getElementById("nlfLob").value=d.lob||"";
   document.getElementById("nlfWow").value=d.wow||"";
-  document.getElementById("nlfBday").value=d.bday||"";
+  document.getElementById("nlfBday").value=(d.bday||[]).map(b=>`${b.name} | ${b.date}`).join("\n");
   document.getElementById("nlfCr").value=(d.cr||[]).map(c=>`${c.label} | ${c.desc}`).join("\n");
   document.getElementById("nlfMom").value=d.mom||"";
   document.getElementById("nlEditorModal").classList.add("visible");
@@ -4695,10 +4787,10 @@ function nlSaveEditor(){
   s[label]={
     edition:label,
     top:nlParseLines(document.getElementById("nlfTop").value,["team","name","lob"]),
-    esc:nlParseLines(document.getElementById("nlfEsc").value,["name","team","lob","quote","photo"]),
+    esc:nlCollectEsc(),
     lob:document.getElementById("nlfLob").value.trim(),
     wow:document.getElementById("nlfWow").value.trim(),
-    bday:document.getElementById("nlfBday").value.trim(),
+    bday:nlParseLines(document.getElementById("nlfBday").value,["name","date"]),
     cr:nlParseLines(document.getElementById("nlfCr").value,["label","desc"]),
     mom:document.getElementById("nlfMom").value.trim()
   };
@@ -4706,7 +4798,8 @@ function nlSaveEditor(){
 }
 document.getElementById("nlEditorModal").addEventListener("click",e=>{if(e.target.id==="nlEditorModal")nlCloseEditor();});
 nlSeed(); nlRefreshSelect(); nlLoad();
-document.getElementById("nlEditBtn").style.display="none";  
+document.getElementById("nlEditBtn").style.display="none";
+  
 </script>
 </body>
 </html>
