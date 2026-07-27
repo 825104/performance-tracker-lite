@@ -1,0 +1,86 @@
+{
+  "Julio 2026": {
+    "edition": "Julio 2026",
+    "top": [
+      {
+        "team": "Ange",
+        "name": "Maria Fernanda Quiros",
+        "lob": "ACPNY"
+      },
+      {
+        "team": "Shary",
+        "name": "Kalex Jimenez",
+        "lob": "EH Comm"
+      },
+      {
+        "team": "Geo",
+        "name": "Carolina Torres",
+        "lob": "Medicare"
+      },
+      {
+        "team": "Tami",
+        "name": "Keieshia Brown",
+        "lob": "Tampa NYSHIP"
+      }
+    ],
+    "esc": [
+      {
+        "name": "Karol Fallas",
+        "team": "Team Geo",
+        "lob": "Medicare",
+        "quote": "Such appreciation when the member feels the +ve impact you created — special! 👏"
+      },
+      {
+        "name": "Carolina Torres",
+        "team": "Team Geo",
+        "lob": "Medicare",
+        "quote": "An outstanding ambassador of the EmblemHealth brand. 🌟"
+      },
+      {
+        "name": "Andres Fernandez",
+        "team": "Team Ange",
+        "lob": "ACPNY",
+        "quote": "Andy was superb… you need more people like him who genuinely care! 💙"
+      }
+    ],
+    "lob": "• ACPNY (Ange): superó meta de CE y logró la mejor adherencia del mes. 🎯\n• EH Comm (Shary): QA sobre meta por varias semanas consecutivas. 💪\n• Medicare (Geo): ¡dos positive escalations en el mes! Karol y Carolina. 👏\n• Tampa (Tami): Keieshia Brown lideró el scope con 98.67%. 🏅",
+    "wow": "🌟 Un caso complejo de Mt. Sinai del equipo de Geo terminó con la member profundamente agradecida, al punto de pedir dejar una escalación positiva. \"Son esas pequeñas cosas que lo hacen a uno sentir satisfacción after the storm.\" 💙",
+    "bday": [
+      {
+        "name": "Monserrat Caravaca",
+        "date": "5 de julio"
+      },
+      {
+        "name": "Rogelio Davis",
+        "date": "10 de julio"
+      },
+      {
+        "name": "Geordi Murillo",
+        "date": "19 de julio"
+      },
+      {
+        "name": "Jefferson Porras",
+        "date": "21 de julio"
+      }
+    ],
+    "cr": [
+      {
+        "label": "Voluntariado",
+        "desc": "🎨 ¡Pintamos el gimnasio del Liceo de Heredia! Gracias a todo el equipo que participó en este voluntariado. Un orgullo devolverle algo a nuestra comunidad. 💙"
+      },
+      {
+        "label": "Colecta",
+        "desc": "🥫 Estamos recogiendo víveres para el Hogar de Alajuela, que recientemente sufrió daños materiales. ¡Sumate con tu aporte y ayudemos juntos! 🤝"
+      },
+      {
+        "label": "World Cup",
+        "desc": "🏆 Seguimos con el World Cup Challenge — retos, trivias y momentos interactivos. Participación voluntaria coordinada con tu líder. ⚽"
+      },
+      {
+        "label": "AFZ",
+        "desc": "🎤 Humans Talks en América Free Zone — charlas inspiradoras abiertas a colaboradores. Un espacio para aprender y crecer juntos."
+      }
+    ],
+    "mom": "☕ Este mes celebramos el crecimiento de nuestra gente, dimos la bienvenida a nuevos compañeros y seguimos construyendo equipo con dinámicas en los huddles. ¡Gracias a todos por poner el corazón cada día! 🙌💙"
+  }
+}
