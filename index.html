@@ -1479,6 +1479,79 @@
 .lv-foot{text-align:center;color:var(--text-muted);font-size:12px;margin:20px 0 6px;}
 .lv-modal-lead{width:100%;min-height:80px;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;background:var(--card-bg-soft);color:var(--text);resize:vertical;}
  
+/* ===== NEWSLETTER FX (mejoras visuales) ===== */
+/* Banner con brillo animado */
+.nl-banner{position:relative;overflow:hidden;}
+.nl-banner::after{content:"";position:absolute;top:-60%;left:-40%;width:55%;height:220%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.20),transparent);transform:rotate(18deg);
+  animation:nlShine 6s ease-in-out infinite;pointer-events:none;}
+@keyframes nlShine{0%{left:-40%}55%{left:130%}100%{left:130%}}
+/* Reveal suave de cada bloque */
+.nl-block{opacity:0;transform:translateY(16px);animation:nlReveal .55s ease forwards;}
+.nl-block:nth-of-type(2){animation-delay:.05s}.nl-block:nth-of-type(3){animation-delay:.1s}
+.nl-block:nth-of-type(4){animation-delay:.15s}.nl-block:nth-of-type(5){animation-delay:.2s}
+.nl-block:nth-of-type(6){animation-delay:.25s}.nl-block:nth-of-type(7){animation-delay:.3s}
+@keyframes nlReveal{to{opacity:1;transform:none}}
+/* Avatares bonitos con gradiente + iniciales */
+.nl-ava{border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;
+  box-shadow:0 6px 16px rgba(0,0,0,.28);border:3px solid rgba(255,255,255,.18);position:relative;flex-shrink:0;}
+.nl-ava::after{content:"";position:absolute;inset:-3px;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.4),transparent);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 0);
+  mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 0);opacity:0;transition:opacity .3s;}
+.nl-gr0{background:linear-gradient(135deg,#8b5cf6,#ec4899);}
+.nl-gr1{background:linear-gradient(135deg,#06b6d4,#3b82f6);}
+.nl-gr2{background:linear-gradient(135deg,#f97316,#eab308);}
+.nl-gr3{background:linear-gradient(135deg,#22c55e,#06b6d4);}
+.nl-gr4{background:linear-gradient(135deg,#ec4899,#f43f5e);}
+.nl-gr5{background:linear-gradient(135deg,#0ea5e9,#22d3ee);}
+/* Positive Escalations con hover 3D */
+.nl-esc{transition:transform .25s ease,box-shadow .25s ease;}
+.nl-esc:hover{transform:translateY(-6px) scale(1.015);box-shadow:0 18px 40px rgba(0,183,195,.20);}
+.nl-esc:hover .nl-ava::after{opacity:1;animation:nlSpin 3s linear infinite;}
+@keyframes nlSpin{to{transform:rotate(360deg)}}
+.nl-esc .av{width:70px;height:70px;font-size:22px;margin:0 auto 8px;}
+/* Carrusel LOB */
+.nl-carousel{position:relative;}
+.nl-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 10px;scroll-behavior:smooth;}
+.nl-track::-webkit-scrollbar{height:6px;}
+.nl-track::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;}
+.nl-slide{scroll-snap-align:start;min-width:240px;flex:0 0 auto;border-radius:16px;padding:18px;color:#fff;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+.nl-slide h3{font-size:15px;margin-bottom:6px;}
+.nl-slide p{font-size:13px;opacity:.96;line-height:1.5;}
+.nl-slide .big{position:absolute;right:-10px;bottom:-22px;font-size:78px;opacity:.16;}
+.nl-s0{background:linear-gradient(135deg,#5B2A86,#8b5cf6);}
+.nl-s1{background:linear-gradient(135deg,#0596a0,#00B7C3);}
+.nl-s2{background:linear-gradient(135deg,#B85C00,#f97316);}
+.nl-s3{background:linear-gradient(135deg,#0033A1,#3b82f6);}
+.nl-cbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:6px;}
+.nl-cbtns button{background:var(--card-bg-soft);border:1px solid var(--border);color:var(--text);border-radius:10px;width:34px;height:34px;cursor:pointer;font-size:16px;}
+.nl-cbtns button:hover{border-color:var(--info);}
+/* Cumpleaños festivos */
+.nl-bday-msg{background:linear-gradient(135deg,rgba(236,72,153,.14),rgba(249,115,22,.12));border:1px solid rgba(236,72,153,.25);
+  border-radius:14px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;line-height:1.6;position:relative;overflow:hidden;color:var(--text);}
+.nl-bcard{display:flex;align-items:center;gap:12px;background:var(--card-bg-soft);border:1px solid var(--border);border-radius:14px;padding:12px 14px;transition:transform .2s;}
+.nl-bcard:hover{transform:translateX(4px);}
+.nl-bcard .av{width:50px;height:50px;font-size:16px;border-width:2px;}
+.nl-bcard .cake{margin-left:auto;font-size:20px;animation:nlBounce 2s ease-in-out infinite;}
+@keyframes nlBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.nl-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.nl-confetti i{position:absolute;top:-10px;width:7px;height:7px;border-radius:2px;opacity:.85;animation:nlFall linear infinite;}
+@keyframes nlFall{to{transform:translateY(150px) rotate(360deg);opacity:0}}
+/* Eventos AFZ con timeline */
+.nl-ev{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:14px;background:var(--card-bg-soft);border:1px solid var(--border);margin-bottom:10px;transition:transform .2s;}
+.nl-ev:hover{transform:translateX(4px);}
+.nl-ev .tag{min-width:74px;text-align:center;color:#fff;font-size:11px;font-weight:800;padding:8px 6px;border-radius:10px;flex-shrink:0;}
+.nl-ev .tag.t0{background:linear-gradient(135deg,#22c55e,#06b6d4);}
+.nl-ev .tag.t1{background:linear-gradient(135deg,#f43f5e,#ec4899);}
+.nl-ev .tag.t2{background:linear-gradient(135deg,#8b5cf6,#6366f1);}
+.nl-ev .tag.t3{background:linear-gradient(135deg,#0ea5e9,#3b82f6);}
+.nl-ev p{font-size:13px;line-height:1.5;color:var(--text);}
+/* Team Moments destacado */
+.nl-moment{background:linear-gradient(135deg,rgba(20,102,200,.12),rgba(0,183,195,.10));border:1px solid rgba(0,183,195,.22);
+  border-radius:14px;padding:16px 18px;font-size:14px;line-height:1.65;color:var(--text);position:relative;}
+.nl-moment::before{content:"💬";position:absolute;top:-10px;left:16px;font-size:22px;background:var(--card-bg);padding:0 6px;border-radius:8px;}
+
 </style>
 </head>
 <body>
@@ -5006,43 +5079,100 @@ function nlRefreshSelect(){
   sel.innerHTML = Object.keys(s).map(k=>`<option>${k}</option>`).join("");
 }
 function nlLoad(){
+/* --- helper: elige gradiente estable según el nombre --- */
+function nlGrad(name){
+  const s=String(name||"");
+  let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0;
+  return "nl-gr"+(h%6);
+}
+/* --- helper: mensaje festivo por mes (sin religión ni zodiaco) --- */
+function nlBdayMessage(edition){
+  const msgs={
+    "enero":"¡Arrancamos el año celebrando! 🎊 Enero trae nuevas metas y a personas que le ponen energía a cada día.",
+    "febrero":"¡Febrero se pone cálido! 💛 Celebramos a quienes contagian buena vibra al equipo.",
+    "marzo":"¡Marzo florece! 🌸 Festejamos a personas que hacen crecer al equipo con su entusiasmo.",
+    "abril":"¡Abril de aventuras! 🌤️ Celebramos a quienes le ponen chispa y frescura a cada día.",
+    "mayo":"¡Mayo brillante! 🌟 Festejamos a personas increíbles que suman lo mejor al equipo.",
+    "junio":"¡Junio con toda! ⚽ Celebramos a quienes juegan en equipo dentro y fuera del trabajo.",
+    "julio":"¡Julio se siente de fiesta! 🎉 Este mes celebramos a personas que le ponen chispa, energía y buena vibra a cada día.",
+    "agosto":"¡Agosto imparable! 🚀 Festejamos a quienes nos inspiran con su actitud positiva.",
+    "septiembre":"¡Septiembre de orgullo! 🎈 Celebramos a personas que hacen la diferencia cada día.",
+    "octubre":"¡Octubre alegre! 🍂 Festejamos a quienes le dan color y calidez al equipo.",
+    "noviembre":"¡Noviembre agradecido! 🧡 Celebramos a personas que hacen especial a este equipo.",
+    "diciembre":"¡Diciembre de celebración! ✨ Cerramos el año festejando a nuestra gente increíble."
+  };
+  const key=Object.keys(msgs).find(m=>String(edition||"").toLowerCase().includes(m));
+  const base=msgs[key]||"¡Feliz cumpleaños a nuestra gente! 🎉 Celebramos a quienes hacen grande a este equipo.";
+  return base+" Que este nuevo año les traiga risas, metas cumplidas y muchos momentos para disfrutar. ¡Gracias por ser parte de este equipazo! ☀️🎈";
+}
+function nlConfettiHTML(){
+  const cols=["#ec4899","#f97316","#eab308","#22c55e","#06b6d4","#8b5cf6"];
+  let h="";
+  for(let i=0;i<18;i++){
+    h+=`<i style="left:${Math.floor(Math.random()*100)}%;background:${cols[i%cols.length]};animation-duration:${(2+Math.random()*2).toFixed(1)}s;animation-delay:${(Math.random()*3).toFixed(1)}s;"></i>`;
+  }
+  return h;
+}
+function nlSlideMove(dir){ const t=document.getElementById("nlLobTrack"); if(t) t.scrollBy({left:dir*260,behavior:"smooth"}); }
+
+function nlLoad(){
   const s = nlStore(); const k = document.getElementById("nlWeekSelect").value; const d = s[k]||{};
   document.getElementById("nlEdition").textContent = "Edición · " + (d.edition||k||"—");
   const teamCls = {Ange:"c-ange",Shary:"c-shary",Geo:"c-geo",Tami:"c-tami"};
   const medals = ["🥇","🥈","🥉","⭐"];
+
+  // Top Performers (igual que antes)
   document.getElementById("nlTopGrid").innerHTML = (d.top||[]).map((t,i)=>`
     <div class="nl-tp"><span class="medal">${medals[i]||"⭐"}</span>
       <div class="info"><b>${t.name}</b><span>Team ${t.team} · ${t.lob}</span></div>
       <span class="chip ${teamCls[t.team]||"c-ange"}">${t.team}</span></div>`).join("")
     || "<span style='color:var(--text-muted)'>Sin datos</span>";
-document.getElementById("nlEscGrid").innerHTML = (d.esc||[]).map(e=>`
-     <div class="nl-esc"><div class="top"><span class="lob">${e.lob||""}</span></div>
-       <div class="av">${nlInitials(e.name)}</div>
-       <div class="b"><div class="nm">${e.name||""}</div><div class="tl">${e.team||""}</div><div class="q">${e.quote||""}</div></div></div>`).join("")
-     || "<span style='color:var(--text-muted)'>Sin escalations</span>";
 
-  document.getElementById("nlLob").textContent = d.lob||"";
+  // Positive Escalations con avatar gradiente
+  document.getElementById("nlEscGrid").innerHTML = (d.esc||[]).map(e=>`
+    <div class="nl-esc"><div class="top"><span class="lob">${e.lob||""}</span></div>
+      <div class="av nl-ava ${nlGrad(e.name)}">${nlInitials(e.name)}</div>
+      <div class="b"><div class="nm">${e.name||""}</div><div class="tl">${e.team||""}</div><div class="q">${e.quote||""}</div></div></div>`).join("")
+    || "<span style='color:var(--text-muted)'>Sin escalations</span>";
+
+  // LOB Highlights como CARRUSEL (parsea las líneas del texto)
+  const lobLines = String(d.lob||"").split("\n").map(l=>l.replace(/^[•\-\s]+/,"").trim()).filter(Boolean);
+  const lobEl = document.getElementById("nlLob");
+  if(lobLines.length){
+    lobEl.innerHTML = `<div class="nl-carousel">
+      <div class="nl-track" id="nlLobTrack">${lobLines.map((line,i)=>{
+        const parts=line.split(":");
+        const title=parts.length>1?parts[0].trim():("Highlight "+(i+1));
+        const body=parts.length>1?parts.slice(1).join(":").trim():line;
+        return `<div class="nl-slide nl-s${i%4}"><h3>${title}</h3><p>${body}</p><span class="big">⭐</span></div>`;
+      }).join("")}</div>
+      <div class="nl-cbtns"><button onclick="nlSlideMove(-1)">‹</button><button onclick="nlSlideMove(1)">›</button></div>
+    </div>`;
+  } else { lobEl.textContent=""; }
+
+  // Wow Call (igual)
   document.getElementById("nlWow").textContent = d.wow||"";
-  // Cumpleaños en tarjetas
-  document.getElementById("nlBday").innerHTML = (d.bday&&d.bday.length)
-    ? `<div class="nl-tp-grid">`+d.bday.map(b=>`
-        <div class="nl-tp"><span class="medal">🎂</span>
-          <div class="info"><b>${b.name||""}</b><span>${b.date||""}</span></div></div>`).join("")+`</div>`
-    : "<span style='color:var(--text-muted)'>Sin cumpleaños cargados este mes</span>";
-  document.getElementById("nlCr").innerHTML = (d.cr||[]).map(ev=>`
-    <div class="nl-event"><div class="cal">${ev.label||""}</div><div class="t"><p>${ev.desc||""}</p></div></div>`).join("")
+
+  // Cumpleaños festivos con mensaje + avatares + confetti
+  const bdayEl=document.getElementById("nlBday");
+  if(d.bday&&d.bday.length){
+    bdayEl.innerHTML = `<div class="nl-bday-msg"><div class="nl-confetti">${nlConfettiHTML()}</div>${nlBdayMessage(d.edition||k)}</div>
+      <div class="nl-tp-grid">`+d.bday.map(b=>`
+        <div class="nl-bcard"><div class="av nl-ava ${nlGrad(b.name)}">${nlInitials(b.name)}</div>
+          <div><div class="nm" style="font-weight:700">${b.name||""}</div><div class="tl" style="font-size:12px;color:var(--text-soft)">${b.date||""}</div></div>
+          <span class="cake">🎂</span></div>`).join("")+`</div>`;
+  } else { bdayEl.innerHTML="<span style='color:var(--text-muted)'>Sin cumpleaños cargados este mes</span>"; }
+
+  // Cognizant CR / AFZ con tags de colores
+  document.getElementById("nlCr").innerHTML = (d.cr||[]).map((ev,i)=>`
+    <div class="nl-ev"><span class="tag t${i%4}">${ev.label||""}</span><p>${ev.desc||""}</p></div>`).join("")
     || "<span style='color:var(--text-muted)'>Sin eventos</span>";
-  document.getElementById("nlMom").textContent = d.mom||"";
+
+  // Team Moments destacado
+  const momEl=document.getElementById("nlMom");
+  momEl.innerHTML = d.mom ? `<div class="nl-moment">${d.mom}</div>` : "<span style='color:var(--text-muted)'>Sin contenido en esta edición</span>";
 }
-function nlOpen(){ document.getElementById("nlOverlay").classList.add("visible"); document.body.style.overflow="hidden"; }
-function nlClose(){ document.getElementById("nlOverlay").classList.remove("visible"); document.body.style.overflow=""; }
-function nlToggleRole(){
-  nlIsLeader=!nlIsLeader;
-  document.getElementById("nlRoleBadge").textContent = nlIsLeader?"🛡️ Vista liderazgo":"👀 Vista agente";
-  document.getElementById("nlEditBtn").style.display = nlIsLeader?"inline-block":"none";
-  var ex=document.getElementById("nlExportBtn"); if(ex) ex.style.display = nlIsLeader?"inline-block":"none";
-  var im=document.getElementById("nlImportBtn"); if(im) im.style.display = nlIsLeader?"inline-block":"none";
-}
+
 /* ---- Editor de escalations con foto (base64) ---- */
 function nlEscCardHTML(e){
   e = e||{};
