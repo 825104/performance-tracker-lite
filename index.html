@@ -1366,6 +1366,55 @@
   0%, 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0.45); }
   50%      { box-shadow: 0 0 0 5px rgba(139,92,246,0); }
 }
+/* ===== WEEKLY NEWSLETTER ===== */
+#nlOverlay{position:fixed;inset:0;z-index:1200;background:var(--bg);overflow-y:auto;display:none;}
+#nlOverlay.visible{display:block;}
+.nl-wrap{max-width:960px;margin:0 auto;padding:0 14px 60px;}
+.nl-topbar{position:sticky;top:0;z-index:5;background:var(--card-bg);border-radius:0 0 16px 16px;box-shadow:var(--shadow);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.nl-topbar .nl-title{font-weight:800;color:var(--text);font-size:16px;display:flex;align-items:center;gap:8px;}
+.nl-spacer{margin-left:auto;}
+.nl-btn{border:1px solid var(--border);background:var(--card-bg-soft);color:var(--text);border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+.nl-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow);}
+.nl-btn.primary{background:linear-gradient(135deg,var(--info),var(--purple));color:#fff;border-color:transparent;}
+.nl-select{padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card-bg-soft);color:var(--text);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;}
+.nl-role{font-size:11px;color:var(--text-soft);background:var(--card-bg-soft);border:1px dashed var(--border);border-radius:8px;padding:5px 10px;}
+.nl-banner{background:linear-gradient(120deg,#0033A1,#1466C8 55%,#00B7C3 130%);color:#fff;border-radius:18px;padding:26px 28px;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+.nl-banner::before{content:"";position:absolute;right:-50px;top:-50px;width:200px;height:200px;background:rgba(255,255,255,.10);border-radius:50%;}
+.nl-banner .k{font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:.9;}
+.nl-banner h1{font-size:30px;margin:6px 0;}
+.nl-banner p{opacity:.94;font-size:14px;max-width:620px;}
+.nl-edition{display:inline-block;margin-top:12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;}
+.nl-block{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);margin-top:16px;overflow:hidden;}
+.nl-head{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border-soft);}
+.nl-head .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:var(--info-bg);}
+.nl-head h2{font-size:17px;color:var(--text);}
+.nl-head .sub{font-size:12px;color:var(--text-soft);}
+.nl-body{padding:18px;color:var(--text);font-size:14px;line-height:1.55;white-space:pre-wrap;}
+.nl-body:empty::before{content:"— Sin contenido en esta edición —";color:var(--text-muted);font-style:italic;}
+.nl-tp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.nl-tp{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:var(--card-bg-soft);border:1px solid var(--border-soft);}
+.nl-tp .chip{font-size:10px;font-weight:800;color:#fff;padding:3px 9px;border-radius:12px;white-space:nowrap;}
+.nl-tp .medal{font-size:22px;}
+.nl-tp .info{flex:1;min-width:0;}
+.nl-tp .info b{font-size:14px;color:var(--text);}
+.nl-tp .info span{display:block;font-size:11px;color:var(--text-soft);}
+.c-ange{background:#8b5cf6;} .c-shary{background:#00B7C3;} .c-geo{background:#f97316;} .c-tami{background:#3b82f6;}
+.nl-esc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.nl-esc{border:1px solid var(--border-soft);border-radius:14px;overflow:hidden;background:var(--card-bg-soft);}
+.nl-esc .top{height:64px;background:linear-gradient(120deg,#0033A1,#00B7C3);position:relative;}
+.nl-esc .lob{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.22);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
+.nl-esc .av{width:66px;height:66px;border-radius:50%;border:4px solid var(--card-bg);background:#DCE6F5 center/cover no-repeat;position:absolute;left:50%;bottom:-33px;transform:translateX(-50%);display:grid;place-items:center;font-size:24px;color:#1466C8;}
+.nl-esc .b{padding:42px 14px 16px;text-align:center;}
+.nl-esc .nm{font-weight:800;font-size:14px;color:var(--text);}
+.nl-esc .tl{font-size:11px;color:var(--text-soft);}
+.nl-esc .q{font-size:12px;color:var(--text);font-style:italic;margin-top:8px;background:var(--card-bg);border:1px solid var(--border-soft);border-radius:10px;padding:8px 10px;}
+.nl-event{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed var(--border-soft);}
+.nl-event:last-child{border-bottom:none;}
+.nl-event .cal{width:52px;text-align:center;background:#0033A1;color:#fff;border-radius:10px;padding:8px 4px;flex-shrink:0;font-weight:800;font-size:12px;}
+.nl-event .t p{font-size:13px;color:var(--text-soft);}
+.nl-tip{margin-top:12px;font-size:12px;color:var(--text-soft);background:var(--card-bg-soft);border:1px dashed var(--border);border-radius:10px;padding:9px 11px;}
+@media(max-width:760px){.nl-tp-grid{grid-template-columns:1fr;}.nl-esc-grid{grid-template-columns:1fr;}}
+  
 </style>
 </head>
 <body>
@@ -1401,6 +1450,7 @@
       <div class="header-actions">
         <button class="tl-mode-btn" id="tlModeBtn" onclick="toggleTLMode()" title="Modo Team Lead">🔒 Modo TL</button>
         <button class="icon-btn" id="uploadBtn" onclick="openUploadModal()" title="Cargar datos">📤</button>
+        <button class="icon-btn" id="nlOpenBtn" onclick="nlOpen()" title="Weekly Newsletter">📰</button>
         <button class="icon-btn" id="themeToggle" title="Cambiar tema">🌙</button>
       </div>
     </div>
@@ -1644,6 +1694,90 @@
     </div>
   </div>
 </div>
+ <!-- ===== WEEKLY NEWSLETTER ===== -->
+<div id="nlOverlay">
+  <div class="nl-wrap">
+    <div class="nl-topbar">
+      <div class="nl-title">📰 The Weekly Pulse</div>
+      <div class="nl-spacer"></div>
+      <select class="nl-select" id="nlWeekSelect" onchange="nlLoad()"></select>
+      <span class="nl-role" id="nlRoleBadge">👀 Vista agente</span>
+      <button class="nl-btn" onclick="nlToggleRole()">Cambiar rol</button>
+      <button class="nl-btn primary" id="nlEditBtn" onclick="nlOpenEditor()">✏️ Editar</button>
+      <button class="nl-btn" onclick="nlClose()">✕ Cerrar</button>
+    </div>
+
+    <div class="nl-banner">
+      <div class="k">Performance Tracker · Cognizant CR</div>
+      <h1>📰 The Weekly Pulse</h1>
+      <p>Lo mejor del mes en nuestros equipos — logros, reconocimientos y los momentos que nos hacen equipo. 💙</p>
+      <span class="nl-edition" id="nlEdition">Edición · —</span>
+    </div>
+
+    <div class="nl-block">
+      <div class="nl-head"><span class="ic">🏆</span><div><h2>Top Performers</h2><div class="sub">Uno por equipo</div></div></div>
+      <div class="nl-body"><div class="nl-tp-grid" id="nlTopGrid"></div></div>
+    </div>
+
+    <div class="nl-block">
+      <div class="nl-head"><span class="ic">⬆️</span><div><h2>Positive Escalations</h2><div class="sub">Reconocimientos de members</div></div></div>
+      <div class="nl-body">
+        <div class="nl-esc-grid" id="nlEscGrid"></div>
+        <div class="nl-tip">📸 Colocá la foto del agente en una carpeta /fotos/ (ej. karol.jpg) y aparecerá en su tarjeta. Si no hay foto, se muestra 👤.</div>
+      </div>
+    </div>
+
+    <div class="nl-block">
+      <div class="nl-head"><span class="ic">📈</span><div><h2>LOB Highlights</h2></div></div>
+      <div class="nl-body" id="nlLob"></div>
+    </div>
+
+    <div class="nl-block">
+      <div class="nl-head"><span class="ic">🎧</span><div><h2>Wow Call of the Week</h2></div></div>
+      <div class="nl-body" id="nlWow"></div>
+    </div>
+
+    <div class="nl-block">
+      <div class="nl-head"><span class="ic">🎂</span><div><h2>Cumpleaños del Mes</h2></div></div>
+      <div class="nl-body" id="nlBday"></div>
+    </div>
+
+    <div class="nl-block">
+      <div class="nl-head"><span class="ic">🌎</span><div><h2>Cognizant CR · Vida en AFZ</h2><div class="sub">Eventos y voluntariados — vía Karla Rodríguez</div></div></div>
+      <div class="nl-body" id="nlCr"></div>
+    </div>
+
+    <div class="nl-block">
+      <div class="nl-head"><span class="ic">💙</span><div><h2>Team Moments</h2></div></div>
+      <div class="nl-body" id="nlMom"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="nlEditorModal">
+  <div class="modal-card" style="max-width:640px;">
+    <div class="modal-title">✏️ Editar Newsletter</div>
+    <div class="modal-subtitle">Los cambios se guardan solo en esta máquina (localStorage).</div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <label>Edición (etiqueta)<input class="oneone-input" id="nlfEdition" placeholder="Ej: Julio 2026"></label>
+      <label>🏆 Top Performers — uno por línea: Equipo | Nombre | LOB<textarea class="oneone-textarea" id="nlfTop"></textarea></label>
+      <label>⬆️ Positive Escalations — uno por línea: Nombre | Team | LOB | quote | foto.jpg<textarea class="oneone-textarea" id="nlfEsc"></textarea></label>
+      <label>📈 LOB Highlights<textarea class="oneone-textarea" id="nlfLob"></textarea></label>
+      <label>🎧 Wow Call of the Week<textarea class="oneone-textarea" id="nlfWow"></textarea></label>
+      <label>🎂 Cumpleaños del Mes<textarea class="oneone-textarea" id="nlfBday"></textarea></label>
+      <label>🌎 Cognizant CR / AFZ — uno por línea: Etiqueta | Descripción<textarea class="oneone-textarea" id="nlfCr"></textarea></label>
+      <label>💙 Team Moments<textarea class="oneone-textarea" id="nlfMom"></textarea></label>
+    </div>
+    <div class="modal-actions">
+      <div></div>
+      <div style="display:flex;gap:8px;">
+        <button class="modal-btn" onclick="nlCloseEditor()">Cancelar</button>
+        <button class="modal-btn primary" onclick="nlSaveEditor()">💾 Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+ 
 <script>
 // ========== DATA DEMO (fallback cuando no hay Excel cargado) ==========
 const MONTHS_ORDER = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
@@ -4470,6 +4604,109 @@ window.addEventListener("resize", () => {
     if (AGENTS[agentKey]) renderEvoChart(AGENTS[agentKey], currentEvoMetric);
   }, 200);
 });
+/* ===== WEEKLY NEWSLETTER LOGIC ===== */
+const NL_KEY = "ptl_newsletter_v1";
+let nlIsLeader = false;
+function nlStore(){ try{return JSON.parse(localStorage.getItem(NL_KEY))||{};}catch(e){return {};} }
+function nlSaveStore(o){ localStorage.setItem(NL_KEY, JSON.stringify(o)); }
+function nlSeed(){
+  const s = nlStore();
+  if(Object.keys(s).length) return;
+  s["Julio 2026"] = {
+    edition:"Julio 2026",
+    top:[
+      {team:"Ange",  name:"Maria Fernanda Quiros", lob:"ACPNY"},
+      {team:"Shary", name:"Kalex Jimenez",         lob:"EH Comm"},
+      {team:"Geo",   name:"Carolina Torres",       lob:"Medicare"},
+      {team:"Tami",  name:"Keieshia Brown",        lob:"Tampa NYSHIP"}
+    ],
+    esc:[
+      {name:"Karol Fallas",     team:"Team Geo",  lob:"Medicare", quote:"Such appreciation when the member feels the +ve impact you created — special! 👏", photo:"fotos/karol.jpg"},
+      {name:"Carolina Torres",  team:"Team Geo",  lob:"Medicare", quote:"An outstanding ambassador of the EmblemHealth brand. 🌟",                          photo:"fotos/carolina.jpg"},
+      {name:"Andres Fernandez", team:"Team Ange", lob:"ACPNY",    quote:"Andy was superb… you need more people like him who genuinely care! 💙",             photo:"fotos/andres.jpg"}
+    ],
+    lob:"• ACPNY (Ange): superó meta de CE y mejor adherencia del mes. 🎯\n• EH Comm (Shary): QA sobre meta varias semanas seguidas. 💪\n• Medicare (Geo): ¡dos positive escalations! Karol y Carolina. 👏\n• Tampa (Tami): Keieshia lideró el scope. 🏅",
+    wow:"🌟 Un caso complejo de Mt. Sinai del equipo de Geo terminó con la member profundamente agradecida. \"Son esas pequeñas cosas que lo hacen a uno sentir satisfacción after the storm.\" 💙",
+    bday:"🎉 Este mes celebramos a nuestros cumpleañeros. ¡Feliz cumpleaños a todos los que cumplen en julio! 🥳",
+    cr:[
+      {label:"World Cup", desc:"🏆 Seguimos con el World Cup Challenge — retos, trivias y momentos interactivos. Participación voluntaria coordinada con tu líder."},
+      {label:"AFZ",       desc:"🎤 Humans Talks en América Free Zone — charlas inspiradoras abiertas a colaboradores."}
+    ],
+    mom:"☕ Celebramos el crecimiento de nuestra gente, dimos la bienvenida a nuevos compañeros y seguimos construyendo equipo. ¡Gracias por poner el corazón cada día! 🙌"
+  };
+  nlSaveStore(s);
+}
+function nlRefreshSelect(){
+  const s = nlStore(); const sel = document.getElementById("nlWeekSelect");
+  sel.innerHTML = Object.keys(s).map(k=>`<option>${k}</option>`).join("");
+}
+function nlLoad(){
+  const s = nlStore(); const k = document.getElementById("nlWeekSelect").value; const d = s[k]||{};
+  document.getElementById("nlEdition").textContent = "Edición · " + (d.edition||k||"—");
+  const teamCls = {Ange:"c-ange",Shary:"c-shary",Geo:"c-geo",Tami:"c-tami"};
+  const medals = ["🥇","🥈","🥉","⭐"];
+  document.getElementById("nlTopGrid").innerHTML = (d.top||[]).map((t,i)=>`
+    <div class="nl-tp"><span class="medal">${medals[i]||"⭐"}</span>
+      <div class="info"><b>${t.name}</b><span>Team ${t.team} · ${t.lob}</span></div>
+      <span class="chip ${teamCls[t.team]||"c-ange"}">${t.team}</span></div>`).join("")
+    || "<span style='color:var(--text-muted)'>Sin datos</span>";
+  document.getElementById("nlEscGrid").innerHTML = (d.esc||[]).map(e=>`
+    <div class="nl-esc"><div class="top"><span class="lob">${e.lob||""}</span></div>
+      <div class="av" style="background-image:url('${e.photo||""}')">👤</div>
+      <div class="b"><div class="nm">${e.name}</div><div class="tl">${e.team||""}</div><div class="q">${e.quote||""}</div></div></div>`).join("")
+    || "<span style='color:var(--text-muted)'>Sin escalations</span>";
+  document.getElementById("nlLob").textContent = d.lob||"";
+  document.getElementById("nlWow").textContent = d.wow||"";
+  document.getElementById("nlBday").textContent = d.bday||"";
+  document.getElementById("nlCr").innerHTML = (d.cr||[]).map(ev=>`
+    <div class="nl-event"><div class="cal">${ev.label||""}</div><div class="t"><p>${ev.desc||""}</p></div></div>`).join("")
+    || "<span style='color:var(--text-muted)'>Sin eventos</span>";
+  document.getElementById("nlMom").textContent = d.mom||"";
+}
+function nlOpen(){ document.getElementById("nlOverlay").classList.add("visible"); document.body.style.overflow="hidden"; }
+function nlClose(){ document.getElementById("nlOverlay").classList.remove("visible"); document.body.style.overflow=""; }
+function nlToggleRole(){
+  nlIsLeader=!nlIsLeader;
+  document.getElementById("nlRoleBadge").textContent = nlIsLeader?"🛡️ Vista liderazgo":"👀 Vista agente";
+  document.getElementById("nlEditBtn").style.display = nlIsLeader?"inline-block":"none";
+}
+function nlOpenEditor(){
+  const s=nlStore(); const k=document.getElementById("nlWeekSelect").value; const d=s[k]||{};
+  document.getElementById("nlfEdition").value=d.edition||k||"";
+  document.getElementById("nlfTop").value=(d.top||[]).map(t=>`${t.team} | ${t.name} | ${t.lob}`).join("\n");
+  document.getElementById("nlfEsc").value=(d.esc||[]).map(e=>`${e.name} | ${e.team} | ${e.lob} | ${e.quote} | ${e.photo||""}`).join("\n");
+  document.getElementById("nlfLob").value=d.lob||"";
+  document.getElementById("nlfWow").value=d.wow||"";
+  document.getElementById("nlfBday").value=d.bday||"";
+  document.getElementById("nlfCr").value=(d.cr||[]).map(c=>`${c.label} | ${c.desc}`).join("\n");
+  document.getElementById("nlfMom").value=d.mom||"";
+  document.getElementById("nlEditorModal").classList.add("visible");
+}
+function nlCloseEditor(){ document.getElementById("nlEditorModal").classList.remove("visible"); }
+function nlParseLines(v,keys){
+  return v.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{
+    const parts=l.split("|").map(p=>p.trim());
+    const o={}; keys.forEach((k,i)=>o[k]=parts[i]||""); return o;
+  });
+}
+function nlSaveEditor(){
+  const s=nlStore();
+  const label=document.getElementById("nlfEdition").value.trim()||("Edición "+new Date().toLocaleDateString());
+  s[label]={
+    edition:label,
+    top:nlParseLines(document.getElementById("nlfTop").value,["team","name","lob"]),
+    esc:nlParseLines(document.getElementById("nlfEsc").value,["name","team","lob","quote","photo"]),
+    lob:document.getElementById("nlfLob").value.trim(),
+    wow:document.getElementById("nlfWow").value.trim(),
+    bday:document.getElementById("nlfBday").value.trim(),
+    cr:nlParseLines(document.getElementById("nlfCr").value,["label","desc"]),
+    mom:document.getElementById("nlfMom").value.trim()
+  };
+  nlSaveStore(s); nlRefreshSelect(); document.getElementById("nlWeekSelect").value=label; nlLoad(); nlCloseEditor();
+}
+document.getElementById("nlEditorModal").addEventListener("click",e=>{if(e.target.id==="nlEditorModal")nlCloseEditor();});
+nlSeed(); nlRefreshSelect(); nlLoad();
+document.getElementById("nlEditBtn").style.display="none";  
 </script>
 </body>
 </html>
