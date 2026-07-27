@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8">por debajo del mínimo (${cap}%) — impacta bono del TL
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0f172a">
 <title>Performance Tracker Lite v4.7.1 | Cognizant </title>
@@ -4774,7 +4774,7 @@ function lvComputeInsights(agents){
     const cap=(anyQA&&anyQA.cap)||95;
     const below=agents.filter(a=>{const m=(a.metrics||[]).find(x=>x.name==="QA");return m&&m.value<cap;}).length;
     if(qaAvg>=cap) ins.push(["g",`QA de equipo ${qaAvg.toFixed(1)}% — sobre el mínimo (${cap}%). 👏`]);
-   else ins.push(["r",`QA de equipo ${qaAvg.toFixed(1)}% por debajo del mínimo (${cap}%) — impacta bono del TL.`]);
+       else ins.push(["r",`QA de equipo ${qaAvg.toFixed(1)}% por debajo del umbral objetivo (${cap}%) — priorizar reforzamiento de calidad.`]);
     if(below>0) ins.push(["a",`${below} agente(s) bajo el cap de QA (${cap}%) — revisar coaching de calidad.`]);
   }
   // AHT
