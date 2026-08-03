@@ -1291,7 +1291,7 @@
       },
       {
         "name": "QA",
-        "value": 94.26,
+        "value": 94.53,
         "unit": "%",
         "goal": 93,
         "goalOp": ">=",
@@ -2260,12 +2260,10 @@
     "firstName": "Brandon",
     "team": "Team Ange",
     "lob": "ACPNY",
-    "category": "Agent NH",
-    "tenure": "New Hire",
+    "category": "Agent",
+    "tenure": "Tenure",
     "month": "Julio 2026",
-    "badges": [
-      "🌱 New Hire"
-    ],
+    "badges": [],
     "metrics": [
       {
         "name": "ADH",
@@ -2710,7 +2708,7 @@
       },
       {
         "name": "QA",
-        "value": 89.91,
+        "value": 90.53,
         "unit": "%",
         "goal": 93,
         "goalOp": ">=",
@@ -2740,7 +2738,7 @@
     "availableMetrics": [
       "Score"
     ],
-    "finalScore": 95.14955951772365,
+    "finalScore": 95.38289285105698,
     "stars": 3,
     "tier": "Bronze",
     "tierIcon": "🥉",
